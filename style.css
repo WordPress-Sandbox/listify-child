@@ -4,3 +4,181 @@ Theme URI:      http://astoundify.com/themes/listify
 Template:       listify
 Version:        1.0
 */
+
+
+/* login & register form */
+a:focus,
+a:active {
+  outline: 0;
+}
+.log_reg_form .form {
+  background: #2854A1;
+  padding: 40px;
+  max-width: 600px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+.log_reg_form .tab-group {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+.log_reg_form .tab-group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.log_reg_form .tab-group li a {
+  display: block;
+  text-decoration: none;
+  padding: 5px;
+  background: rgba(160, 179, 176, 0.25);
+  color: #a0b3b0;
+  font-size: 18px;
+  float: left;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  -webkit-transition: .5s ease;
+  transition: .5s ease;
+}
+.log_reg_form .tab-group li a:hover {
+  background: #179b77;
+  color: #ffffff;
+}
+.log_reg_form .tab-group .active a {
+  background: #1ab188;
+  color: #ffffff;
+}
+
+.log_reg_form .tab-content > div:last-child {
+  display: none;
+}
+.log_reg_form .form h1 {
+  font-size: 18px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 300;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.log_reg_form .form form label {
+  position: absolute;
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+  left: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  font-size: 15px;
+}
+
+.log_reg_form .form form label .req {
+  margin: 2px;
+  color: #1ab188;
+}
+
+
+.log_reg_form .form form label.active {
+  -webkit-transform: translateY(35px);
+  transform: translateY(35px);
+  left: 2px;
+  font-size: 14px;
+}
+
+.log_reg_form .form form label.active .req {
+  opacity: 0;
+}
+
+
+.log_reg_form .form form label.highlight {
+  color: #ffffff;
+}
+
+
+.log_reg_form .form form input, 
+.log_reg_form .form form textarea {
+  font-size: 18px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: 1px solid #a0b3b0;
+  color: #ffffff;
+  border-radius: 0;
+  -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.log_reg_form .form form input:focus, 
+.log_reg_form .form form textarea:focus {
+  outline: 0;
+  border-color: #1ab188;
+}
+
+
+.log_reg_form .form form textarea {
+  border: 2px solid #a0b3b0;
+  resize: vertical;
+}
+
+
+.log_reg_form .form form .field-wrap {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+
+.log_reg_form .form form .top-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.log_reg_form .form form .top-row > div {
+  float: left;
+  width: 48%;
+  margin-right: 4%;
+}
+
+.log_reg_form .form form .top-row > div:last-child {
+  margin: 0;
+}
+
+
+.log_reg_form .form form .button {
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 10px 0;
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: #1ab188;
+  color: #ffffff;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.log_reg_form .form form .button:hover, 
+.log_reg_form .form form .button:focus {
+  background: #179b77;
+}
+
+
+.log_reg_form .form form .button-block {
+  display: block;
+  width: 100%;
+}
+
+
+.log_reg_form .form form .forgot {
+  margin-top: -20px;
+  text-align: right;
+}
