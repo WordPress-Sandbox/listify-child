@@ -99,7 +99,8 @@ a:active {
 
 
 .log_reg_form .form form input, 
-.log_reg_form .form form textarea {
+.log_reg_form .form form textarea,
+.log_reg_form .form form select {
   font-size: 18px;
   display: block;
   width: 100%;
@@ -108,18 +109,27 @@ a:active {
   background: none;
   background-image: none;
   border: 1px solid #a0b3b0;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.5);
   border-radius: 0;
   -webkit-transition: border-color .25s ease, box-shadow .25s ease;
   transition: border-color .25s ease, box-shadow .25s ease;
 }
-
+.log_reg_form .form form input[type="phone"]
+.listify-select, 
+.mfp-content .select, .select {
+	display: block;
+}
+.js-toggle-area-trigger:after, 
+.listify-select:after,
+.select:after {
+	color: rgba(255, 255, 255, 0.5);
+	line-height: 35px !important;
+}
 .log_reg_form .form form input:focus, 
 .log_reg_form .form form textarea:focus {
   outline: 0;
   border-color: #1ab188;
 }
-
 
 .log_reg_form .form form textarea {
   border: 2px solid #a0b3b0;
@@ -181,4 +191,119 @@ a:active {
 .log_reg_form .form form .forgot {
   margin-top: -20px;
   text-align: right;
+}
+
+
+/* social login */
+.apsl-login-networks.theme-4 {
+    width: 300px;
+    margin: 7em 10em auto;
+}
+
+div.social-networks a {
+	display: block;
+}
+.visible-mobile {
+	display: none;
+}
+
+@media only screen and (max-width: 991px) {
+	.visible-mobile {
+		display: block;
+	}
+	.hidden-mobile {
+		display: none !important;
+	}
+	.apsl-login-networks.theme-4 {
+		width: auto !important;
+		display: table !important;
+		margin: 0 auto !important;
+	}
+}
+
+
+
+/* date picker */
+div.datedropper.my-style {
+  border-radius: 8px;
+  width: 180px;
+}
+div.datedropper.my-style .picker {
+  border-radius: 8px;
+  box-shadow: 0 0 32px 0px rgba(0, 0, 0, 0.1);
+}
+div.datedropper.my-style .pick-l {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+div.datedropper.my-style:before,
+div.datedropper.my-style .pick-submit,
+div.datedropper.my-style .pick-lg-b .pick-sl:before,
+div.datedropper.my-style .pick-m,
+div.datedropper.my-style .pick-lg-h {
+  background-color: #1AB188;
+}
+div.datedropper.my-style .pick-y.pick-jump,
+div.datedropper.my-style .pick li span,
+div.datedropper.my-style .pick-lg-b .pick-wke,
+div.datedropper.my-style .pick-btn {
+  color: #1AB188;
+}
+div.datedropper.my-style .picker,
+div.datedropper.my-style .pick-l {
+  background-color: #FFF;
+}
+div.datedropper.my-style .picker,
+div.datedropper.my-style .pick-arw,
+div.datedropper.my-style .pick-l {
+  color: #4D4D4D;
+}
+div.datedropper.my-style .pick-m,
+div.datedropper.my-style .pick-m .pick-arw,
+div.datedropper.my-style .pick-lg-h,
+div.datedropper.my-style .pick-lg-b .pick-sl,
+div.datedropper.my-style .pick-submit {
+  color: #FFF;
+}
+div.datedropper.my-style.picker-tiny:before,
+div.datedropper.my-style.picker-tiny .pick-m {
+  background-color: #FFF;
+}
+div.datedropper.my-style.picker-tiny .pick-m,
+div.datedropper.my-style.picker-tiny .pick-m .pick-arw {
+  color: #4D4D4D;
+}
+div.datedropper.my-style.picker-lkd .pick-submit {
+  background-color: #FFF;
+  color: #4D4D4D;
+}
+
+/* phone varification */
+input#phone {
+    padding-left: 45px;
+}
+.intl-tel-input .selected-flag .iti-arrow {
+	border-top: 4px solid rgba(255, 255, 255, 0.5);
+}
+span#valid-msg {
+    color: #1AB188;
+}
+span#error-msg {
+    color: red;
+}
+
+::-webkit-input-placeholder {
+   color: rgba(255, 255, 255, 0.5);
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255, 255, 255, 0.5);  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255, 255, 255, 0.5);  
+}
+
+:-ms-input-placeholder {  
+   color: rgba(255, 255, 255, 0.5);  
 }
