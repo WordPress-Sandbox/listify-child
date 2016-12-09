@@ -307,3 +307,28 @@ span#error-msg {
 :-ms-input-placeholder {  
    color: rgba(255, 255, 255, 0.5);  
 }
+
+/* registration error */
+.result-message.alert-danger {
+    display: none;
+    position: relative;
+    color: red;
+    padding: 8px 0 8px 30px;
+}
+.result-message.alert-danger:before {
+    content: "\f05e";
+    position: absolute;
+    font-family: 'FontAwesome';
+    color: red;
+    left: 10px;
+    font-size: 15px;
+}
+.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert {
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}

@@ -150,6 +150,7 @@ jQuery(function($){
 		postal_code 	: $('#postal_code').val(),
 		country 		: $('#country').val(),
 		pass 			: $('#pass').val(),
+		confpass 		: $('#confpass').val(),
     };
  
     // Do AJAX request
@@ -169,7 +170,5 @@ jQuery(function($){
     });
  
   });
-
-
 
 });

@@ -5,82 +5,118 @@ function isValidEmail($email){
 }
 
 function new_user_register() {
-    
+
     $err = array();
 
-	// Verify nonce
-	if( !isset( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], 'vz_new_user' ) ) {
-		$err[] = 'Ooops, something went wrong, please try again later.';
-	}
+    // Verify nonce
+    if( !isset( $_POST['reg_nonce'] ) || !wp_verify_nonce( $_POST['reg_nonce'], 'register_user' ) ) {
+        $err[] = 'Ooops, something went wrong, please try again later.';
+    }
  
- 	// Get data 
+    // Get data 
+    $username= $_POST['username'];
     $firstname= $_POST['firstname'];
     $lastname = $_POST['lastname'];
-    $username = $_POST['username'];
+    $gender = $_POST['gender'];
+    $dd = $_POST['dd'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
-    $company    = $_POST['company'];
-    $password = $_POST['pass'];
-    $conf_password = $_POST['conf_pass'];
+    $streetaddress    = $_POST['streetaddress'];
+    $apartmentsuite    = $_POST['apartmentsuite'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $postal_code = $_POST['postal_code'];
+    $country = $_POST['country'];
+    $confpass = $_POST['confpass'];
+    $pass = $_POST['pass'];
+
+    // echo $username;
 
     // Validate 
+    if(empty($username)){
+        $err[] = 'User name required';
+    }    
     if(empty($firstname)){
-    	$err[] = 'First name required';
+        $err[] = 'First name required';
     }    
     if(empty($lastname)){
-    	$err[] = 'Last name required';
+        $err[] = 'Last name required';
     }
-    if(empty($username)) {
-    	$err[] = 'User name required';
+    if(empty($gender)) {
+        $err[] = 'Gender required';
+    } 
+    if(empty($dd)) {
+        $err[] = 'Date required';
     } 
     if(empty($email) || !isValidEmail($email) ){
-    	$err[] = 'Valid Email required';
+        $err[] = 'Valid Email required';
     }
     if(empty($phone)){
-    	$err[] = 'Phone number required';
+        $err[] = 'Phone number required';
     }
-    if(empty($password)) {
+    if(empty($streetaddress)) {
+        $err[] = 'Streetaddress required';
+    }    
+    if(empty($apartmentsuite)) {
+        $err[] = 'Apartmentsuite required';
+    }
+    if(empty($city)) {
+        $err[] = 'City required';
+    }
+    if(empty($postal_code)) {
+        $err[] = 'Postal Code required';
+    }
+    if(empty($country)) {
+        $err[] = 'Country required';
+    }
+
+    if(empty($pass)) {
         $err[] = 'Password required';
     }    
-    if(empty($conf_password)) {
-    	$err[] = 'Confirm your password';
+    if(empty($confpass)) {
+        $err[] = 'Confirm your password';
     }
-    if ($password != $conf_password) {
+    if ($pass != $confpass) {
         $err[] = 'Passwords do not match';
     }
 
     // data in array
     $userdata = array(
         'user_login' => $username,
-        'user_pass'  => $password,
+        'user_pass'  => $pass,
         'user_email' => $email,
         'first_name' => $firstname,
-        'last_name'	 => $lastname,
-        'role'   	 => 'subscriber'
+        'last_name'  => $lastname,
+        'role'       => 'subscriber'
     );
 
-    $now = current_time( 'mysql' );
-
     if(empty($err)) {
-    	$user_id = wp_insert_user( $userdata );
-	    if( !is_wp_error($user_id) ) {
-	    	// user meta field
-            update_user_meta($user_id, 'phone', $phone);
-	    	update_user_meta($user_id, 'passupdate', $now);
-	    	// login user
-			$creds = array(
-			    'user_login'    => $username,
-			    'user_password' => $password,
-			    'remember'      => true
-			);
-			wp_signon( $creds, false );
-			echo json_encode('success');
-	    } else {
-	    	$wp_err = $user_id->get_error_message();
-	    	echo json_encode($wp_err);
-	    }
+        $user_id = wp_insert_user( $userdata );
+        if( !is_wp_error($user_id) ) {
+            // user meta field
+            update_user_meta($user_id, 'billing_phone', $phone);
+            update_user_meta($user_id, 'gender', $gender);
+            update_user_meta($user_id, 'dd', $dd);
+            update_user_meta($user_id, 'billing_state', $streetaddress);
+            update_user_meta($user_id, 'apartmentsuite', $apartmentsuite);
+            update_user_meta($user_id, 'billing_city', $city);
+            update_user_meta($user_id, 'billing_postcode', $postal_code);
+            update_user_meta($user_id, 'country', $country);
+            update_user_meta($user_id, 'confpass', $confpass);
+            // login user after successful registration
+            $creds = array(
+                'user_login'    => $username,
+                'user_password' => $pass,
+                'remember'      => true
+            );
+            wp_signon( $creds, false );
+            echo json_encode('success');
+        } else {
+            $wp_err = $user_id->get_error_message();
+            echo json_encode($wp_err);
+        }
     } else {
-    	echo json_encode($err[0]);
+        echo json_encode($err[0]);
     }
 
   die();
