@@ -27,6 +27,10 @@ jQuery(function($){
 
 	});
 
+	$('#streetaddress').on('keyup blur focus change', function(){
+		$('#locality, #administrative_area_level_1, #postal_code, #country').prev('label').addClass('active highlight');
+	});
+
 	$('.tab a').on('click', function (e) {
 	  
 	  e.preventDefault();
@@ -111,7 +115,7 @@ jQuery(function($){
 	}
 
 	$(document).ready(function () {
-	   $("#pass, #confpass").keyup(checkPasswordMatch);
+	   $("#pass, #confpass").on( 'keyup, focus', checkPasswordMatch);
 	});
 
 
