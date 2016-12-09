@@ -68,8 +68,6 @@ get_header();
 						          <h1>Sign Up for Free</h1>
 						          
 						          <div class="result-message alert-danger alert"></div>
-
-						          <h1>Sign Up for Free</h1>
 						          
 						          <form id="register" action="/" method="post">
 

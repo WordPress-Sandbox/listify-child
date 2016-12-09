@@ -87,7 +87,7 @@ function new_user_register() {
         'user_email' => $email,
         'first_name' => $firstname,
         'last_name'  => $lastname,
-        'role'       => 'subscriber'
+        'role'       => 'customer'
     );
 
     if(empty($err)) {
