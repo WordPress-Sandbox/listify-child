@@ -1,28 +1,27 @@
 jQuery(function($){
 	
-	$('.form').find('input, textarea').on('keyup blur focus', function (e) {
+	$('.form').find('input, textarea').on('keyup blur focus change', function (e) {
 	  var $this = $(this),
 	      label = $this.prev('label');
 
 		  if (e.type === 'keyup') {
-				if ($this.val() === '') {
-	          label.removeClass('active highlight');
-	        } else {
+				if ($this.val()) {
 	          label.addClass('active highlight');
+	        } else {
+	          label.removeClass('active highlight');
 	        }
 	    } else if (e.type === 'blur') {
-	    	if( $this.val() === '' ) {
-	    		label.removeClass('active highlight'); 
+	    	if( $this.val()) {
+	    		label.addClass('active highlight'); 
 				} else {
-			    label.removeClass('highlight');   
+			    label.removeClass('active highlight');   
 				}   
 	    } else if (e.type === 'focus') {
 	      
-	      if( $this.val() === '' ) {
-	    		label.removeClass('highlight'); 
-				} 
-	      else if( $this.val() !== '' ) {
-			    label.addClass('highlight');
+	      if( $this.val()) {
+	    		label.addClass('active highlight'); } 
+	      else {
+			    label.removeClass('active highlight');
 				}
 	    }
 
@@ -98,5 +97,73 @@ jQuery(function($){
 	    }
 	  }
 	});
+
+
+	/* password match */
+	function checkPasswordMatch() {
+	    var password = $("#pass").val();
+	    var confirmPassword = $("#confpass").val();
+
+	    if (password != confirmPassword)
+	        $("#pass, #confpass").next().attr('id', 'error-msg').text('Passwords do not match!');
+	    else
+	        $("#pass, #confpass").next().attr('id', 'valid-msg').text('✓ Passwords match');
+	}
+
+	$(document).ready(function () {
+	   $("#pass, #confpass").keyup(checkPasswordMatch);
+	});
+
+
+	/* register user */
+
+	 $('button.register').click( function(event) {
+
+    that = $(this);
+
+    if (event.preventDefault) {
+        event.preventDefault();
+    } else {
+        event.returnValue = false;
+    }
+
+    that.text('Please wait...');
+
+	var ddata = JSON.stringify($('form#register').serializeArray());
+
+    var reg_nonce = $('#register_user_nonce').val();
+    var firstname  = $('#reg_firstname').val();
+    var lastname  = $('#reg_lastname').val();
+    var username  = $('#reg_username').val();
+    var email = $('#reg_email').val();
+    var phone = $('#reg_phone').val();
+    var company = $('#reg_company').val();
+    var pass  = $('#reg_password').val();
+    var conf_pass  = $('#reg_conf_password').val();
+ 
+    data = {
+      action: 'register_user',
+      data: ddata
+    };
+ 
+    // Do AJAX request
+    $.post( local.ajax_url, data, function(response) {
+      if( response ) {
+        var data = $.parseJSON(response);
+        if( data == 'success' ) {
+          that.text('Redirecting...');
+          location.reload();
+        } else {
+          $('.result-message').html(data);
+          $('.result-message').addClass('alert-danger');
+          $('.result-message').show();
+          that.text('Get started now');
+        }
+      }
+    });
+ 
+  });
+
+
 
 });

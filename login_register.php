@@ -38,7 +38,7 @@ get_header();
 						      	<div id="login">   
 						          <h1>Welcome Back!</h1>
 						          
-						          <form action="/" method="post">
+						          <form id="login" action="/" method="post">
 						          
 						            <div class="field-wrap">
 						            <label>
@@ -66,73 +66,98 @@ get_header();
 						        <div id="signup">   
 						          <h1>Sign Up for Free</h1>
 						          
-						          <form id="validate_form" action="/" method="post">
-						          
+						          <form id="register" action="/" method="post">
+
+								<div class="field-wrap">
+									<label> Username </label>
+								  	<input type="text" name="username" id="username" />
+								</div>
+
 						          <div class="top-row">
 						            <div class="field-wrap">
 						              <label>
 						                First Name<span class="req">*</span>
 						              </label>
-						              <input type="text" required/>
+						              <input type="text" name="fname" id="fname" required/>
 						            </div>
 						            <div class="field-wrap">
 						              <label>
 						                Last Name<span class="req">*</span>
 						              </label>
-						              <input type="text" required/>
+						              <input type="text" name="lname" id="lname" required/>
 						            </div>
 						          </div>
 
 						          <div class="top-row">
 									<div class="field-wrap">
-										<select name="gender">
+										<select name="gender" id="gender">
 											<option value="male">Male</option>
 											<option value="female">Female</option>
 										</select>
 									</div>
 									<div class="field-wrap">
-						              <input id="datedropper" data-theme="my-style" value="Date of birth"/>
+						              <input id="datedropper" name="dd" id="dd" data-theme="my-style" value="Date of birth"/>
 						            </div>
 						          </div>
 
 						          <div class="top-row">
 									<div class="field-wrap">
-										<input id="email" type="email" placeholder="Email*" required/>
+										<input id="email" name="email" id="email" type="email" placeholder="Email*" required/>
 										<span></span>
 									</div>
 									<div class="field-wrap">
-						              	<input id="phone" placeholder="Phone*" />
+						              	<input id="phone" name="phone" id="phone" placeholder="Phone*" />
 										<span id="valid-msg" class="hide">✓ Valid</span>
 										<span id="error-msg" class="hide">Invalid number</span>
 						            </div>
 						          </div>
 
-						          	<div class="field-wrap">
-										<label> Address line 1</label>
-						              	<input type="text" name="address1" />
-						            </div>
+								<div class="field-wrap">
+								  	<input id="autocomplete" name="streetaddress" id="streetaddress" type="text"></input>
+								</div>
 
-						            <div class="field-wrap">
-										<label> Address line 2</label>
-						              	<input type="text" name="address2" />
-						            </div>
+								<div class="field-wrap">
+									<label> Apartment/Suite #</label>
+								  	<input type="text" name="apartmentsuite" id="apartment_suite" />
+								</div>
+
+
+								<div class="top-row">
+									<div class="field-wrap">
+										<label> City </label>
+									  	<input type="text" name="city" id="locality"/>
+									</div>
+									<div class="field-wrap">
+										<label> State </label>
+									  	<input type="text" name="state" id="administrative_area_level_1"/>
+									</div>
+						        </div>
+
+								<div class="top-row">
+									<div class="field-wrap">
+										<label> Zip </label>
+									  	<input type="text" name="zip" id="postal_code"/>
+									</div>
+									<div class="field-wrap">
+										<label> Country </label>
+									  	<input type="text" name="country" id="country"/>
+									</div>
+						        </div>
 
 						          <div class="top-row">
 						          <div class="field-wrap">
-						            <label>
-						              Set A Password<span class="req">*</span>
-						            </label>
-						            <input type="password"required autocomplete="off"/>
+						            <input id="pass" name="pass" id="password" type="password" placeholder="Set A Password" required autocomplete="off"/>
+						            <span></span>
 						          </div>
 						          <div class="field-wrap">
-						            <label>
-						              Re-enter Password<span class="req">*</span>
-						            </label>
-						            <input type="password"required autocomplete="off"/>
+						            <input id="confpass" type="password" placeholder="Re-enter Password" required autocomplete="off"/>
+						            <span></span>
 						          </div>
 						          </div>
+
+						          <?php wp_nonce_field('register_user','register_user_nonce', true, true ); ?>
 						          
-						          <button type="submit" class="button button-block"/>Get Started</button>
+						          <button type="submit" class="button button-block register"/>Get Started</button>
 						          
 						          </form>
 
