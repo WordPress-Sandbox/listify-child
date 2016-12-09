@@ -3,7 +3,7 @@ jQuery(function($){
 	// This example displays an address form, using the autocomplete feature
 	// of the Google Places API to help users fill in the information.
 
-	$("#autocomplete").on('focus', function () {
+	$("#streetaddress").on('focus', function () {
 		$(this).attr('placeholder', 'Street Address');
 	    geolocate();
 	});
@@ -20,7 +20,7 @@ jQuery(function($){
 	    // Create the autocomplete object, restricting the search
 	    // to geographical location types.
 	    autocomplete = new google.maps.places.Autocomplete(
-	    /** @type {HTMLInputElement} */ (document.getElementById('autocomplete')), {
+	    /** @type {HTMLInputElement} */ (document.getElementById('streetaddress')), {
 	        types: ['geocode'],
 	        // componentRestrictions: ['us'],
 	    });

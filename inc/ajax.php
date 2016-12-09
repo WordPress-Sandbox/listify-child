@@ -5,15 +5,7 @@ function isValidEmail($email){
 }
 
 function new_user_register() {
-
-    $data = array();
-    $decoded = json_decode($_POST['data'], true);
-    foreach ($decoded as $value) {
-        if($value["name"] == 'fname') {
-            $data['firstname'] = $value["value"];
-        }
-    }
- 
+    
  //    $err = array();
 
 	// // Verify nonce

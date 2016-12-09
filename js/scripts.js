@@ -128,22 +128,24 @@ jQuery(function($){
     }
 
     that.text('Please wait...');
-
-	var ddata = JSON.stringify($('form#register').serializeArray());
-
-    var reg_nonce = $('#register_user_nonce').val();
-    var firstname  = $('#reg_firstname').val();
-    var lastname  = $('#reg_lastname').val();
-    var username  = $('#reg_username').val();
-    var email = $('#reg_email').val();
-    var phone = $('#reg_phone').val();
-    var company = $('#reg_company').val();
-    var pass  = $('#reg_password').val();
-    var conf_pass  = $('#reg_conf_password').val();
  
     data = {
-      action: 'register_user',
-      data: ddata
+		action: 'register_user',
+		reg_nonce 		: $('#register_user_nonce').val(),
+		username 		: $('#username').val(),
+		firstname 		: $('#fname').val(),
+		lastname 		: $('#lname').val(),
+		gender 			: $('#gender').val(),
+		dd 				: $('#datedropper').val(),
+		email 			: $('#email').val(),
+		phone 			: $('#phone').val(),
+		streetaddress 	: $('#streetaddress').val(),
+		apartmentsuite 	: $('#apartmentsuite').val(),
+		city 			: $('#locality').val(),
+		state 			: $('#administrative_area_level_1').val(),
+		postal_code 	: $('#postal_code').val(),
+		country 		: $('#country').val(),
+		pass 			: $('#pass').val(),
     };
  
     // Do AJAX request

@@ -96,7 +96,7 @@ get_header();
 										</select>
 									</div>
 									<div class="field-wrap">
-						              <input id="datedropper" name="dd" id="dd" data-theme="my-style" value="Date of birth"/>
+						              <input id="datedropper" name="dd" data-theme="my-style" value="Date of birth"/>
 						            </div>
 						          </div>
 
@@ -113,12 +113,12 @@ get_header();
 						          </div>
 
 								<div class="field-wrap">
-								  	<input id="autocomplete" name="streetaddress" id="streetaddress" type="text"></input>
+								  	<input id="streetaddress" name="streetaddress" type="text"></input>
 								</div>
 
 								<div class="field-wrap">
 									<label> Apartment/Suite #</label>
-								  	<input type="text" name="apartmentsuite" id="apartment_suite" />
+								  	<input type="text" name="apartmentsuite" id="apartmentsuite" />
 								</div>
 
 
