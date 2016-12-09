@@ -5,7 +5,7 @@ function isValidEmail($email){
 }
 
 function new_user_register() {
-    
+
     $err = array();
 
 	// Verify nonce
@@ -89,8 +89,6 @@ function new_user_register() {
         'last_name'	 => $lastname,
         'role'   	 => 'subscriber'
     );
-
-
 
     if(empty($err)) {
     	$user_id = wp_insert_user( $userdata );

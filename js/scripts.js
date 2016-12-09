@@ -151,7 +151,6 @@ jQuery(function($){
  
     // Do AJAX request
     $.post( local.ajax_url, data, function(response) {
-    	console.log(response);
       if( response ) {
         var data = $.parseJSON(response);
         if( data == 'success' ) {
@@ -167,7 +166,5 @@ jQuery(function($){
     });
  
   });
-
-
 
 });

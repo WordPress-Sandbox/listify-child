@@ -1,0 +1,6 @@
+## .gitignore for mac os x
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
