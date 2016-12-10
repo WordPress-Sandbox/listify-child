@@ -69,9 +69,6 @@ jQuery(function($){
 	});
 
 
-	// datedropper 
-	$('.datedropper_customer, .datedropper_business').dateDropper();
-
 	// inttelinput 
 	var telInput = $(".phone_customer, .phone_business"),
 	  errorMsg = $("#error-msg"),

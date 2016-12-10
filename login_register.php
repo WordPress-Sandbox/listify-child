@@ -92,7 +92,7 @@ get_header();
 														</select>
 													</div>
 													<div class="field-wrap">
-									              	<input id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth"/>
+									              	<input type="date" id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth"/>
 									            </div>
 								         	</div>
 
@@ -202,7 +202,7 @@ get_header();
 														</select>
 													</div>
 													<div class="field-wrap">
-									              	<input id="datedropper" class="datedropper_business" name="dd" data-theme="my-style" value="Date of birth"/>
+									              	<input type="date" id="datedropper" class="datedropper_business" name="dd" data-theme="my-style" value="Date of birth"/>
 									            </div>
 								         	</div>
 

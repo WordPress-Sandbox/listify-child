@@ -5,12 +5,10 @@
 function listify_child_styles() {
 
 	/* CSS */
-	wp_enqueue_style( 'datedropper', get_stylesheet_directory_uri() . '/assets/datedropper3/datedropper.min.css');
 	wp_enqueue_style( 'inttelinput', get_stylesheet_directory_uri() . '/assets/inttelinput/css/intlTelInput.css');
     wp_enqueue_style( 'listify-child', get_stylesheet_uri() );
 
     /* JS */
-    wp_enqueue_script( 'datedropper', get_stylesheet_directory_uri() . '/assets/datedropper3/datedropper.min.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'inttelinput', get_stylesheet_directory_uri() . '/assets/inttelinput/js/intlTelInput.min.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'autocomplete', get_stylesheet_directory_uri() . '/js/geolocate.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'googlemap_api', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB0s2f700pfcaEjKUrYBkes4F9A3yg40M&libraries=places', array('jquery'), '1.0', true);
