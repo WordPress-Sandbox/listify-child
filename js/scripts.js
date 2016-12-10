@@ -27,30 +27,53 @@ jQuery(function($){
 
 	});
 
-	$('#streetaddress').on('keyup blur focus change', function(){
+	$('.streetaddress_customer, .streetaddress_business').on('keyup blur focus change', function(){
 		$('#locality, #administrative_area_level_1, #postal_code, #country').prev('label').addClass('active highlight');
 	});
 
-	$('.tab a').on('click', function (e) {
-	  
-	  e.preventDefault();
-	  
-	  $(this).parent().addClass('active');
-	  $(this).parent().siblings().removeClass('active');
-	  
-	  target = $(this).attr('href');
 
-	  $('.tab-content > div').not(target).hide();
-	  
-	  $(target).fadeIn(600);
-	  
+	$('.tab-group').each(function(){
+	    // For each set of tabs, we want to keep track of
+	    // which tab is active and it's associated content
+	    var $active, $content, $links = $(this).find('a');
+
+	    // If the location.hash matches one of the links, use that as the active tab.
+	    // If no match is found, use the first link as the initial active tab.
+	    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+	    $active.addClass('active');
+
+	    $content = $($active[0].hash);
+
+	    // Hide the remaining content
+	    $links.not($active).each(function () {
+	        $(this.hash).hide();
+	    });
+
+	    // Bind the click event handler
+	    $(this).on('click', 'a', function(e){
+	        // Make the old tab inactive.
+	        $active.removeClass('active');
+	        $content.hide();
+
+	        // Update the variables with the new link and content
+	        $active = jQuery(this);
+	        $content = jQuery(this.hash);
+
+	        // Make the tab active.
+	        $active.addClass('active');
+	        $content.show();
+
+	        // Prevent the anchor's default click action
+	        e.preventDefault();
+	    });
 	});
 
+
 	// datedropper 
-	$('#datedropper').dateDropper();
+	$('.datedropper_customer, .datedropper_business').dateDropper();
 
 	// inttelinput 
-	var telInput = $("#phone"),
+	var telInput = $(".phone_customer, .phone_business"),
 	  errorMsg = $("#error-msg"),
 	  validMsg = $("#valid-msg");
 
