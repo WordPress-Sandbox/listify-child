@@ -346,3 +346,34 @@ span#error-msg {
     border-radius: 4px;
 }
 
+
+/* remodal */
+
+  .remodal-wrapper #modal1Title {
+    margin: 0 0 35px;
+  }
+  .remodal-wrapper .verification_content {
+    text-align: left;
+    display: inline-flex;
+    align-items: center;
+  }
+  .remodal-wrapper .verification_content label {
+    display: block;
+    text-align: left;
+    padding-bottom: 5px;
+  }
+  .remodal-wrapper .verification_content .verification_img {
+    width: 100px;
+    margin-right: 20px;
+  }
+  .remodal-wrapper .verification_content input[type="number"] {
+      max-width: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      appearance: none;
+  }
+  .remodal-wrapper .verification_content .custom_btn {
+    padding: 12px 25px;
+    font-weight: bold;
+  }

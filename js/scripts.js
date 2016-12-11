@@ -220,12 +220,19 @@ $('button.register').click( function(event) {
 		country 		: $('#country').val(),
 		pass 			: $('#pass').val(),
 		confpass 		: $('#confpass').val(),
+		phone_verify 	: 'required',
     };
  
     // Do AJAX request
     $.post( local.ajax_url, data, function(response) {
       if( response ) {
+      	console.log(response);
         var data = $.parseJSON(response);
+        if( data = 'phone_not_verified') {
+        	var inst = $('[data-remodal-id=phone_verification]').remodal();
+        	inst.open();
+        	return;
+        }
         if( data == 'success' ) {
           that.text('Redirecting...');
           location.reload();

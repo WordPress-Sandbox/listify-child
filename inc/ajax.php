@@ -16,6 +16,10 @@ function new_user_register() {
     if( !isset( $_POST['reg_nonce'] ) || !wp_verify_nonce( $_POST['reg_nonce'], 'register_user' ) ) {
         $err[] = 'Ooops, something went wrong, please try again later.';
     }
+
+    if($_POST['phone_verify'] === 'required') {
+        echo json_encode('phone_not_verified');
+    }
  
     // Get data 
     $username= $_POST['username'];
@@ -33,8 +37,6 @@ function new_user_register() {
     $country = $_POST['country'];
     $confpass = $_POST['confpass'];
     $pass = $_POST['pass'];
-
-    // echo $username;
 
     // Validate 
     if(empty($username)){
@@ -58,22 +60,6 @@ function new_user_register() {
     if(empty($phone)){
         $err[] = 'Phone number required';
     }
-    if(empty($streetaddress)) {
-        $err[] = 'Streetaddress required';
-    }    
-    if(empty($apartmentsuite)) {
-        $err[] = 'Apartmentsuite required';
-    }
-    if(empty($city)) {
-        $err[] = 'City required';
-    }
-    if(empty($postal_code)) {
-        $err[] = 'Postal Code required';
-    }
-    if(empty($country)) {
-        $err[] = 'Country required';
-    }
-
     if(empty($pass)) {
         $err[] = 'Password required';
     }    

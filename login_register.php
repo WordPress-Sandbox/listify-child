@@ -12,8 +12,6 @@ get_header();
 
 ?>
 
-<p class="send_message"> SEND MESSAGE </p>
-
 	<div <?php echo apply_filters( 'listify_cover', 'page-cover page-cover--large', array( 'size' => 'full' ) ); ?>>
 		<h1 class="page-title cover-wrapper"><?php the_post(); the_title(); rewind_posts(); ?>
 	</div>
@@ -36,58 +34,6 @@ get_header();
 						      </ul>
 						      
 						      <div class="tab-content">
-										<a href="#phone_verification"><p>Phone verification</p></a>
-										
-										<div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
-											<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
-											<style>
-												/* Popup */
-												.remodal-wrapper #modal1Title {
-													margin: 0 0 35px;
-												}
-												.remodal-wrapper .verification_content {
-													text-align: left;
-													display: inline-flex;
-													align-items: center;
-												}
-												.remodal-wrapper .verification_content label {
-													display: block;
-													text-align: left;
-													padding-bottom: 5px;
-												}
-												.remodal-wrapper .verification_content .verification_img {
-													width: 100px;
-													margin-right: 20px;
-												}
-												.remodal-wrapper .verification_content input[type="number"] {
-												    max-width: 100%;
-												    -webkit-appearance: none;
-												    -moz-appearance: none;
-												    -o-appearance: none;
-												    appearance: none;
-												}
-												.remodal-wrapper .verification_content .custom_btn {
-													padding: 12px 25px;
-													font-weight: bold;
-												}
-											</style>
-											<h2 id="modal1Title">Verify Your Phone Number</h2>
-											<div class="verification_content">
-												<div class="verification_img">
-													<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/phone.png" alt="">
-												</div>
-												<div id="modal1Desc">
-													<form action="">
-														<label for="verification_code">Enter Verification Code</label>
-														<input type="number" name="verification_code" id="verification_code">
-														<input type="submit" name="code_submit" value="Continue" id="code_submit" class="custom_btn">
-													</form>
-												</div>
-											</div>
-										</div>
-
-
-
 						      	<div id="login">   
 						         	<h1>Welcome Back!</h1>
 						          
@@ -338,5 +284,26 @@ get_header();
 
 	    </div> <!-- content area -->
 	</div>
+
+	<div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+	<style>
+
+	</style>
+	<h2 id="modal1Title">Verify Your Phone Number</h2>
+	<div class="verification_content">
+		<div class="verification_img">
+			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/SmartPhone.png" alt="">
+		</div>
+		<div id="modal1Desc">
+			<form action="">
+				<label for="verification_code">Enter Verification Code</label>
+				<input type="number" name="verification_code" id="verification_code">
+				<input type="submit" name="code_submit" value="Verify" id="code_submit" class="custom_btn">
+			</form>
+		</div>
+	</div>
+</div>
+
 
 <?php get_footer(); ?>
