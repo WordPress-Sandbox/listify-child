@@ -41,13 +41,13 @@ get_header();
 									
 						          	<form method="post" accept-charset="utf-8" autocomplete="off" role="form">
 						            	<div class="field-wrap">
-						            		<label>Email Address<span class="req">*</span></label>
+						            		<label class="active">Email Address<span class="req">*</span></label>
 						            		<input type="text" name="username" id="username" autocomplete="off" required/>
 						            		<span class="message"></span>
 						          		</div>
 						          
 											<div class="field-wrap">
-												<label>Password<span class="req">*</span></label>
+												<label class="active">Password<span class="req">*</span></label>
 												<input type="password" name="password" id="password" autocomplete="off" required/>
 											</div>
 						          		<p class="forgot"><a href="#">Forgot Password?</a></p>
@@ -299,7 +299,8 @@ get_header();
 			<form action="">
 				<label for="verification_code">Enter Verification Code</label>
 				<input type="number" name="verification_code" id="verification_code">
-				<input type="submit" name="code_submit" value="Verify" id="code_submit" class="custom_btn">
+				<input type="submit" name="pin_submit" value="Verify" id="pin_submit" class="custom_btn">
+				<div class="show_message">✓ Success!</div>
 			</form>
 		</div>
 	</div>

@@ -1,22 +1,23 @@
 jQuery(function($){
 
-	// 
-	function isEmpty(obj) {
-	    for(var key in obj) {
-	        if(obj.hasOwnProperty(key))
-	            return false;
-	    }
-	    return true;
-	}
+	//
 
 	function SavingWallet() {
 		this.errors = {};
+		this.phone = 'required';
+		this.isEmpty = 	function(obj) {
+		    for(var key in obj) {
+		        if(obj.hasOwnProperty(key))
+		            return false;
+		    }
+		    return true;
+		};
 	}
 
 	var savingwallet = new SavingWallet();
 
 
-	$('.form').find('input, textarea').on('keyup blur focus change', function (e) {
+	$('.form').find('textarea, input:not([type="date"])').on('keyup blur focus change', function (e) {
 	  var $this = $(this),
 	      label = $this.prev('label');
 
@@ -148,37 +149,23 @@ jQuery(function($){
 	    var password = $("#pass").val();
 	    var confirmPassword = $("#confpass").val();
 
-	    if (password != confirmPassword) {
-	        $("#pass, #confpass").next().attr('id', 'error-msg').text('Passwords do not match!');
-	    	savingwallet.errors['pass'] = 'Passwords not match';
-	    } else { 
-	        $("#pass, #confpass").next().attr('id', 'valid-msg').text('✓ Passwords match');
-	    	delete savingwallet.errors['pass'];
+	    if(password) {
+	    	if (password != confirmPassword) {
+		        $("#pass, #confpass").next().attr('id', 'error-msg').text('Passwords do not match!');
+		    	savingwallet.errors['pass'] = 'Passwords not match';
+		    } else { 
+		        $("#pass, #confpass").next().attr('id', 'valid-msg').text('✓ Passwords match');
+		    	delete savingwallet.errors['pass'];
+		    }
 	    }
 	}
 
 	$(document).ready(function () {
-	   $("#pass, #confpass").on( 'keyup, focus', checkPasswordMatch);
+	   $("#pass, #confpass").on( 'keyup blur focus change', checkPasswordMatch);
 	});
 
 
 	/* register user */
-
-	$('.send_message').click(function(e){
-
-		e.preventDefault();
-
-		var data_message = {
-			action: 'send_sms_localhost',
-			nonce : local.nonce
-		}
-
-		$.post( local.ajax_url, data_message, function(res) {
-			var res = $.parseJSON(res);
-			console.log(res);
-		});
-
-	});
 
 	$('button.register').click( function(event) {
 
@@ -190,7 +177,7 @@ jQuery(function($){
 	        event.returnValue = false;
 	    }
 
-	    if(!isEmpty(savingwallet.errors)) {
+	    if(!savingwallet.isEmpty(savingwallet.errors)) {
 			$('.result-message').html('Please fill required fields');
 			$('.result-message').addClass('alert-danger');
 			$('.result-message').show();
@@ -217,17 +204,18 @@ jQuery(function($){
 			country 		: $('#country').val(),
 			pass 			: $('#pass').val(),
 			confpass 		: $('#confpass').val(),
-			phone_verify 	: 'required',
+			phone_verify 	: savingwallet.phone,
 	    };
 	 
 	    // Do AJAX request
 	    $.post( local.ajax_url, data, function(response) {
 	      if( response ) {
-	      	console.log(response);
 	        var data = $.parseJSON(response);
-	        if( data = 'phone_not_verified') {
+	        if( typeof data.pin == 'number') {
 	        	var inst = $('[data-remodal-id=phone_verification]').remodal();
 	        	inst.open();
+	        	savingwallet.pin = data.pin;
+	        	console.log(savingwallet.pin);
 	        	return;
 	        }
 	        if( data == 'success' ) {
@@ -242,6 +230,22 @@ jQuery(function($){
 	      }
 	    });
 	 
+	});
+
+
+	// Phone verification 
+	$('#pin_submit').click(function(e){
+		e.preventDefault();
+		var user_code = $("#verification_code").val();
+		console.log(user_code == savingwallet.pin);
+		if( user_code == savingwallet.pin ) {
+			console.log(this);
+			$(this).append('<span class="success"> Success!</span>');
+			var inst = $('[data-remodal-id=phone_verification]').remodal();
+	        	inst.close();
+	        $('#valid-msg').removeClass('hide').text('Phone verified!');
+			savingwallet.phone = 'verified';
+		}
 	});
 
 
