@@ -203,7 +203,9 @@ a:active {
   margin-top: -20px;
   text-align: right;
 }
-
+.log_reg_form .form form .forgot a{
+  color: #fff;
+}
 /* social login */
 .apsl-login-networks.theme-4 {
     width: 300px;
@@ -348,32 +350,31 @@ span#error-msg {
 
 
 /* remodal */
-
-  .remodal-wrapper #modal1Title {
-    margin: 0 0 35px;
-  }
-  .remodal-wrapper .verification_content {
-    text-align: left;
-    display: inline-flex;
-    align-items: center;
-  }
-  .remodal-wrapper .verification_content label {
-    display: block;
-    text-align: left;
-    padding-bottom: 5px;
-  }
-  .remodal-wrapper .verification_content .verification_img {
-    width: 100px;
-    margin-right: 20px;
-  }
-  .remodal-wrapper .verification_content input[type="number"] {
-      max-width: 100%;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      -o-appearance: none;
-      appearance: none;
-  }
-  .remodal-wrapper .verification_content .custom_btn {
-    padding: 12px 25px;
-    font-weight: bold;
-  }
+#modal1Title {
+  margin: 0 0 35px;
+}
+.verification_content {
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+}
+.verification_content label {
+  display: block;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.verification_content .verification_img {
+  width: 100px;
+  margin-right: 20px;
+}
+.verification_content input[type="number"] {
+    max-width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+.verification_content .custom_btn {
+  padding: 12px 25px;
+  font-weight: bold;
+}

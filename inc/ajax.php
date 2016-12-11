@@ -148,6 +148,56 @@ add_action('wp_ajax_send_sms_localhost', 'send_sms_function');
 add_action('wp_ajax_nopriv_send_sms_localhost', 'send_sms_function');
 
 
+/**
+ * User login
+ *
+ */
+
+function msw_user_login() {
+ 
+    $err = array();
+
+    // Verify nonce
+    if( !isset( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], 'msw_login_user' ) ) {
+        $err[] = 'Ooops, something went wrong, please try again later.';
+    }
+ 
+    // Get data 
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Validate 
+    if(empty($username)){
+        $err[] = 'Username required';
+    }    
+    if(empty($password)){
+        $err[] = 'Password required';
+    }
+
+    if(empty($err)) {
+        // login user
+        $creds = array(
+            'user_login'    => $username,
+            'user_password' => $password,
+            'remember'      => true
+        );
+        $user = wp_signon( $creds, false );
+        if ( !is_wp_error($user) ) {
+            echo json_encode('success');
+        } else {
+            $wp_err = $user->get_error_message();
+            echo json_encode($wp_err);
+        }
+    } else {
+        echo json_encode($err[0]);
+    }
+
+  die();
+ 
+}
+ 
+add_action('wp_ajax_nopriv_user_login', 'msw_user_login');
+
 
 
 

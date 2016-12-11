@@ -180,71 +180,120 @@ jQuery(function($){
 
 	});
 
+	$('button.register').click( function(event) {
+
+	    that = $(this);
+
+	    if (event.preventDefault) {
+	        event.preventDefault();
+	    } else {
+	        event.returnValue = false;
+	    }
+
+	    if(!isEmpty(savingwallet.errors)) {
+			$('.result-message').html('Please fill required fields');
+			$('.result-message').addClass('alert-danger');
+			$('.result-message').show();
+			return;
+	    }
+
+	    that.text('Please wait...');
+	 
+	    data = {
+			action: 'register_user',
+			reg_nonce 		: $('#register_user_nonce').val(),
+			username 		: $('#username').val(),
+			firstname 		: $('#fname').val(),
+			lastname 		: $('#lname').val(),
+			gender 			: $('#gender').val(),
+			dd 				: $('#datedropper').val(),
+			email 			: $('#email').val(),
+			phone 			: $('#phone').val(),
+			streetaddress 	: $('#streetaddress').val(),
+			apartmentsuite 	: $('#apartmentsuite').val(),
+			city 			: $('#locality').val(),
+			state 			: $('#administrative_area_level_1').val(),
+			postal_code 	: $('#postal_code').val(),
+			country 		: $('#country').val(),
+			pass 			: $('#pass').val(),
+			confpass 		: $('#confpass').val(),
+			phone_verify 	: 'required',
+	    };
+	 
+	    // Do AJAX request
+	    $.post( local.ajax_url, data, function(response) {
+	      if( response ) {
+	      	console.log(response);
+	        var data = $.parseJSON(response);
+	        if( data = 'phone_not_verified') {
+	        	var inst = $('[data-remodal-id=phone_verification]').remodal();
+	        	inst.open();
+	        	return;
+	        }
+	        if( data == 'success' ) {
+	          that.text('Redirecting...');
+	          location.reload();
+	        } else {
+	          $('.result-message').html(data);
+	          $('.result-message').addClass('alert-danger');
+	          $('.result-message').show();
+	          that.text('Get started now');
+	        }
+	      }
+	    });
+	 
+	});
 
 
+	// User login 
+	$(".login_btn").click(function(){
+	    $(".login_btn_head").show();
+	});
 
-$('button.register').click( function(event) {
+	$('button.login').click( function(event) {
 
-    that = $(this);
+	    that = $(this);
 
-    if (event.preventDefault) {
-        event.preventDefault();
-    } else {
-        event.returnValue = false;
-    }
+	    if (event.preventDefault) {
+	        event.preventDefault();
+	    } else {
+	        event.returnValue = false;
+	    }
 
-    if(!isEmpty(savingwallet.errors)) {
-		$('.result-message').html('Please fill required fields');
-		$('.result-message').addClass('alert-danger');
-		$('.result-message').show();
-		return;
-    }
+	    that.text('Please wait...');
 
-    that.text('Please wait...');
- 
-    data = {
-		action: 'register_user',
-		reg_nonce 		: $('#register_user_nonce').val(),
-		username 		: $('#username').val(),
-		firstname 		: $('#fname').val(),
-		lastname 		: $('#lname').val(),
-		gender 			: $('#gender').val(),
-		dd 				: $('#datedropper').val(),
-		email 			: $('#email').val(),
-		phone 			: $('#phone').val(),
-		streetaddress 	: $('#streetaddress').val(),
-		apartmentsuite 	: $('#apartmentsuite').val(),
-		city 			: $('#locality').val(),
-		state 			: $('#administrative_area_level_1').val(),
-		postal_code 	: $('#postal_code').val(),
-		country 		: $('#country').val(),
-		pass 			: $('#pass').val(),
-		confpass 		: $('#confpass').val(),
-		phone_verify 	: 'required',
-    };
- 
-    // Do AJAX request
-    $.post( local.ajax_url, data, function(response) {
-      if( response ) {
-      	console.log(response);
-        var data = $.parseJSON(response);
-        if( data = 'phone_not_verified') {
-        	var inst = $('[data-remodal-id=phone_verification]').remodal();
-        	inst.open();
-        	return;
-        }
-        if( data == 'success' ) {
-          that.text('Redirecting...');
-          location.reload();
-        } else {
-          $('.result-message').html(data);
-          $('.result-message').addClass('alert-danger');
-          $('.result-message').show();
-          that.text('Get started now');
-        }
-      }
-    });
- 
-  });
+	    var reg_nonce = $('#msw_login_nonce').val();
+	    var username  = $('#username').val();
+	    var password  = $('#password').val();
+	 
+	    data = {
+	      action: 'user_login',
+	      nonce: reg_nonce,
+	      username: username,
+	      password: password
+	    };
+	 
+	    // Do AJAX request
+	    $.post( local.ajax_url, data, function(response) {
+	      if( response ) {
+	        var data = $.parseJSON(response);
+	        console.log(data);
+	        if( data == 'success' ) {
+	          that.text('Redirecting...');
+	          //window.location.href = ajax.profile_page;
+	          localStorage.clear(); // clear search data to make favorite icon work
+	          location.reload();
+	        } else {
+	          $('.result-message').html(data);
+	          $('.result-message').addClass('alert-danger');
+	          $('.result-message').show();
+	          that.text('Login');
+	        }
+	      }
+	    });
+	 
+	});
+
+
 
 });

@@ -36,20 +36,23 @@ get_header();
 						      <div class="tab-content">
 						      	<div id="login">   
 						         	<h1>Welcome Back!</h1>
-						          
-						          	<form action="/" method="post">
+									
+									<div class="result-message alert-danger alert"></div>
+									
+						          	<form method="post" accept-charset="utf-8" autocomplete="off" role="form">
 						            	<div class="field-wrap">
 						            		<label>Email Address<span class="req">*</span></label>
-						            		<input type="email"required autocomplete="off"/>
+						            		<input type="text" name="username" id="username" autocomplete="off" required/>
 						            		<span class="message"></span>
 						          		</div>
 						          
 											<div class="field-wrap">
 												<label>Password<span class="req">*</span></label>
-												<input type="password"required autocomplete="off"/>
+												<input type="password" name="password" id="password" autocomplete="off" required/>
 											</div>
 						          		<p class="forgot"><a href="#">Forgot Password?</a></p>
-						          		<button class="button button-block">Log In</button>
+						          		<?php wp_nonce_field('msw_login_user','msw_login_nonce', true, true ); ?>
+						          		<button class="button button-block login_btn login">Log In</button>
 						          	</form><!-- /form -->
 						        	</div><!-- / login -->
 
@@ -284,16 +287,13 @@ get_header();
 
 	    </div> <!-- content area -->
 	</div>
-
+	<a href="#phone_verification">wsdx</a>
 	<div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
 	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
-	<style>
-
-	</style>
 	<h2 id="modal1Title">Verify Your Phone Number</h2>
 	<div class="verification_content">
 		<div class="verification_img">
-			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/SmartPhone.png" alt="">
+			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
 		</div>
 		<div id="modal1Desc">
 			<form action="">
