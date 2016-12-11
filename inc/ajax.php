@@ -1,5 +1,9 @@
 <?php 
 
+
+// Use the REST API Client to make requests to the Twilio REST API
+use Twilio\Rest\Client;
+
 function isValidEmail($email){ 
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
@@ -125,3 +129,40 @@ function new_user_register() {
 
 add_action('wp_ajax_register_user', 'new_user_register');
 add_action('wp_ajax_nopriv_register_user', 'new_user_register');
+
+
+function send_sms_function()
+ {
+
+    $action = $_POST['action'];
+    $nonce = $_POST['nonce'];
+
+    // Your Account SID and Auth Token from twilio.com/console
+    $sid = 'ACf2609e774c67bbfc8af7844558d57608';
+    $token = '59b014bf2054a4e636a2daa66df6a08f';
+    $client = new Client($sid, $token);
+
+    // Use the client to do fun stuff like send text messages!
+    $client->messages->create(
+        // the number you'd like to send the message to
+        '+8801734415341',
+        array(
+            // A Twilio phone number you purchased at twilio.com/console
+            'from' => '561 800-0461',
+            // the body of the text message you'd like to send
+            'body' => "Hey Azizul! Good luck on the bar exam!"
+        )
+    );
+
+    echo json_encode('Message successfully sent');
+    die();
+ }
+
+add_action('wp_ajax_send_sms_localhost', 'send_sms_function');
+add_action('wp_ajax_nopriv_send_sms_localhost', 'send_sms_function');
+
+
+
+
+
+

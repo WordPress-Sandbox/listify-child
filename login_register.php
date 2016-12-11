@@ -12,6 +12,8 @@ get_header();
 
 ?>
 
+<p class="send_message"> SEND MESSAGE </p>
+
 	<div <?php echo apply_filters( 'listify_cover', 'page-cover page-cover--large', array( 'size' => 'full' ) ); ?>>
 		<h1 class="page-title cover-wrapper"><?php the_post(); the_title(); rewind_posts(); ?>
 	</div>
@@ -92,6 +94,7 @@ get_header();
 														</select>
 													</div>
 													<div class="field-wrap">
+													<label class="active">Date of birth<span class="req">*</span></label>
 									              	<input type="date" id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth"/>
 									            </div>
 								         	</div>

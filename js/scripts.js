@@ -1,5 +1,21 @@
 jQuery(function($){
-	
+
+	// 
+	function isEmpty(obj) {
+	    for(var key in obj) {
+	        if(obj.hasOwnProperty(key))
+	            return false;
+	    }
+	    return true;
+	}
+
+	function SavingWallet() {
+		this.errors = {};
+	}
+
+	var savingwallet = new SavingWallet();
+
+
 	$('.form').find('input, textarea').on('keyup blur focus change', function (e) {
 	  var $this = $(this),
 	      label = $this.prev('label');
@@ -85,6 +101,7 @@ jQuery(function($){
 	  telInput.removeClass("error");
 	  errorMsg.addClass("hide");
 	  validMsg.addClass("hide");
+	  delete savingwallet.errors['phone'];
 	};
 
 	// on blur: validate
@@ -93,9 +110,11 @@ jQuery(function($){
 	  if ($.trim(telInput.val())) {
 	    if (telInput.intlTelInput("isValidNumber")) {
 	      validMsg.removeClass("hide");
+	      delete savingwallet.errors['phone'];
 	    } else {
 	      telInput.addClass("error");
 	      errorMsg.removeClass("hide");
+	      savingwallet.errors['phone'] = 'Invalid phone number';
 	    }
 	  }
 	});
@@ -104,7 +123,6 @@ jQuery(function($){
 	telInput.on("keyup change", reset);
 
 	// varify emails 
-
 	function isEmail(email) {
 	  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	  return regex.test(email);
@@ -116,8 +134,10 @@ jQuery(function($){
 	  if ($.trim(emailInput.val())) {
 	    if (isEmail($.trim(emailInput.val()))) {
 	      $(this).next().attr('id', 'valid-msg').text('✓ Valid email');
+	      delete savingwallet.errors['email'];
 	    } else {
 	    	$(this).next().attr('id', 'error-msg').text('Invalid email');
+	    	savingwallet.errors['email'] = 'Invalid email';
 	    }
 	  }
 	});
@@ -128,10 +148,13 @@ jQuery(function($){
 	    var password = $("#pass").val();
 	    var confirmPassword = $("#confpass").val();
 
-	    if (password != confirmPassword)
+	    if (password != confirmPassword) {
 	        $("#pass, #confpass").next().attr('id', 'error-msg').text('Passwords do not match!');
-	    else
+	    	savingwallet.errors['pass'] = 'Passwords not match';
+	    } else { 
 	        $("#pass, #confpass").next().attr('id', 'valid-msg').text('✓ Passwords match');
+	    	delete savingwallet.errors['pass'];
+	    }
 	}
 
 	$(document).ready(function () {
@@ -141,7 +164,26 @@ jQuery(function($){
 
 	/* register user */
 
-	 $('button.register').click( function(event) {
+	$('.send_message').click(function(e){
+
+		e.preventDefault();
+
+		var data_message = {
+			action: 'send_sms_localhost',
+			nonce : local.nonce
+		}
+
+		$.post( local.ajax_url, data_message, function(res) {
+			var res = $.parseJSON(res);
+			console.log(res);
+		});
+
+	});
+
+
+
+
+$('button.register').click( function(event) {
 
     that = $(this);
 
@@ -149,6 +191,13 @@ jQuery(function($){
         event.preventDefault();
     } else {
         event.returnValue = false;
+    }
+
+    if(!isEmpty(savingwallet.errors)) {
+		$('.result-message').html('Please fill required fields');
+		$('.result-message').addClass('alert-danger');
+		$('.result-message').show();
+		return;
     }
 
     that.text('Please wait...');
