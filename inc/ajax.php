@@ -18,24 +18,21 @@ function new_user_register() {
         die();
     }
 
-    if($_POST['phone_verify'] == 'required') {
+    if($_POST['phone_verify'] == 'unverified') {
 
         $sid = 'ACf2609e774c67bbfc8af7844558d57608';
         $token = '59b014bf2054a4e636a2daa66df6a08f';
         $pin = rand(1000, 9999);
         $client = new Client($sid, $token);
 
-        // Use the client to do fun stuff like send text messages!
-        // $client->messages->create(
-        //     // the number you'd like to send the message to
-        //     '+8801734415341',
-        //     array(
-        //         // A Twilio phone number you purchased at twilio.com/console
-        //         'from' => '561 800-0461',
-        //         // the body of the text message you'd like to send
-        //         'body' => $pin
-        //     )
-        // );
+        /* send verfication sms */
+        $client->messages->create(
+            $_POST['phone'],
+            array(
+                'from' => '561 800-0461',
+                'body' => 'Your mysavingswallet pin is: ' . $pin
+            )
+        );
 
         echo json_encode(array('pin'=>$pin));
         die();
@@ -49,13 +46,13 @@ function new_user_register() {
     $dd = $_POST['dd'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
+    $phone_status = $_POST['phone_verify'];
     $streetaddress    = $_POST['streetaddress'];
     $apartmentsuite    = $_POST['apartmentsuite'];
     $city = $_POST['city'];
     $state = $_POST['state'];
     $postal_code = $_POST['postal_code'];
     $country = $_POST['country'];
-    $confpass = $_POST['confpass'];
     $pass = $_POST['pass'];
 
     // Validate 
@@ -82,12 +79,6 @@ function new_user_register() {
     }
     if(empty($pass)) {
         $err[] = 'Password required';
-    }    
-    if(empty($confpass)) {
-        $err[] = 'Confirm your password';
-    }
-    if ($pass != $confpass) {
-        $err[] = 'Passwords do not match';
     }
 
     // data in array
@@ -112,7 +103,7 @@ function new_user_register() {
             update_user_meta($user_id, 'billing_city', $city);
             update_user_meta($user_id, 'billing_postcode', $postal_code);
             update_user_meta($user_id, 'country', $country);
-            update_user_meta($user_id, 'confpass', $confpass);
+            update_user_meta($user_id, 'phone_status', $phone_status);
             // login user after successful registration
             $creds = array(
                 'user_login'    => $username,

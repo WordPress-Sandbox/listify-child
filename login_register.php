@@ -36,21 +36,22 @@ get_header();
 						      <div class="tab-content">
 						      	<div id="login">   
 						         	<h1>Welcome Back!</h1>
+						         	<div class="result-message alert-danger"></div>
 									
-									<div class="result-message alert-danger alert"></div>
+						          	<form id="loginform" method="post" accept-charset="utf-8" autocomplete="off" role="form">
 									
-						          	<form method="post" accept-charset="utf-8" autocomplete="off" role="form">
 						            	<div class="field-wrap">
 						            		<label class="active">Email Address<span class="req">*</span></label>
-						            		<input type="text" name="username" id="username" autocomplete="off" required/>
+						            		<input type="text" name="username" required>
 						            		<span class="message"></span>
 						          		</div>
 						          
-											<div class="field-wrap">
-												<label class="active">Password<span class="req">*</span></label>
-												<input type="password" name="password" id="password" autocomplete="off" required/>
-											</div>
-						          		<p class="forgot"><a href="#">Forgot Password?</a></p>
+										<div class="field-wrap">
+											<label class="active">Password<span class="req">*</span></label>
+											<input type="password" name="password" required>
+										</div>
+
+						          		<p class="forgot"><a href="<?php echo wp_lostpassword_url(); ?>">Forgot Password?</a></p>
 						          		<?php wp_nonce_field('msw_login_user','msw_login_nonce', true, true ); ?>
 						          		<button class="button button-block login_btn login">Log In</button>
 						          	</form><!-- /form -->
@@ -59,53 +60,54 @@ get_header();
 						        	<div id="signup">   
 						         	<h1>Sign Up for Free</h1>
 
-										<!-- Signup Type Tab -->
-										<ul class="tab-group">
-											<li class="tab"><a href="#signup_customer">Customer</a></li>	
-											<li class="tab"><a href="#signup_business">Business</a></li>
-										</ul><!-- /Signup Type -->
-
-						         	<div class="result-message alert-danger alert"></div>
+									<!-- Signup Type Tab -->
+									<ul class="tab-group">
+										<li class="tab"><a href="#signup_customer">Customer</a></li>	
+										<li class="tab"><a href="#signup_business">Business</a></li>
+									</ul><!-- /Signup Type -->
 										
 							         <div id="signup_customer">
-							         	<form id="register" action="/" method="post">
-
-												<div class="field-wrap">
-													<label> Username </label>
-												  	<input type="text" name="username" id="username" />
-												</div>
+							         	<div class="result-message alert-danger alert"></div>
+							         	<form id="register_customer" action="/" method="post">
+							         		<h2>Register and start saving</h2>
+											<div class="field-wrap">
+												<label> Username <span class="req">*</span></label>
+											  	<input type="text" name="customer_username" id="username" >
+											</div>
 
 									         <div class="top-row">
 									            <div class="field-wrap">
 									              	<label>First Name<span class="req">*</span></label>
-									              	<input type="text" name="fname" id="fname" required/>
+									              	<input type="text" name="fname" id="fname">
 									            </div>
 									            <div class="field-wrap">
 									              	<label>Last Name<span class="req">*</span></label>
-									              	<input type="text" name="lname" id="lname" required/>
+									              	<input type="text" name="lname" id="lname">
 									            </div>
 									         </div>
 
 								          	<div class="top-row">
-													<div class="field-wrap">
-														<select name="gender" id="gender">
-															<option value="male">Male</option>
-															<option value="female">Female</option>
-														</select>
-													</div>
-													<div class="field-wrap">
+												<div class="field-wrap">
+													<select name="gender" id="gender">
+														<option value="male">Male</option>
+														<option value="female">Female</option>
+													</select>
+												</div>
+												<div class="field-wrap">
 													<label class="active">Date of birth<span class="req">*</span></label>
-									              	<input type="date" id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth"/>
+									              	<input type="date" id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth">
 									            </div>
 								         	</div>
 
 								          	<div class="top-row">
 													<div class="field-wrap">
-														<input name="email" id="email" type="email" placeholder="Email*" required/>
+														<label>Email<span class="req">*</span></label>
+														<input name="email" id="email" type="email">
 														<span></span>
 													</div>
 													<div class="field-wrap">
-														<input id="phone" name="phone" class="phone_customer" placeholder="Phone*" />
+														<label class="active hightlight">Phone<span class="req">*</span></label>
+														<input id="phone" name="phone" class="phone_customer">
 														<span id="valid-msg" class="hide">✓ Valid</span>
 														<span id="error-msg" class="hide">Invalid number</span>
 													</div>
@@ -117,57 +119,60 @@ get_header();
 
 												<div class="field-wrap">
 													<label> Apartment/Suite #</label>
-												  	<input type="text" name="apartmentsuite" id="apartmentsuite" />
+												  	<input type="text" name="apartmentsuite" id="apartmentsuite">
 												</div>
 
 
 												<div class="top-row">
 													<div class="field-wrap">
 														<label> City </label>
-														<input type="text" name="city" id="locality"/>
+														<input type="text" name="city" id="locality">
 													</div><!-- /City -->
 
 													<div class="field-wrap">
 														<label> State </label>
-														<input type="text" name="state" id="administrative_area_level_1"/>
+														<input type="text" name="state" id="administrative_area_level_1">
 													</div><!-- /State -->
 												</div>
 
 												<div class="top-row">
 													<div class="field-wrap">
 														<label> Zip </label>
-														<input type="text" name="zip" id="postal_code"/>
+														<input type="text" name="zip" id="postal_code">
 													</div><!-- /Zip -->
 
 													<div class="field-wrap">
 														<label> Country </label>
-														<input type="text" name="country" id="country"/>
+														<input type="text" name="country" id="country">
 													</div>
 												</div><!-- /Country -->
 
 												<div class="top-row">
 													<div class="field-wrap">
-														<input id="pass" name="pass" id="password" type="password" placeholder="Set A Password" required autocomplete="off"/>
+														<label>Enter a password</label>
+														<input type="password" name="pass" id="pass" id="password">
 														<span></span>
 													</div>
 													<div class="field-wrap">
-														<input id="confpass" type="password" placeholder="Re-enter Password" required autocomplete="off"/>
+														<label>Re-enter password</label>
+														<input type="password" name="confpass" id="confpass">
 														<span></span>
 													</div>
 												</div>
 
 								          	<?php wp_nonce_field('register_user','register_user_nonce', true, true ); ?>
 								          
-								          	<button type="submit" class="button button-block register">Get Started</button>
+								          	<button type="submit" class="button button-block register_customer">Get Started</button>
 								         </form><!-- /form signup_customer -->
 							         </div><!-- /signup_customer Id -->
 
 							         <div id="signup_business">
-							         	<form id="register" action="/" method="post">
+							         	<h2>List your business for free</h2>
+							         	<form id="register_business" action="/" method="post">
 												<div class="top-row">
 
 													<div class="field-wrap">
-														<input type="text" name="business_name" id="business_name" class="business_name"  placeholder="Business name" required/>
+														<input type="text" name="business_name" id="business_name" class="business_name"  placeholder="Business name" required>
 														<span></span>
 													</div>
 													<div class="field-wrap">
@@ -183,17 +188,17 @@ get_header();
 
 												<div class="field-wrap">
 													<label> Username </label>
-												  	<input type="text" name="username" id="username" />
+												  	<input type="text" name="username" id="username" >
 												</div>
 
 									         <div class="top-row">
 									            <div class="field-wrap">
 									              	<label>First Name<span class="req">*</span></label>
-									              	<input type="text" name="fname" id="fname" required/>
+									              	<input type="text" name="fname" id="fname" required>
 									            </div>
 									            <div class="field-wrap">
 									              	<label>Last Name<span class="req">*</span></label>
-									              	<input type="text" name="lname" id="lname" required/>
+									              	<input type="text" name="lname" id="lname" required>
 									            </div>
 									         </div>
 
@@ -205,17 +210,17 @@ get_header();
 														</select>
 													</div>
 													<div class="field-wrap">
-									              	<input type="date" id="datedropper" class="datedropper_business" name="dd" data-theme="my-style" value="Date of birth"/>
+									              	<input type="date" id="datedropper" class="datedropper_business" name="dd" data-theme="my-style" value="Date of birth">
 									            </div>
 								         	</div>
 
 								          	<div class="top-row">
 													<div class="field-wrap">
-														<input name="email" id="email" type="email" placeholder="Email*" required/>
+														<input name="email" id="email" type="email" placeholder="Email*" required>
 														<span></span>
 													</div>
 													<div class="field-wrap">
-														<input id="phone" class="phone_business" name="phone"  placeholder="Phone*" />
+														<input id="phone" class="phone_business" name="phone"  placeholder="Phone*" >
 														<span id="valid-msg" class="hide">✓ Valid</span>
 														<span id="error-msg" class="hide">Invalid number</span>
 													</div>
@@ -227,48 +232,48 @@ get_header();
 
 												<div class="field-wrap">
 													<label> Apartment/Suite #</label>
-												  	<input type="text" name="apartmentsuite" id="apartmentsuite" />
+												  	<input type="text" name="apartmentsuite" id="apartmentsuite">
 												</div>
 
 
 												<div class="top-row">
 													<div class="field-wrap">
 														<label> City </label>
-														<input type="text" name="city" id="locality"/>
+														<input type="text" name="city" id="locality">
 													</div><!-- /City -->
 
 													<div class="field-wrap">
 														<label> State </label>
-														<input type="text" name="state" id="administrative_area_level_1"/>
+														<input type="text" name="state" id="administrative_area_level_1">
 													</div><!-- /State -->
 												</div>
 
 												<div class="top-row">
 													<div class="field-wrap">
 														<label> Zip </label>
-														<input type="text" name="zip" id="postal_code"/>
+														<input type="text" name="zip" id="postal_code">
 													</div><!-- /Zip -->
 
 													<div class="field-wrap">
 														<label> Country </label>
-														<input type="text" name="country" id="country"/>
+														<input type="text" name="country" id="country">
 													</div>
 												</div><!-- /Country -->
 
 												<div class="top-row">
 													<div class="field-wrap">
-														<input name="pass" id="password" type="password" placeholder="Set A Password" required autocomplete="off"/>
+														<input name="pass" id="password" type="password" placeholder="Set A Password" required autocomplete="off">
 														<span></span>
 													</div>
 													<div class="field-wrap">
-														<input id="confpass" type="password" placeholder="Re-enter Password" required autocomplete="off"/>
+														<input id="confpass" type="password" placeholder="Re-enter Password" required autocomplete="off">
 														<span></span>
 													</div>
 												</div>
 
 								          	<?php wp_nonce_field('register_user','register_user_nonce', true, true ); ?>
 								          
-								          	<button type="submit" class="button button-block register">Get Started</button>
+								          	<button type="submit" class="button button-block register_business">Get Started</button>
 								         </form><!-- /form signup_Business -->
 							         </div><!-- /signup_business -->
 
@@ -278,8 +283,8 @@ get_header();
 						   </div><!-- /form -->
 						</div>
 
-						<div class="col-md-6 hidden-mobile">
-							<?php echo do_shortcode('[apsl-login-lite login_text="Login with Social Media"]'); ?>
+						<div class="col-md-offset-2 col-md-4 hidden-mobile">
+							<?php echo do_shortcode('[wordpress_social_login]'); ?>
 						</div>
 					</div>
 				</div>
@@ -287,7 +292,6 @@ get_header();
 
 	    </div> <!-- content area -->
 	</div>
-	<a href="#phone_verification">wsdx</a>
 	<div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
 	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
 	<h2 id="modal1Title">Verify Your Phone Number</h2>
@@ -296,11 +300,11 @@ get_header();
 			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
 		</div>
 		<div id="modal1Desc">
-			<form action="">
+			<form id="pin_submit" action="">
 				<label for="verification_code">Enter Verification Code</label>
 				<input type="number" name="verification_code" id="verification_code">
-				<input type="submit" name="pin_submit" value="Verify" id="pin_submit" class="custom_btn">
-				<div class="show_message">✓ Success!</div>
+				<input type="submit" name="pin_submit" value="Verify" class="custom_btn">
+				<div class="show_message"></div>
 			</form>
 		</div>
 	</div>

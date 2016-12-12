@@ -4,20 +4,146 @@ jQuery(function($){
 
 	function SavingWallet() {
 		this.errors = {};
-		this.phone = 'required';
-		this.isEmpty = 	function(obj) {
-		    for(var key in obj) {
-		        if(obj.hasOwnProperty(key))
-		            return false;
-		    }
-		    return true;
-		};
+		this.requiredFields = ['customer_username', 'fname', 'lname', 'dd', 'email', 'phone', 'pass', 'confpass'];
+		this.phone_verify = 'unverified';
 	}
+
+	// open remodal 
+	SavingWallet.prototype.openModal = function() {
+    	var inst = $('[data-remodal-id=phone_verification]').remodal();
+    	inst.open();
+	}	
+
+	// close remodal 
+	SavingWallet.prototype.closeModal = function() {
+    	var inst = $('[data-remodal-id=phone_verification]').remodal();
+    	inst.close();
+	}	
+
+	// check empty object
+	SavingWallet.prototype.isEmpty = function(obj) {
+		for(var key in obj) {
+	        if(obj.hasOwnProperty(key))
+	            return false;
+	    }
+	    return true;
+	}
+
+	// confirm password match 
+	SavingWallet.prototype.checkPasswordMatch = function(p1, p2) {
+	    if(p1) {
+	    	if (p1 != p2) {
+	    		return false;
+		    } else { 
+		    	return true;
+		    }
+	    }
+	}
+
+
+	// email validation
+	SavingWallet.prototype.isValidEmail = function(email) {
+	  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	  return regex.test(email);
+	}
+
+	// phone validation 
+	SavingWallet.prototype.isPhoneValid = function(){
+		var telInput = $(".phone_customer");
+		telInput.intlTelInput({
+		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
+		  // onlyCountries: ["us"],
+		  preferredCountries: []
+		});
+		if(telInput.intlTelInput("isValidNumber")){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// check any invalid or empty field 
+	SavingWallet.prototype.hasEmptyInvalidField = function(){
+		var that = this;
+		$.each(this.requiredFields, function(i, v) {
+			var val = $('input[name="' + v + '"]').val();
+			var trimmedval = $.trim(val);
+			if( v == 'phone' && !that.isPhoneValid()) {
+				$('input[name="phone"]').addClass('error-msg');
+				that.errors['phone'] = 'Invalid phone';
+			} else if ( v == 'email' && !that.isValidEmail(val)) {
+				$('input[name="email"]').addClass('error-msg');
+				that.errors['email'] = 'Invalid email';
+			} else if (!trimmedval) {
+				$('input[name="'+ v +'"]').addClass('error-msg');
+				that.errors[v] = 'invalid ' + v;
+			}
+		});
+	}
+
+
 
 	var savingwallet = new SavingWallet();
 
+	$('input').on('keyup change', function(e){
+		$(this).removeClass('error-msg');
+	});
 
-	$('.form').find('textarea, input:not([type="date"])').on('keyup blur focus change', function (e) {
+
+	// inttelinput 
+	var telInput = $(".phone_customer"),
+	  errorMsg = $("#error-msg"),
+	  validMsg = $("#valid-msg");
+
+	// initialise plugin
+	telInput.intlTelInput({
+	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
+	  // onlyCountries: ["us"],
+	  preferredCountries: []
+	});
+
+	var reset = function() {
+	  telInput.removeClass("error");
+	  errorMsg.addClass("hide");
+	  validMsg.addClass("hide");
+	  delete savingwallet.errors['phone'];
+	};
+
+	// on blur: validate
+	telInput.blur(function() {
+	  reset();
+	  if ($.trim(telInput.val())) {
+	    if (telInput.intlTelInput("isValidNumber")) {
+	      validMsg.removeClass("hide");
+	      delete savingwallet.errors['phone'];
+	    } else {
+	      telInput.addClass("error");
+	      errorMsg.removeClass("hide");
+	      savingwallet.errors['phone'] = 'Invalid phone number';
+	    }
+	  }
+	});
+
+	// on keyup / change flag: reset
+	telInput.on("keyup change", reset);
+
+
+	var emailInput = $("#email");
+	emailInput.blur(function() {
+	  $(this).next().text('');
+	  if ($.trim(emailInput.val())) {
+	    if (savingwallet.isValidEmail($.trim(emailInput.val()))) {
+	      $(this).next().attr('id', 'valid-msg').text('✓ Valid email');
+	      delete savingwallet.errors['email'];
+	    } else {
+	    	$(this).next().attr('id', 'error-msg').text('Invalid email');
+	    	savingwallet.errors['email'] = 'Invalid email';
+	    }
+	  }
+	});
+
+
+	$('.form').find('input:not([type="date"])').on('keyup blur focus change', function (e) {
 	  var $this = $(this),
 	      label = $this.prev('label');
 
@@ -86,64 +212,6 @@ jQuery(function($){
 	});
 
 
-	// inttelinput 
-	var telInput = $(".phone_customer, .phone_business"),
-	  errorMsg = $("#error-msg"),
-	  validMsg = $("#valid-msg");
-
-	// initialise plugin
-	telInput.intlTelInput({
-	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  onlyCountries: ["us"],
-	  preferredCountries: []
-	});
-
-	var reset = function() {
-	  telInput.removeClass("error");
-	  errorMsg.addClass("hide");
-	  validMsg.addClass("hide");
-	  delete savingwallet.errors['phone'];
-	};
-
-	// on blur: validate
-	telInput.blur(function() {
-	  reset();
-	  if ($.trim(telInput.val())) {
-	    if (telInput.intlTelInput("isValidNumber")) {
-	      validMsg.removeClass("hide");
-	      delete savingwallet.errors['phone'];
-	    } else {
-	      telInput.addClass("error");
-	      errorMsg.removeClass("hide");
-	      savingwallet.errors['phone'] = 'Invalid phone number';
-	    }
-	  }
-	});
-
-	// on keyup / change flag: reset
-	telInput.on("keyup change", reset);
-
-	// varify emails 
-	function isEmail(email) {
-	  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	  return regex.test(email);
-	}
-
-	var emailInput = $("#email");
-	emailInput.blur(function() {
-	  $(this).next().text('');
-	  if ($.trim(emailInput.val())) {
-	    if (isEmail($.trim(emailInput.val()))) {
-	      $(this).next().attr('id', 'valid-msg').text('✓ Valid email');
-	      delete savingwallet.errors['email'];
-	    } else {
-	    	$(this).next().attr('id', 'error-msg').text('Invalid email');
-	    	savingwallet.errors['email'] = 'Invalid email';
-	    }
-	  }
-	});
-
-
 	/* password match */
 	function checkPasswordMatch() {
 	    var password = $("#pass").val();
@@ -166,25 +234,30 @@ jQuery(function($){
 
 
 	/* register user */
+	$('form#register_customer').submit( function(event) {
 
-	$('button.register').click( function(event) {
+		event.preventDefault();
 
-	    that = $(this);
+	    var that = $(this);
+	    var btn = that.find('.register_customer');
 
-	    if (event.preventDefault) {
-	        event.preventDefault();
-	    } else {
-	        event.returnValue = false;
-	    }
+	    console.log(savingwallet.phone_verify);
+	    console.log($('#phone').val());
+
+	    btn.text('Please wait...');
+
+	    savingwallet.hasEmptyInvalidField();
 
 	    if(!savingwallet.isEmpty(savingwallet.errors)) {
-			$('.result-message').html('Please fill required fields');
-			$('.result-message').addClass('alert-danger');
-			$('.result-message').show();
+			that.prev().html('Please fill required fields');
+			that.prev().addClass('alert-danger');
+			that.prev().show();
+			savingwallet.errors = {};
+			btn.text('Get started');
 			return;
+	    } else {
+	    	that.prev().hide();
 	    }
-
-	    that.text('Please wait...');
 	 
 	    data = {
 			action: 'register_user',
@@ -203,8 +276,7 @@ jQuery(function($){
 			postal_code 	: $('#postal_code').val(),
 			country 		: $('#country').val(),
 			pass 			: $('#pass').val(),
-			confpass 		: $('#confpass').val(),
-			phone_verify 	: savingwallet.phone,
+			phone_verify 	: savingwallet.phone_verify,
 	    };
 	 
 	    // Do AJAX request
@@ -212,20 +284,18 @@ jQuery(function($){
 	      if( response ) {
 	        var data = $.parseJSON(response);
 	        if( typeof data.pin == 'number') {
-	        	var inst = $('[data-remodal-id=phone_verification]').remodal();
-	        	inst.open();
+	        	savingwallet.openModal();
 	        	savingwallet.pin = data.pin;
-	        	console.log(savingwallet.pin);
 	        	return;
 	        }
 	        if( data == 'success' ) {
-	          that.text('Redirecting...');
+	          btn.text('Redirecting...');
 	          location.reload();
 	        } else {
-	          $('.result-message').html(data);
-	          $('.result-message').addClass('alert-danger');
-	          $('.result-message').show();
-	          that.text('Get started now');
+	          that.prev().html(data);
+	          that.prev().addClass('alert-danger');
+	          that.prev().show();
+	          btn.text('Get started');
 	        }
 	      }
 	    });
@@ -234,41 +304,33 @@ jQuery(function($){
 
 
 	// Phone verification 
-	$('#pin_submit').click(function(e){
+	$('#pin_submit').submit(function(e){
 		e.preventDefault();
 		var user_code = $("#verification_code").val();
 		console.log(user_code == savingwallet.pin);
 		if( user_code == savingwallet.pin ) {
-			console.log(this);
-			$(this).append('<span class="success"> Success!</span>');
-			var inst = $('[data-remodal-id=phone_verification]').remodal();
-	        	inst.close();
+			$(this).find('.show_message').addClass('phone_success').text('✓ Success!');
+			setTimeout(savingwallet.closeModal(), 3000);
 	        $('#valid-msg').removeClass('hide').text('Phone verified!');
-			savingwallet.phone = 'verified';
+			savingwallet.phone_verify = 'verified';
+		} else {
+			$(this).find('.show_message').addClass('phone_failed').text('x Failed');
 		}
 	});
 
 
 	// User login 
-	$(".login_btn").click(function(){
-	    $(".login_btn_head").show();
-	});
+	$('form#loginform').submit( function(event) {
 
-	$('button.login').click( function(event) {
+		event.preventDefault();
+		var that = $(this);
+		var loginbutton = that.find('.login_btn');
 
-	    that = $(this);
+	    loginbutton.text('Please wait...');
 
-	    if (event.preventDefault) {
-	        event.preventDefault();
-	    } else {
-	        event.returnValue = false;
-	    }
-
-	    that.text('Please wait...');
-
-	    var reg_nonce = $('#msw_login_nonce').val();
-	    var username  = $('#username').val();
-	    var password  = $('#password').val();
+	    var reg_nonce = $('input[name="msw_login_nonce"]').val();
+	    var username  = $('input[name="username"]').val();
+	    var password  = $('input[name="password"]').val();
 	 
 	    data = {
 	      action: 'user_login',
@@ -276,28 +338,24 @@ jQuery(function($){
 	      username: username,
 	      password: password
 	    };
-	 
+
 	    // Do AJAX request
 	    $.post( local.ajax_url, data, function(response) {
+
 	      if( response ) {
 	        var data = $.parseJSON(response);
-	        console.log(data);
 	        if( data == 'success' ) {
-	          that.text('Redirecting...');
-	          //window.location.href = ajax.profile_page;
-	          localStorage.clear(); // clear search data to make favorite icon work
+	          loginbutton.text('Redirecting...');
 	          location.reload();
 	        } else {
-	          $('.result-message').html(data);
-	          $('.result-message').addClass('alert-danger');
-	          $('.result-message').show();
-	          that.text('Login');
+	          that.prev().html(data);
+	          that.prev().addClass('alert-danger');
+	          that.prev().show();
+	          loginbutton.text('Login');
 	        }
 	      }
 	    });
 	 
 	});
-
-
 
 });
