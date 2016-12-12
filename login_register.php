@@ -178,11 +178,20 @@ get_header();
 												</div>
 												<div class="field-wrap">
 													<select name="business_type" id="business_type">
-														<option value="Business Type 1">Business Type 1</option>
-														<option value="Business Type 2">Business Type 2</option>
-														<option value="Business Type 3">Business Type 3</option>
-														<option value="Business Type 4">Business Type 4</option>
-														<option value="Business Type 5">Business Type 5</option>
+														<option value="accountant">Accountant</option>
+														<option value="accountant">Arts & Entertainment</option>
+														<option value="accountant">Automotive</option>
+														<option value="accountant">Business Services</option>
+														<option value="accountant">Cleaning Services</option>
+														<option value="accountant">Doctors & Health Professionals</option>
+														<option value="accountant">Grocery Store</option>
+														<option value="accountant">Hair Salon & Spa</option>
+														<option value="accountant">Home Improvement</option>
+														<option value="accountant">Hotels & Lodging</option>
+														<option value="accountant">Legal Services</option>
+														<option value="accountant">Outdoors</option>
+														<option value="accountant">Restaurants & Bars</option>
+														<option value="accountant">Transportation</option>
 													</select>
 												</div>
 								          	</div>

@@ -55,11 +55,7 @@ a:active {
 }
 #signup .tab-group li.tab a {
   background: transparent;
-    border-bottom: 1px solid #f5f5f5;
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    transition: all 0.5s;
+  border-bottom: 1px solid #f5f5f5;
 }
 
 .log_reg_form .tab-content > div:last-child {
