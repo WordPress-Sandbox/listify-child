@@ -107,7 +107,7 @@ get_header();
 													</div>
 													<div class="field-wrap">
 														<label class="active hightlight">Phone<span class="req">*</span></label>
-														<input id="phone" name="phone" class="phone_customer">
+														<input id="phone_customer" name="phone_customer" class="phone_customer">
 														<span id="valid-msg" class="hide">✓ Valid</span>
 														<span id="error-msg" class="hide">Invalid number</span>
 													</div>
@@ -167,111 +167,118 @@ get_header();
 							         </div><!-- /signup_customer Id -->
 
 							         <div id="signup_business">
-							         	<h2>List your business for free</h2>
+							         	<div class="result-message alert-danger alert"></div>
 							         	<form id="register_business" action="/" method="post">
-												<div class="top-row">
-
-													<div class="field-wrap">
-														<input type="text" name="business_name" id="business_name" class="business_name"  placeholder="Business name" required>
-														<span></span>
-													</div>
-													<div class="field-wrap">
-														<select name="business_type" id="business_type" required>
-															<option value="Business Type 1">Business Type 1</option>
-															<option value="Business Type 2">Business Type 2</option>
-															<option value="Business Type 3">Business Type 3</option>
-															<option value="Business Type 4">Business Type 4</option>
-															<option value="Business Type 5">Business Type 5</option>
-														</select>
-													</div>
+							         		<h2>List your business for free</h2>
+											<div class="top-row">
+												<div class="field-wrap">
+													<label>Business name</label>
+													<input type="text" name="business_name" id="business_name">
+													<span></span>
+												</div>
+												<div class="field-wrap">
+													<select name="business_type" id="business_type">
+														<option value="Business Type 1">Business Type 1</option>
+														<option value="Business Type 2">Business Type 2</option>
+														<option value="Business Type 3">Business Type 3</option>
+														<option value="Business Type 4">Business Type 4</option>
+														<option value="Business Type 5">Business Type 5</option>
+													</select>
+												</div>
 								          	</div>
 
-												<div class="field-wrap">
-													<label> Username </label>
-												  	<input type="text" name="username" id="username" >
-												</div>
+											<div class="field-wrap">
+												<label> Username <span class="req">*</span></label>
+											  	<input type="text" name="business_username" id="business_username" >
+											</div>
 
 									         <div class="top-row">
 									            <div class="field-wrap">
 									              	<label>First Name<span class="req">*</span></label>
-									              	<input type="text" name="fname" id="fname" required>
+									              	<input type="text" name="bs_fname" id="bs_fname">
 									            </div>
 									            <div class="field-wrap">
 									              	<label>Last Name<span class="req">*</span></label>
-									              	<input type="text" name="lname" id="lname" required>
+									              	<input type="text" name="bs_lname" id="bs_lname">
 									            </div>
 									         </div>
 
 								          	<div class="top-row">
-													<div class="field-wrap">
-														<select name="gender" id="gender">
-															<option value="male">Male</option>
-															<option value="female">Female</option>
-														</select>
-													</div>
-													<div class="field-wrap">
-									              	<input type="date" id="datedropper" class="datedropper_business" name="dd" data-theme="my-style" value="Date of birth">
+												<div class="field-wrap">
+													<select name="bs_gender" id="bs_gender">
+														<option value="male">Male</option>
+														<option value="female">Female</option>
+													</select>
+												</div>
+												<div class="field-wrap">
+													<label class="active">Date of birth<span class="req">*</span></label>
+									              	<input type="date" id="bs_datedropper" class="datedropper_business" name="bs_dd"value="Date of birth">
 									            </div>
 								         	</div>
 
 								          	<div class="top-row">
-													<div class="field-wrap">
-														<input name="email" id="email" type="email" placeholder="Email*" required>
-														<span></span>
-													</div>
-													<div class="field-wrap">
-														<input id="phone" class="phone_business" name="phone"  placeholder="Phone*" >
-														<span id="valid-msg" class="hide">✓ Valid</span>
-														<span id="error-msg" class="hide">Invalid number</span>
-													</div>
+												<div class="field-wrap">
+													<label>Email<span class="req">*</span></label>
+													<input name="bs_email" id="bs_email" type="email">
+													<span></span>
+												</div>
+												<div class="field-wrap">
+													<label class="active hightlight">Phone<span class="req">*</span></label>
+													<input id="bs_phone" name="bs_phone" class="bs_phone">
+													<span id="valid-msg" class="hide">✓ Valid</span>
+													<span id="error-msg" class="hide">Invalid number</span>
+												</div>
 								          	</div>
 
+											<div class="field-wrap">
+											  	<input id="bs_streetaddress" class="bs_streetaddress_customer" name="streetaddress" type="text">
+											</div>
+
+											<div class="field-wrap">
+												<label> Apartment/Suite #</label>
+											  	<input type="text" name="bs_apartmentsuite" id="abs_partmentsuite">
+											</div>
+
+
+											<div class="top-row">
 												<div class="field-wrap">
-												  	<input type="text" name="streetaddress" id="streetaddress" class="streetaddress_business">
-												</div>
+													<label> City </label>
+													<input type="text" name="bs_city" id="locality">
+												</div><!-- /City -->
 
 												<div class="field-wrap">
-													<label> Apartment/Suite #</label>
-												  	<input type="text" name="apartmentsuite" id="apartmentsuite">
+													<label> State </label>
+													<input type="text" name="bs_state" id="administrative_area_level_1">
+												</div><!-- /State -->
+											</div>
+
+											<div class="top-row">
+												<div class="field-wrap">
+													<label> Zip </label>
+													<input type="text" name="bs_zip" id="postal_code">
+												</div><!-- /Zip -->
+
+												<div class="field-wrap">
+													<label> Country </label>
+													<input type="text" name="bs_country" id="country">
 												</div>
+											</div><!-- /Country -->
 
-
-												<div class="top-row">
-													<div class="field-wrap">
-														<label> City </label>
-														<input type="text" name="city" id="locality">
-													</div><!-- /City -->
-
-													<div class="field-wrap">
-														<label> State </label>
-														<input type="text" name="state" id="administrative_area_level_1">
-													</div><!-- /State -->
+											<div class="top-row">
+												<div class="field-wrap">
+													<label>Enter a password</label>
+													<input type="password" name="bs_pass" id="bs_password">
+													<span></span>
 												</div>
-
-												<div class="top-row">
-													<div class="field-wrap">
-														<label> Zip </label>
-														<input type="text" name="zip" id="postal_code">
-													</div><!-- /Zip -->
-
-													<div class="field-wrap">
-														<label> Country </label>
-														<input type="text" name="country" id="country">
-													</div>
-												</div><!-- /Country -->
-
-												<div class="top-row">
-													<div class="field-wrap">
-														<input name="pass" id="password" type="password" placeholder="Set A Password" required autocomplete="off">
-														<span></span>
-													</div>
-													<div class="field-wrap">
-														<input id="confpass" type="password" placeholder="Re-enter Password" required autocomplete="off">
-														<span></span>
-													</div>
+												<div class="field-wrap">
+													<label>Re-enter password</label>
+													<input type="password" name="bs_confpass" id="bs_confpass">
+													<span></span>
 												</div>
+											</div>
 
-								          	<?php wp_nonce_field('register_user','register_user_nonce', true, true ); ?>
+
+								          	<?php wp_nonce_field('register_business','register_business_nonce', true, true ); ?>
 								          
 								          	<button type="submit" class="button button-block register_business">Get Started</button>
 								         </form><!-- /form signup_Business -->

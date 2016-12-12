@@ -304,8 +304,9 @@ select option {
     color: #FFF;
 }
 /* phone varification */
-input#phone {
-    padding-left: 45px;
+input#phone_customer,  
+input#phone_business {
+    padding-left: 45px !important;
 }
 .intl-tel-input .selected-flag .iti-arrow {
 	border-top: 4px solid rgba(255, 255, 255, 0.5);

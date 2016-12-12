@@ -4,7 +4,7 @@ jQuery(function($){
 
 	function SavingWallet() {
 		this.errors = {};
-		this.requiredFields = ['customer_username', 'fname', 'lname', 'dd', 'email', 'phone', 'pass', 'confpass'];
+		this.requiredFields = ['customer_username', 'fname', 'lname', 'dd', 'email', 'phone_customer', 'pass', 'confpass'];
 		this.phone_verify = 'unverified';
 	}
 
@@ -49,7 +49,7 @@ jQuery(function($){
 
 	// phone validation 
 	SavingWallet.prototype.isPhoneValid = function(){
-		var telInput = $(".phone_customer");
+		var telInput = $("#phone_customer");
 		telInput.intlTelInput({
 		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
 		  // onlyCountries: ["us"],
@@ -68,9 +68,9 @@ jQuery(function($){
 		$.each(this.requiredFields, function(i, v) {
 			var val = $('input[name="' + v + '"]').val();
 			var trimmedval = $.trim(val);
-			if( v == 'phone' && !that.isPhoneValid()) {
-				$('input[name="phone"]').addClass('error-msg');
-				that.errors['phone'] = 'Invalid phone';
+			if( v == 'phone_customer' && !that.isPhoneValid()) {
+				$('input[name="phone_customer"]').addClass('error-msg');
+				that.errors['phone_customer'] = 'Invalid phone';
 			} else if ( v == 'email' && !that.isValidEmail(val)) {
 				$('input[name="email"]').addClass('error-msg');
 				that.errors['email'] = 'Invalid email';
@@ -91,14 +91,14 @@ jQuery(function($){
 
 
 	// inttelinput 
-	var telInput = $(".phone_customer"),
+	var telInput = $("#phone_customer"),
 	  errorMsg = $("#error-msg"),
 	  validMsg = $("#valid-msg");
 
 	// initialise plugin
 	telInput.intlTelInput({
 	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  // onlyCountries: ["us"],
+	  onlyCountries: ["us"],
 	  preferredCountries: []
 	});
 
@@ -241,8 +241,95 @@ jQuery(function($){
 	    var that = $(this);
 	    var btn = that.find('.register_customer');
 
-	    console.log(savingwallet.phone_verify);
-	    console.log($('#phone').val());
+	    // console.log(savingwallet.phone_verify);
+	    // console.log($('#phone').val());
+
+	    btn.text('Please wait...');
+
+	    savingwallet.hasEmptyInvalidField();
+
+	    console.log(savingwallet.errors);
+
+	    if(!savingwallet.isEmpty(savingwallet.errors)) {
+			that.prev().html('Please fill required fields');
+			that.prev().addClass('alert-danger');
+			that.prev().show();
+			savingwallet.errors = {};
+			btn.text('Get started');
+			return;
+	    } else {
+	    	that.prev().hide();
+	    }
+	 
+	    data = {
+			action: 'register_user',
+			reg_nonce 		: $('#register_user_nonce').val(),
+			username 		: $('#username').val(),
+			firstname 		: $('#fname').val(),
+			lastname 		: $('#lname').val(),
+			gender 			: $('#gender').val(),
+			dd 				: $('#datedropper').val(),
+			email 			: $('#email').val(),
+			phone 			: $('#phone_customer').val(),
+			streetaddress 	: $('#streetaddress').val(),
+			apartmentsuite 	: $('#apartmentsuite').val(),
+			city 			: $('#locality').val(),
+			state 			: $('#administrative_area_level_1').val(),
+			postal_code 	: $('#postal_code').val(),
+			country 		: $('#country').val(),
+			pass 			: $('#pass').val(),
+			phone_verify 	: savingwallet.phone_verify,
+	    };
+	 
+	    // Do AJAX request
+	    $.post( local.ajax_url, data, function(response) {
+	      if( response ) {
+	        var data = $.parseJSON(response);
+	        if( typeof data.pin == 'number') {
+	        	savingwallet.openModal();
+	        	savingwallet.pin = data.pin;
+	        	return;
+	        }
+	        if( data == 'success' ) {
+	          btn.text('Redirecting...');
+	          location.reload();
+	        } else {
+	          that.prev().html(data);
+	          that.prev().addClass('alert-danger');
+	          that.prev().show();
+	          btn.text('Get started');
+	        }
+	      }
+	    });
+	 
+	});
+
+
+	// Phone verification 
+	$('#pin_submit').submit(function(e){
+		e.preventDefault();
+		var user_code = $("#verification_code").val();
+		console.log(user_code == savingwallet.pin);
+		if( user_code == savingwallet.pin ) {
+			$(this).find('.show_message').addClass('phone_success').text('✓ Success!');
+			window.setTimeout(savingwallet.closeModal(), 3000);
+	        $('#valid-msg').removeClass('hide').text('Phone verified!');
+			savingwallet.phone_verify = 'verified';
+		} else {
+			$(this).find('.show_message').addClass('phone_failed').text('x Failed');
+		}
+	});
+
+
+	// Business registration 
+	$('form#register_business').submit(function(event){
+
+		event.preventDefault();
+	    var that = $(this);
+	    var btn = that.find('.register_business');
+
+	   	// console.log(savingwallet.phone_verify);
+	    // console.log($('#phone').val());
 
 	    btn.text('Please wait...');
 
@@ -299,23 +386,8 @@ jQuery(function($){
 	        }
 	      }
 	    });
-	 
-	});
 
 
-	// Phone verification 
-	$('#pin_submit').submit(function(e){
-		e.preventDefault();
-		var user_code = $("#verification_code").val();
-		console.log(user_code == savingwallet.pin);
-		if( user_code == savingwallet.pin ) {
-			$(this).find('.show_message').addClass('phone_success').text('✓ Success!');
-			setTimeout(savingwallet.closeModal(), 3000);
-	        $('#valid-msg').removeClass('hide').text('Phone verified!');
-			savingwallet.phone_verify = 'verified';
-		} else {
-			$(this).find('.show_message').addClass('phone_failed').text('x Failed');
-		}
 	});
 
 
