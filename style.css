@@ -485,10 +485,10 @@ span#error-msg {
     padding: 8px 15px;
     text-align: center;
 }
-.user_profile .tab-group li.active a,
-.user_profile .tab-group li:hover a,
-.user_profile .tab-group li:focus a,
-.user_profile .tab-group li:active a {
+.user_profile .tab-group li a.active,
+.user_profile .tab-group li a:hover,
+.user_profile .tab-group li a:focus,
+.user_profile .tab-group li a:active {
     color: #fff;
     border: none;
     background: #2854A1;
@@ -728,6 +728,16 @@ span#error-msg {
   .dl-horizontal dd {
       margin: 0;
       margin-left: 180px;
+  }
+}
+@media (max-width: 768px) {
+  .user_profile_img, .user_profile_desc {
+      padding: 0 20px;
+      text-align: center;
+  }
+  .user_profile .tab-group li {
+      display: block;
+      width: 100%;
   }
 }
 .user_profile input::-webkit-input-placeholder { 

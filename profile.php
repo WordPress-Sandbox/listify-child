@@ -10,22 +10,26 @@ get_header();
 	<div class="container user_profile">
         <div class="row">
             <div class="col-md-3">
-                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/profile.jpg" alt="">
-                <h2 class="user_name">Edward Rooster</h2>
-                <p class="user_bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet magnam enim totam inventore nostrum qui unde perferendis, velit. Eligendi neque inventore commodi est numquam vitae voluptatem necessitatibus maiores consequatur in.</p>
+                <div class="user_profile_img">
+                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/profile.jpg" alt="">
+                </div>
+                <div class="user_profile_desc">
+                    <h2 class="user_name">Edward Rooster</h2>
+                    <p class="user_bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet magnam enim totam inventore nostrum qui unde perferendis, velit. Eligendi neque inventore commodi est numquam vitae voluptatem necessitatibus maiores consequatur in.</p>
+                </div>
             </div>
 
             <div class="col-md-9">
                 <div class="user_profile_body">
                     <ul class="tab-group">
-                        <li class="active"><a href="#profile">Edit Profile</a></li>
+                        <li><a href="#profile">Edit Profile</a></li>
                         <li><a href="#passwordTab">Change Password</a></li>
                         <li><a href="#payment">Payment Options</a></li>
                         <li><a href="#settings">Notification Settings</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div id="profile" class="user_profile_edit fade in active">
+                        <div id="profile" class="user_profile_edit fade">
                             <h2>Manage your Name, ID and Email Addresses.</h2>
                             <p>Below are the name and email addresses on file for your account.</p>
                             <br>
