@@ -54,7 +54,7 @@ function new_user_register() {
     if(empty($dd)) {
         $err[] = 'Date required';
     } 
-    if(empty($email) || !isValidEmail($email) ){
+    if(empty($email) || !$mysavingwallet->isValidEmail($email) ){
         $err[] = 'Valid Email required';
     }
     if(empty($phone)){
@@ -114,38 +114,25 @@ add_action('wp_ajax_nopriv_register_user', 'new_user_register');
 
 /* business user registration */
 
-function new_business_user_register() {
+function new_business_register() {
+
+    $mysavingwallet2 = new Mysavingwallet;
 
     $err = array();
 
     // Verify nonce
-    if( !isset( $_POST['register_business_nonce'] ) || !wp_verify_nonce( $_POST['register_business_nonce'], 'register_business' ) ) {
+    if( !isset( $_POST['reg_nonce'] ) || !wp_verify_nonce( $_POST['reg_nonce'], 'register_business' ) ) {
         $err[] = 'Ooops, something went wrong, please try again later.';
         die();
     }
 
     if($_POST['phone_verify'] == 'unverified') {
-
-        $sid = 'ACf2609e774c67bbfc8af7844558d57608';
-        $token = '59b014bf2054a4e636a2daa66df6a08f';
-        $pin = rand(1000, 9999);
-        $client = new Client($sid, $token);
-
-        /* send verfication sms */
-        $client->messages->create(
-            $_POST['phone'],
-            array(
-                'from' => '561 800-0461',
-                'body' => 'Your mysavingswallet pin is: ' . $pin
-            )
-        );
-
-        echo json_encode(array('pin'=>$pin));
-        die();
+        $mysavingwallet2->sendPin($_POST['phone']);
     }
  
     // Get data 
-    $business_name= $_POST['business_name'];
+    $bs_name = $_POST['bs_name'];
+    $bs_type = $_POST['bs_type'];
     $bs_username= $_POST['bs_username'];
     $bs_fname= $_POST['bs_fname'];
     $bs_lname = $_POST['bs_lname'];
@@ -153,7 +140,6 @@ function new_business_user_register() {
     $bs_dd = $_POST['bs_dd'];
     $bs_email    = $_POST['bs_email'];
     $bs_phone    = $_POST['bs_phone'];
-    //$phone_status = $_POST['phone_verify'];
     $bs_streetaddress    = $_POST['bs_streetaddress'];
     $bs_apartmentsuite    = $_POST['bs_apartmentsuite'];
     $bs_city = $_POST['bs_city'];
@@ -163,7 +149,10 @@ function new_business_user_register() {
     $bs_pass = $_POST['bs_pass'];
 
     // Validate 
-    if(empty($business_name)){
+    if(empty($bs_name)){
+        $err[] = 'Business name required';
+    }        
+    if(empty($bs_type)){
         $err[] = 'Business name required';
     }    
     if(empty($bs_username)){
@@ -181,7 +170,7 @@ function new_business_user_register() {
     if(empty($bs_dd)) {
         $err[] = 'Date required';
     } 
-    if(empty($bs_email) || !isValidEmail($bs_email) ){
+    if(empty($bs_email) || !$mysavingwallet2->isValidEmail($bs_email) ){
         $err[] = 'Valid Email required';
     }
     if(empty($bs_phone)){
@@ -198,7 +187,7 @@ function new_business_user_register() {
         'user_email' => $bs_email,
         'first_name' => $bs_fname,
         'last_name'  => $bs_lname,
-        'role'       => 'customer'
+        'role'       => 'business'
     );
 
     if(empty($err)) {
@@ -234,8 +223,8 @@ function new_business_user_register() {
  
 }
 
-add_action('wp_ajax_register_user', 'new_business_user_register');
-add_action('wp_ajax_nopriv_register_user', 'new_business_user_register');
+add_action('wp_ajax_register_business', 'new_business_register');
+add_action('wp_ajax_nopriv_register_business', 'new_business_register');
 
 
 /**

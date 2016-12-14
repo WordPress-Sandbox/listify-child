@@ -72,7 +72,7 @@ get_header();
 							         		<h2>Register and start saving</h2>
 											<div class="field-wrap">
 												<label> Username <span class="req">*</span></label>
-											  	<input type="text" name="customer_username" id="username" >
+											  	<input type="text" name="reg_username" id="reg_username" >
 											</div>
 
 									         <div class="top-row">
@@ -103,13 +103,12 @@ get_header();
 													<div class="field-wrap">
 														<label>Email<span class="req">*</span></label>
 														<input name="email" id="email" type="email">
-														<span></span>
+														<span class="show_message"></span>
 													</div>
 													<div class="field-wrap">
 														<label class="active hightlight">Phone<span class="req">*</span></label>
-														<input id="phone_customer" name="phone_customer" class="phone_customer">
-														<span id="valid-msg" class="hide">✓ Valid</span>
-														<span id="error-msg" class="hide">Invalid number</span>
+														<input id="phone" name="phone" class="phone">
+														<span class="show_message"></span>
 													</div>
 								          	</div>
 
@@ -173,11 +172,12 @@ get_header();
 											<div class="top-row">
 												<div class="field-wrap">
 													<label>Business name</label>
-													<input type="text" name="business_name" id="business_name">
+													<input type="text" name="bs_name" id="bs_name">
 													<span></span>
 												</div>
 												<div class="field-wrap">
-													<select name="business_type" id="business_type">
+													<label class="active"> Business type <span class="req">*</span></label>
+													<select name="bs_type" id="bs_type">
 														<option value="accountant">Accountant</option>
 														<option value="accountant">Arts & Entertainment</option>
 														<option value="accountant">Automotive</option>
@@ -221,7 +221,7 @@ get_header();
 												</div>
 												<div class="field-wrap">
 													<label class="active">Date of birth<span class="req">*</span></label>
-									              	<input type="date" id="bs_dd" class="datedropper_business" name="bs_dd"value="Date of birth">
+									              	<input type="date" id="bs_dd" class="datedropper_business" name="bs_dd" value="Date of birth">
 									            </div>
 								         	</div>
 
@@ -234,13 +234,12 @@ get_header();
 												<div class="field-wrap">
 													<label class="active hightlight">Phone<span class="req">*</span></label>
 													<input id="bs_phone" name="bs_phone" class="bs_phone">
-													<span id="valid-msg" class="hide">✓ Valid</span>
-													<span id="error-msg" class="hide">Invalid number</span>
+													<span class="show_message"></span>
 												</div>
 								          	</div>
 
 											<div class="field-wrap">
-											  	<input id="bs_streetaddress" class="bs_streetaddress_customer" name="streetaddress" type="text">
+											  	<input id="bs_streetaddress" class="bs_streetaddress_customer" name="bs_streetaddress" type="text">
 											</div>
 
 											<div class="field-wrap">
@@ -257,19 +256,19 @@ get_header();
 
 												<div class="field-wrap">
 													<label> State </label>
-													<input type="text" name="bs_state" id="administrative_area_level_2">
+													<input type="text" name="bs_state" id="bs_administrative_area_level_2">
 												</div><!-- /State -->
 											</div>
 
 											<div class="top-row">
 												<div class="field-wrap">
 													<label> Zip </label>
-													<input type="text" name="bs_zip" id="bspostal_code">
+													<input type="text" name="bs_zip" id="bs_postal_code">
 												</div><!-- /Zip -->
 
 												<div class="field-wrap">
 													<label> Country </label>
-													<input type="text" name="bs_country" id="country">
+													<input type="text" name="bs_country" id="bs_country">
 												</div>
 											</div><!-- /Country -->
 
@@ -308,23 +307,43 @@ get_header();
 
 	    </div> <!-- content area -->
 	</div>
+
 	<div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
-	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
-	<h2 id="modal1Title">Verify Your Phone Number</h2>
-	<div class="verification_content">
-		<div class="verification_img">
-			<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
+		<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+		<h2 id="modal1Title">Verify Your Phone Number</h2>
+		<div class="verification_content">
+			<div class="verification_img">
+				<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
+			</div>
+			<div id="modal1Desc">
+				<form id="pin_submit" action="">
+					<label for="verification_code">Enter Verification Code</label>
+					<input type="number" name="verification_code" id="verification_code">
+					<input type="submit" name="pin_submit" value="Verify" class="custom_btn">
+					<div class="show_message"></div>
+				</form>
+			</div>
 		</div>
-		<div id="modal1Desc">
-			<form id="pin_submit" action="">
-				<label for="verification_code">Enter Verification Code</label>
-				<input type="number" name="verification_code" id="verification_code">
-				<input type="submit" name="pin_submit" value="Verify" class="custom_btn">
-				<div class="show_message"></div>
-			</form>
+	</div>	
+
+
+	<div class="remodal" data-remodal-id="bs_phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+		<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+		<h2 id="modal1Title">Verify Your Phone Number</h2>
+		<div class="verification_content">
+			<div class="verification_img">
+				<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
+			</div>
+			<div id="modal1Desc">
+				<form id="bs_pin_submit" action="">
+					<label for="verification_code">Enter Verification Code</label>
+					<input type="number" name="bs_verification_code" id="bs_verification_code">
+					<input type="submit" name="bs_pin_submit" value="Verify" class="custom_btn">
+					<div class="bs_show_message"></div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 
 
 <?php get_footer(); ?>

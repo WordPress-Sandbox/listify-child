@@ -300,8 +300,8 @@ select option {
     color: #FFF;
 }
 /* phone varification */
-input#phone_customer,  
-input#phone_business {
+input#phone,  
+input#bs_phone {
     padding-left: 45px !important;
 }
 .intl-tel-input .selected-flag .iti-arrow {
@@ -395,10 +395,10 @@ span#error-msg {
 .success {
     padding: 5px 0 0;
 }
-.phone_sucess {
+.success_message {
   color: green;
 }
-.phone_failed {
+.error_message {
   color: red;
 }
 
