@@ -1,14 +1,13 @@
 <?php 
 
-
 // Use the REST API Client to make requests to the Twilio REST API
 use Twilio\Rest\Client;
 
-function isValidEmail($email){ 
-    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-}
+require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
 
 function new_user_register() {
+
+    $mysavingwallet = new Mysavingwallet;
 
     $err = array();
 
@@ -19,23 +18,7 @@ function new_user_register() {
     }
 
     if($_POST['phone_verify'] == 'unverified') {
-
-        $sid = 'ACf2609e774c67bbfc8af7844558d57608';
-        $token = '59b014bf2054a4e636a2daa66df6a08f';
-        $pin = rand(1000, 9999);
-        $client = new Client($sid, $token);
-
-        /* send verfication sms */
-        $client->messages->create(
-            $_POST['phone'],
-            array(
-                'from' => '561 800-0461',
-                'body' => 'Your mysavingswallet pin is: ' . $pin
-            )
-        );
-
-        echo json_encode(array('pin'=>$pin));
-        die();
+        $mysavingwallet->sendPin($_POST['phone']);
     }
  
     // Get data 

@@ -95,7 +95,7 @@ get_header();
 												</div>
 												<div class="field-wrap">
 													<label class="active">Date of birth<span class="req">*</span></label>
-									              	<input type="date" id="datedropper" class="datedropper_customer" name="dd" data-theme="my-style" value="Date of birth">
+									              	<input type="date" id="dd" class="datedropper_customer" name="dd" value="Date of birth">
 									            </div>
 								         	</div>
 

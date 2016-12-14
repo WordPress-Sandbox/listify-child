@@ -30,6 +30,5 @@ function listify_child_theme_setup() {
 }
 add_action( 'after_setup_theme', 'listify_child_theme_setup' );
 
-require get_stylesheet_directory() . '/inc/required_plugins.php';
 require get_stylesheet_directory() . '/inc/ajax.php';
 require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';
