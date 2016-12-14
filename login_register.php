@@ -198,7 +198,7 @@ get_header();
 
 											<div class="field-wrap">
 												<label> Username <span class="req">*</span></label>
-											  	<input type="text" name="business_username" id="business_username" >
+											  	<input type="text" name="bs_username" id="bs_username" >
 											</div>
 
 									         <div class="top-row">
@@ -221,7 +221,7 @@ get_header();
 												</div>
 												<div class="field-wrap">
 													<label class="active">Date of birth<span class="req">*</span></label>
-									              	<input type="date" id="bs_datedropper" class="datedropper_business" name="bs_dd"value="Date of birth">
+									              	<input type="date" id="bs_dd" class="datedropper_business" name="bs_dd"value="Date of birth">
 									            </div>
 								         	</div>
 
@@ -245,26 +245,26 @@ get_header();
 
 											<div class="field-wrap">
 												<label> Apartment/Suite #</label>
-											  	<input type="text" name="bs_apartmentsuite" id="abs_partmentsuite">
+											  	<input type="text" name="bs_apartmentsuite" id="bs_apartmentsuite">
 											</div>
 
 
 											<div class="top-row">
 												<div class="field-wrap">
 													<label> City </label>
-													<input type="text" name="bs_city" id="locality">
+													<input type="text" name="bs_city" id="bslocality">
 												</div><!-- /City -->
 
 												<div class="field-wrap">
 													<label> State </label>
-													<input type="text" name="bs_state" id="administrative_area_level_1">
+													<input type="text" name="bs_state" id="administrative_area_level_2">
 												</div><!-- /State -->
 											</div>
 
 											<div class="top-row">
 												<div class="field-wrap">
 													<label> Zip </label>
-													<input type="text" name="bs_zip" id="postal_code">
+													<input type="text" name="bs_zip" id="bspostal_code">
 												</div><!-- /Zip -->
 
 												<div class="field-wrap">

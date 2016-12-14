@@ -127,7 +127,7 @@ jQuery(function($){
 	// on keyup / change flag: reset
 	telInput.on("keyup change", reset);
 
-
+	// customer user mail validation
 	var emailInput = $("#email");
 	emailInput.blur(function() {
 	  $(this).next().text('');
@@ -138,6 +138,22 @@ jQuery(function($){
 	    } else {
 	    	$(this).next().attr('id', 'error-msg').text('Invalid email');
 	    	savingwallet.errors['email'] = 'Invalid email';
+	    }
+	  }
+	});
+
+
+	//business user mail validation 
+	var bs_emailInput = $("#bs_email");
+	bs_emailInput.blur(function() {
+	  $(this).next().text('');
+	  if ($.trim(bs_emailInput.val())) {
+	    if (savingwallet.isValidEmail($.trim(bs_emailInput.val()))) {
+	      $(this).next().attr('id', 'valid-msg').text('✓ Valid email');
+	      delete savingwallet.errors['email'];
+	    } else {
+	    	$(this).next().attr('id', 'error-msg').text('Invalid email');
+	    	savingwallet.errors['bs_email'] = 'Invalid email';
 	    }
 	  }
 	});
@@ -228,10 +244,12 @@ jQuery(function($){
 	    }
 	}
 
+	// customer pass check
 	$(document).ready(function () {
 	   $("#pass, #confpass").on( 'keyup blur focus change', checkPasswordMatch);
 	});
 
+	
 
 	/* Customer registration */
 	$('form#register_customer').submit( function(event) {
@@ -349,22 +367,23 @@ jQuery(function($){
 	    }
 	 
 	    data = {
-			action: 'register_user',
-			reg_nonce 		: $('#register_user_nonce').val(),
-			username 		: $('#username').val(),
-			firstname 		: $('#fname').val(),
-			lastname 		: $('#lname').val(),
-			gender 			: $('#gender').val(),
-			dd 				: $('#datedropper').val(),
-			email 			: $('#email').val(),
-			phone 			: $('#phone').val(),
-			streetaddress 	: $('#streetaddress').val(),
-			apartmentsuite 	: $('#apartmentsuite').val(),
-			city 			: $('#locality').val(),
-			state 			: $('#administrative_area_level_1').val(),
-			postal_code 	: $('#postal_code').val(),
-			country 		: $('#country').val(),
-			pass 			: $('#pass').val(),
+			action: 'register_business',
+			reg_nonce 		: $('#register_business_nonce').val(),
+			business_name 	: $('#business_name').val(),
+			bs_username 	: $('#bs_username').val(),
+			bs_fname 		: $('#bs_fname').val(),
+			bs_lname 		: $('#bs_lname').val(),
+			bs_gender 		: $('#bs_gender').val(),
+			bs_dd 			: $('#bs_dd').val(),
+			bs_email 		: $('#bs_email').val(),
+			bs_phone 		: $('#bs_phone').val(),
+			bs_streetaddress: $('#bs_streetaddress').val(),
+			bs_apartmentsuite : $('#bs_apartmentsuite').val(),
+			bslocality 		: $('#bslocality').val(),
+			bsstate 		: $('#administrative_area_level_2').val(),
+			bspostal_code 	: $('#bspostal_code').val(),
+			bs_country 		: $('#bs_country').val(),
+			bs_pass 		: $('#bs_pass').val(),
 			phone_verify 	: savingwallet.phone_verify,
 	    };
 	 
