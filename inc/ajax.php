@@ -17,7 +17,7 @@ function new_user_register() {
         die();
     }
 
-    if($_POST['phone_verify'] == 'unverified') {
+    if($_POST['phone_status'] == 'unverified') {
         $mysavingwallet->sendPin($_POST['phone']);
     }
  
@@ -127,7 +127,7 @@ function new_business_register() {
         die();
     }
 
-    if($_POST['phone_verify'] == 'unverified') {
+    if($_POST['phone_status'] == 'unverified') {
         $mysavingwallet2->sendPin($_POST['phone']);
     }
  

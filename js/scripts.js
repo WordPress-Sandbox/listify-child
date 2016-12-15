@@ -283,9 +283,12 @@ jQuery(function($){
 			pass 			: $('#pass').val(),
 			phone_status 	: savingwallet.phone_status,
 	    };
+
+	    console.log(data);
 	 
 	    // Do AJAX request
 	    $.post( local.ajax_url, data, function(response) {
+	    	console.log(res);
 	      if( response ) {
 	        var data = $.parseJSON(response);
 	        if( typeof data.pin == 'number') {
