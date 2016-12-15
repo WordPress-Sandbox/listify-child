@@ -94,8 +94,5 @@ function mysavingwallet_redirect_if_admin_page()
 add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 
 
-
-
-
 require get_stylesheet_directory() . '/inc/ajax.php';
 require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';

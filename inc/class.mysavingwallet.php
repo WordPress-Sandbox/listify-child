@@ -18,17 +18,17 @@ class Mysavingwallet {
 
 	public function sendPin() { 
 
-		$client = new Client($this->sid, $this->token);
+		// $client = new Client($this->sid, $this->token);
 		$pin = rand(1000, 9999);
 
 		/* send verfication sms */
-        $client->messages->create(
-            $to,
-            array(
-                'from' => $this->from_phone,
-                'body' => 'Your mysavingswallet pin is: ' . $pin
-            )
-        );
+        // $client->messages->create(
+        //     $to,
+        //     array(
+        //         'from' => $this->from_phone,
+        //         'body' => 'Your mysavingswallet pin is: ' . $pin
+        //     )
+        // );
 
         echo json_encode(array('pin'=>$pin));
         die();
@@ -40,3 +40,5 @@ class Mysavingwallet {
 	}
 
 }
+
+?>

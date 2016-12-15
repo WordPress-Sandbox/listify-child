@@ -1,9 +1,8 @@
 <?php 
 
 // Use the REST API Client to make requests to the Twilio REST API
-use Twilio\Rest\Client;
-
 require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
+use Twilio\Rest\Client;
 
 function new_user_register() {
 
@@ -17,7 +16,7 @@ function new_user_register() {
         die();
     }
 
-    if($_POST['phone_status'] == 'unverified') {
+    if($_POST['phone_status'] != 'verified') {
         $mysavingwallet->sendPin($_POST['phone']);
     }
  
@@ -127,7 +126,7 @@ function new_business_register() {
         die();
     }
 
-    if($_POST['phone_status'] == 'unverified') {
+    if($_POST['phone_status'] != 'verified') {
         $mysavingwallet2->sendPin($_POST['phone']);
     }
  
@@ -301,7 +300,7 @@ function email_verify_func() {
     $headers = 'From:admin@mysavingswallet.com' . "\r\n";
 
     //
-    if( $user->user_email == $email && $email_status != 'verified' ) {
+    if( $user->user_email == $email && $email_status != 'vkerified' ) {
         $mail = wp_mail( $email, $sub, $message, $headers);
         if($mail) {
             update_user_meta($user_id, 'email_code', $code);

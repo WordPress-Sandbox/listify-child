@@ -288,7 +288,7 @@ jQuery(function($){
 	 
 	    // Do AJAX request
 	    $.post( local.ajax_url, data, function(response) {
-	    	console.log(res);
+	    	console.log(response);
 	      if( response ) {
 	        var data = $.parseJSON(response);
 	        if( typeof data.pin == 'number') {
@@ -320,7 +320,7 @@ jQuery(function($){
 		if( user_code == savingwallet.pin ) {
 			$(this).find('.show_message').removeClass('error_message').addClass('success_message').text('✓ Success!');
 	        $('#phone').removeClass('error_message').addClass('success_message').text('Phone verified!');
-			savingwallet.phone_verify = 'verified';
+			savingwallet.phone_status = 'verified';
 			window.setTimeout(savingwallet.closeModal, 3000);
 			$('form#register_customer').submit();
 		} else {
@@ -393,6 +393,7 @@ jQuery(function($){
 		}
 
 		$.post( local.ajax_url, data, function(res) {
+			var res = $.parseJSON(res);
 			if(res == 'success') {
 				$('.email_verify').html('<span class="success_message">✓ Please check your inbox.</span>');
 				window.setTimeout(codebox, 3000);
@@ -415,14 +416,19 @@ jQuery(function($){
 
 		console.log(data);
 
+		function reload() {
+			location.reload();
+		}
+
 		$.post( local.ajax_url, data, function(res) {
-			console.log(res);
-			// if(res == 'success') {
+			var res = $.parseJSON(res);
+			if(res == 'success') {
+				$('.email_verify').after(' ');
 				$('.email_verify').html('<span class="success_message">✓ Email successfully verified! </span>');
-				window.setTimeout(location.reload, 2000);
-			// } else {
-			// 	$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
-			// }
+				window.setTimeout(reload, 2000);
+			} else {
+				$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
+			}
 		});
 
 	});

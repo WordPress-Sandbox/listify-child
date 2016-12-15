@@ -178,7 +178,6 @@ jQuery(function($){
 
 	    bssavingwallet.hasEmptyInvalidField();
 	    console.log(bssavingwallet.errors);
-	    console.log($('#bs_name').val());
 
 	    if(!bssavingwallet.isEmpty(bssavingwallet.errors)) {
 			that.prev().html('Please fill required fields');
@@ -245,7 +244,7 @@ jQuery(function($){
 		if( user_code == bssavingwallet.pin ) {
 			$(this).find('.bs_show_message').removeClass('error_message').addClass('success_message').text('✓ Success!');
 	        $('#bs_phone').removeClass('error_message').addClass('success_message').text('Phone verified!');
-			bssavingwallet.phone_verify = 'verified';
+			bssavingwallet.phone_status = 'verified';
 			window.setTimeout(bssavingwallet.closeModal, 3000);
 			$('form#register_business').submit();
 		} else {

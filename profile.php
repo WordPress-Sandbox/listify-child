@@ -15,7 +15,8 @@ $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
 
 if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
-
+    <?php echo get_user_meta($user_id, 'email_code', true); ?>
+    <?php echo get_user_meta($user_id, 'email_status', true); ?>
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -44,7 +45,7 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
                     <?php echo get_avatar($user_id, 170); ?>
                 </div>
                 <div class="user_profile_desc">
-                    <h2 class="user_name">Edward Rooster</h2>
+                    <h2 class="user_name"><?php echo $user->display_name; ?></h2>
                     <p class="user_bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet magnam enim totam inventore nostrum qui unde perferendis, velit. Eligendi neque inventore commodi est numquam vitae voluptatem necessitatibus maiores consequatur in.</p>
                 </div>
             </div>
