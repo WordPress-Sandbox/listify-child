@@ -379,25 +379,50 @@ jQuery(function($){
 			email: $('.email_verify input[name="email"]').val()
 		}
 
+		var form = `<div class="email_verify">
+		<input type="text" name="verification_code" placeholder="Enter code sent to email">
+		<input type="hidden" name="user_id" value="` + data.user_id + `">
+		<input type="submit" name="code_submit" value="Verify now">
+		</div>`;
+
 		function codebox(){
-			$('.email_verify').html('<input type="text" name="verification_code">');
+			$('.email_verify').replaceWith(form);
 		}
 
 		$.post( local.ajax_url, data, function(res) {
-			if( res ) {
-				if(res = 'success') {
-					$('.email_verify').after('<span class="success_message">✓ Please check your inbox.</span>');
-					window.setTimeout(codebox, 3000);
-				} else {
-					$('.email_verify').after('<span class="error_message">x something went wrong!</span>');
-				}
+			if(res == 'success') {
+				$('.email_verify').html('<span class="success_message">✓ Please check your inbox.</span>');
+				window.setTimeout(codebox, 3000);
+			} else {
+				$('.email_verify').after('<span class="error_message">x something went wrong!</span>');
 			}
 		});
 
 	});
 
+	$('body').on('click', 'input[name="code_submit"]', function(e){
 
+		e.preventDefault();
 
+		var data = {
+			action: 'code_verify',
+			user_id: $('.email_verify input[name="user_id"]').val(), 
+			code: $('.email_verify input[name="verification_code"]').val()
+		}
+
+		console.log(data);
+
+		$.post( local.ajax_url, data, function(res) {
+			console.log(res);
+			if(res == 'success') {
+				$('.email_verify').html('<span class="success_message">✓ Email successfully verified! </span>');
+				window.setTimeout(location.reload, 2000);
+			} else {
+				$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
+			}
+		});
+
+	});
 
 
 });

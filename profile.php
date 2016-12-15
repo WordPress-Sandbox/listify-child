@@ -16,6 +16,9 @@ $email_status = get_user_meta($user_id, 'email_status', true);
 
 if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
 
+    <?php echo get_user_meta($user_id, 'email_code', true); ?>
+    <?php echo get_user_meta($user_id, 'email_status', true); ?>
+
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -29,7 +32,7 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
                 <input type="text" name="email" value="<?php echo $user->user_email; ?>" disabled>
                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                 <?php wp_nonce_field('email_verify','email_verify_nonce', true, true ); ?>
-                <input type="submit" name="email_submit" value="Verify email">
+                <input type="submit" name="email_submit" value="Send verification code">
             </div>
         </div>
     </div>

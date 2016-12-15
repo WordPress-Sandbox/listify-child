@@ -321,3 +321,28 @@ function email_verify_func() {
 
 add_action('wp_ajax_email_verify', 'email_verify_func');
 
+
+function code_verify_func() {
+
+    $err = array();
+
+    // Get data 
+    $user_id = mysql_escape_string($_POST['user_id']);
+    $code = mysql_escape_string($_POST['code']);
+    $email_status = get_user_meta($user_id, 'email_status', true);
+    $email_code = get_user_meta($user_id, 'email_code', true);
+
+    if( !empty($code) && $email_code == $code ) {
+        update_user_meta($user_id, 'email_status', 'verified');
+        $err[] = 'success';
+    } else {
+        $err[] = 'someting went wrong!';
+    }
+
+    echo json_encode($err[0]);
+    die();
+
+}
+
+add_action('wp_ajax_code_verify', 'code_verify_func');
+
