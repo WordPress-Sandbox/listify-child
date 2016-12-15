@@ -5,7 +5,7 @@ jQuery(function($){
 	function Bs_savingWallet() {
 		this.errors = {};
 		this.requiredFields = ['bs_name', 'bs_type', 'bs_username', 'bs_fname', 'bs_lname', 'bs_dd', 'bs_email', 'bs_phone', 'bs_pass', 'bs_confpass'];
-		this.phone_verify = 'unverified';
+		this.phone_status = 'unverified';
 	}
 
 	// open remodal 
@@ -152,10 +152,10 @@ jQuery(function($){
 
 	    if(password) {
 	    	if (password != confirmPassword) {
-		        $("#bs_pass, #bs_confpass").next().addClass('error_message').text('Passwords do not match!');
+		        $("#bs_pass, #bs_confpass").next().removeClass('success_message').addClass('error_message').text('Passwords do not match!');
 		    	bssavingwallet.errors['pass'] = 'Passwords not match';
 		    } else { 
-		        $("#bs_pass, #bs_confpass").next().addClass('success_message').text('✓ Passwords match');
+		        $("#bs_pass, #bs_confpass").next().removeClass('error_message').addClass('success_message').text('✓ Passwords match');
 		    	delete bssavingwallet.errors['pass'];
 		    }
 	    }
@@ -178,6 +178,7 @@ jQuery(function($){
 
 	    bssavingwallet.hasEmptyInvalidField();
 	    console.log(bssavingwallet.errors);
+	    console.log($('#bs_name').val());
 
 	    if(!bssavingwallet.isEmpty(bssavingwallet.errors)) {
 			that.prev().html('Please fill required fields');
@@ -194,6 +195,7 @@ jQuery(function($){
 			action: 'register_business',
 			reg_nonce 		: $('#register_business_nonce').val(),
 			bs_name 	 	: $('#bs_name').val(),
+			bs_type 	 	: $('#bs_type').val(),
 			bs_username 	: $('#bs_username').val(),
 			bs_fname 		: $('#bs_fname').val(),
 			bs_lname 		: $('#bs_lname').val(),
@@ -203,12 +205,12 @@ jQuery(function($){
 			bs_phone 		: $('#bs_phone').val(),
 			bs_streetaddress: $('#bs_streetaddress').val(),
 			bs_apartmentsuite : $('#bs_apartmentsuite').val(),
-			bslocality 		: $('#bslocality').val(),
-			bsstate 		: $('#administrative_area_level_2').val(),
-			bspostal_code 	: $('#bspostal_code').val(),
+			bslocality 		: $('#bs_locality').val(),
+			bsstate 		: $('#bs_administrative_area_level_2').val(),
+			bspostal_code 	: $('#bs_postal_code').val(),
 			bs_country 		: $('#bs_country').val(),
 			bs_pass 		: $('#bs_pass').val(),
-			phone_verify 	: bssavingwallet.phone_verify,
+			phone_status 	: bssavingwallet.phone_status,
 	    };
 	 
 	    // Do AJAX request

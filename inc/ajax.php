@@ -29,7 +29,7 @@ function new_user_register() {
     $dd = $_POST['dd'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
-    $phone_status = $_POST['phone_verify'];
+    $phone_status = $_POST['phone_status'];
     $streetaddress    = $_POST['streetaddress'];
     $apartmentsuite    = $_POST['apartmentsuite'];
     $city = $_POST['city'];
@@ -87,6 +87,7 @@ function new_user_register() {
             update_user_meta($user_id, 'billing_postcode', $postal_code);
             update_user_meta($user_id, 'country', $country);
             update_user_meta($user_id, 'phone_status', $phone_status);
+            update_user_meta($user_id, 'email_status', 'unverified');
             // login user after successful registration
             $creds = array(
                 'user_login'    => $username,
@@ -140,6 +141,7 @@ function new_business_register() {
     $bs_dd = $_POST['bs_dd'];
     $bs_email    = $_POST['bs_email'];
     $bs_phone    = $_POST['bs_phone'];
+    $phone_status = $_POST['phone_status'];
     $bs_streetaddress    = $_POST['bs_streetaddress'];
     $bs_apartmentsuite    = $_POST['bs_apartmentsuite'];
     $bs_city = $_POST['bs_city'];
@@ -152,9 +154,6 @@ function new_business_register() {
     if(empty($bs_name)){
         $err[] = 'Business name required';
     }        
-    if(empty($bs_type)){
-        $err[] = 'Business name required';
-    }    
     if(empty($bs_username)){
         $err[] = 'User name required';
     }    
@@ -202,7 +201,8 @@ function new_business_register() {
             update_user_meta($user_id, 'billing_city', $bs_city);
             update_user_meta($user_id, 'billing_postcode', $bs_zip);
             update_user_meta($user_id, 'country', $bs_country);
-            //update_user_meta($user_id, 'phone_status', $phone_status);
+            update_user_meta($user_id, 'phone_status', $phone_status);
+            update_user_meta($user_id, 'email_status', 'unverified');
             // login user after successful registration
             $creds = array(
                 'user_login'    => $bs_username,

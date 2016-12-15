@@ -251,7 +251,7 @@ get_header();
 											<div class="top-row">
 												<div class="field-wrap">
 													<label> City </label>
-													<input type="text" name="bs_city" id="bslocality">
+													<input type="text" name="bs_city" id="bs_locality">
 												</div><!-- /City -->
 
 												<div class="field-wrap">
@@ -275,7 +275,7 @@ get_header();
 											<div class="top-row">
 												<div class="field-wrap">
 													<label>Enter a password</label>
-													<input type="password" name="bs_pass" id="bs_password">
+													<input type="password" name="bs_pass" id="bs_pass">
 													<span></span>
 												</div>
 												<div class="field-wrap">

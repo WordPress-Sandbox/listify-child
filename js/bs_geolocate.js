@@ -3,24 +3,24 @@ jQuery(function($){
 	// This example displays an address form, using the autocomplete feature
 	// of the Google Places API to help users fill in the information.
 
-	$("#streetaddress, #bs_streetaddress").on('focus', function () {
+	$("#bs_streetaddress").on('focus', function () {
 		$(this).attr('placeholder', 'Street Address');
 	    geolocate();
 	});
 
 	var placeSearch, autocomplete;
 	var componentForm = {
-	    locality: 'long_name',
-	    administrative_area_level_1: 'short_name',
-	    country: 'long_name',
-	    postal_code: 'short_name'
+	    bs_locality: 'long_name',
+	    bs_administrative_area_level_1: 'short_name',
+	    bs_country: 'long_name',
+	    bs_postal_code: 'short_name'
 	};
 
 	function initialize() {
 	    // Create the autocomplete object, restricting the search
 	    // to geographical location types.
 	    autocomplete = new google.maps.places.Autocomplete(
-	    /** @type {HTMLInputElement} */ (document.getElementById('streetaddress')), {
+	    /** @type {HTMLInputElement} */ (document.getElementById('bs_streetaddress')), {
 	        types: ['geocode'],
 	        // componentRestrictions: ['us'],
 	    });

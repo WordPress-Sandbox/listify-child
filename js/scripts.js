@@ -5,7 +5,7 @@ jQuery(function($){
 	function SavingWallet() {
 		this.errors = {};
 		this.requiredFields = ['reg_username', 'fname', 'lname', 'dd', 'email', 'phone', 'pass', 'confpass'];
-		this.phone_verify = 'unverified';
+		this.phone_status = 'unverified';
 	}
 
 	// open remodal 
@@ -281,7 +281,7 @@ jQuery(function($){
 			postal_code 	: $('#postal_code').val(),
 			country 		: $('#country').val(),
 			pass 			: $('#pass').val(),
-			phone_verify 	: savingwallet.phone_verify,
+			phone_status 	: savingwallet.phone_status,
 	    };
 	 
 	    // Do AJAX request

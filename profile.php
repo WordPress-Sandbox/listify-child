@@ -2,8 +2,10 @@
 /*
 Template name: Profile 
 */
-/*22498E*/
 get_header();
+
+
+echo get_user_meta('11', 'phone_status', true);
 
 ?>
 <div id="primary">
