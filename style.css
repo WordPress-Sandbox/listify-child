@@ -779,7 +779,10 @@ span#error-msg {
 }
 
 
-
+/* profile edit */
+.user_profile_img img {
+    width: 100%;
+}
 
 
 

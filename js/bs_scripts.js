@@ -52,7 +52,7 @@ jQuery(function($){
 		var telInput = $("#bs_phone");
 		telInput.intlTelInput({
 		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-		  // onlyCountries: ["us"],
+		  onlyCountries: ["us"],
 		  preferredCountries: []
 		});
 		if(telInput.intlTelInput("isValidNumber")){
@@ -97,7 +97,7 @@ jQuery(function($){
 	// initialise plugin
 	bstelInput.intlTelInput({
 	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  // onlyCountries: ["us"],
+	  onlyCountries: ["us"],
 	  preferredCountries: []
 	});
 

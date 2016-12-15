@@ -16,9 +16,6 @@ $email_status = get_user_meta($user_id, 'email_status', true);
 
 if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
 
-    <?php echo get_user_meta($user_id, 'email_code', true); ?>
-    <?php echo get_user_meta($user_id, 'email_status', true); ?>
-
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -44,7 +41,7 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
         <div class="row">
             <div class="col-md-3">
                 <div class="user_profile_img">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/profile.jpg" alt="">
+                    <?php echo get_avatar($user_id, 170); ?>
                 </div>
                 <div class="user_profile_desc">
                     <h2 class="user_name">Edward Rooster</h2>
@@ -66,6 +63,9 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
                             <h2>Manage your Name, ID and Email Addresses.</h2>
                             <p>Below are the name and email addresses on file for your account.</p>
                             <br>
+
+                            <?php echo do_shortcode('[avatar_upload]'); ?>
+
                             <dl class="dl-horizontal">
                                 <dt><strong>Your name </strong></dt>
                                 <dd>

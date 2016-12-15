@@ -52,7 +52,7 @@ jQuery(function($){
 		var telInput = $("#phone");
 		telInput.intlTelInput({
 		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-		  // onlyCountries: ["us"],
+		  onlyCountries: ["us"],
 		  preferredCountries: []
 		});
 		if(telInput.intlTelInput("isValidNumber")){
@@ -96,7 +96,7 @@ jQuery(function($){
 	// initialise plugin
 	telInput.intlTelInput({
 	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  // onlyCountries: ["us"],
+	  onlyCountries: ["us"],
 	  preferredCountries: []
 	});
 
@@ -414,12 +414,12 @@ jQuery(function($){
 
 		$.post( local.ajax_url, data, function(res) {
 			console.log(res);
-			if(res == 'success') {
+			// if(res == 'success') {
 				$('.email_verify').html('<span class="success_message">✓ Email successfully verified! </span>');
 				window.setTimeout(location.reload, 2000);
-			} else {
-				$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
-			}
+			// } else {
+			// 	$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
+			// }
 		});
 
 	});
