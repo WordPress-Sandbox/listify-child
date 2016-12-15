@@ -22,21 +22,21 @@ function new_user_register() {
     }
  
     // Get data 
-    $username= $_POST['username'];
-    $firstname= $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $gender = $_POST['gender'];
-    $dd = $_POST['dd'];
-    $email    = $_POST['email'];
-    $phone    = $_POST['phone'];
-    $phone_status = $_POST['phone_status'];
-    $streetaddress    = $_POST['streetaddress'];
-    $apartmentsuite    = $_POST['apartmentsuite'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $postal_code = $_POST['postal_code'];
-    $country = $_POST['country'];
-    $pass = $_POST['pass'];
+    $username= mysql_escape_string($_POST['username']);
+    $firstname= mysql_escape_string($_POST['firstname']);
+    $lastname = mysql_escape_string($_POST['lastname']);
+    $gender = mysql_escape_string($_POST['gender']);
+    $dd = mysql_escape_string($_POST['dd']);
+    $email    = mysql_escape_string($_POST['email']);
+    $phone    = mysql_escape_string($_POST['phone']);
+    $phone_status = mysql_escape_string($_POST['phone_status']);
+    $streetaddress    = mysql_escape_string($_POST['streetaddress']);
+    $apartmentsuite    = mysql_escape_string($_POST['apartmentsuite']);
+    $city = mysql_escape_string($_POST['city']);
+    $state = mysql_escape_string($_POST['state']);
+    $postal_code = mysql_escape_string($_POST['postal_code']);
+    $country = mysql_escape_string($_POST['country']);
+    $pass = mysql_escape_string($_POST['pass']);
 
     // Validate 
     if(empty($username)){
@@ -132,23 +132,23 @@ function new_business_register() {
     }
  
     // Get data 
-    $bs_name = $_POST['bs_name'];
-    $bs_type = $_POST['bs_type'];
-    $bs_username= $_POST['bs_username'];
-    $bs_fname= $_POST['bs_fname'];
-    $bs_lname = $_POST['bs_lname'];
-    $bs_gender = $_POST['bs_gender'];
-    $bs_dd = $_POST['bs_dd'];
-    $bs_email    = $_POST['bs_email'];
-    $bs_phone    = $_POST['bs_phone'];
-    $phone_status = $_POST['phone_status'];
-    $bs_streetaddress    = $_POST['bs_streetaddress'];
-    $bs_apartmentsuite    = $_POST['bs_apartmentsuite'];
-    $bs_city = $_POST['bs_city'];
-    $bs_state = $_POST['bs_state'];
-    $bs_zip = $_POST['bs_zip'];
-    $bs_country = $_POST['bs_country'];
-    $bs_pass = $_POST['bs_pass'];
+    $bs_name = mysql_escape_string($_POST['bs_name']);
+    $bs_type = mysql_escape_string($_POST['bs_type']);
+    $bs_username= mysql_escape_string($_POST['bs_username']);
+    $bs_fname= mysql_escape_string($_POST['bs_fname']);
+    $bs_lname = mysql_escape_string($_POST['bs_lname']);
+    $bs_gender = mysql_escape_string($_POST['bs_gender']);
+    $bs_dd = mysql_escape_string($_POST['bs_dd']);
+    $bs_email    = mysql_escape_string($_POST['bs_email']);
+    $bs_phone    = mysql_escape_string($_POST['bs_phone']);
+    $phone_status = mysql_escape_string($_POST['phone_status']);
+    $bs_streetaddress    = mysql_escape_string($_POST['bs_streetaddress']);
+    $bs_apartmentsuite    = mysql_escape_string($_POST['bs_apartmentsuite']);
+    $bs_city = mysql_escape_string($_POST['bs_city']);
+    $bs_state = mysql_escape_string($_POST['bs_state']);
+    $bs_zip = mysql_escape_string($_POST['bs_zip']);
+    $bs_country = mysql_escape_string($_POST['bs_country']);
+    $bs_pass = mysql_escape_string($_POST['bs_pass']);
 
     // Validate 
     if(empty($bs_name)){
@@ -242,8 +242,8 @@ function msw_user_login() {
     }
  
     // Get data 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = mysql_escape_string($_POST['username']);
+    $password = mysql_escape_string($_POST['password']);
 
     // Validate 
     if(empty($username)){
@@ -279,5 +279,45 @@ add_action('wp_ajax_nopriv_user_login', 'msw_user_login');
 
 
 
+/* email verify */
+function email_verify_func() {
 
+    $err = array();
+
+    // Verify nonce
+    if( !isset( $_POST['email_verify_nonce'] ) && !wp_verify_nonce( $_POST['email_verify_nonce'], 'email_verify' ) ) {
+        $err[] = 'Ooops, something went wrong, please try again later.';
+    }
+
+    // Get data 
+    $user_id = mysql_escape_string($_POST['user_id']);
+    $email = mysql_escape_string($_POST['email']);
+    $user = new WP_User($user_id);
+    $email_status = get_user_meta($user_id, 'email_status', true);
+
+    $sub = "Mysavingwallet email verification";
+    $code = mysql_escape_string(md5(rand(1000,5000))) ;
+    $message = "Hi {$user->display_name}, your email verfication code is: {$code}";
+    $headers = 'From:admin@mysavingswallet.com' . "\r\n";
+
+    //
+    if( $user->user_email == $email && $email_status != 'verified' ) {
+        $mail = wp_mail( $email, $sub, $message, $headers);
+        if($mail) {
+            update_user_meta($user_id, 'email_code', $code);
+            update_user_meta($user_id, 'email_status', 'pending');
+            $err[] = 'success';
+        } else {
+            $err[] = 'Counldn\'t sent the mail.';
+        }
+    } else {
+        $err[] = 'Something went wrong!';
+    }
+
+    echo json_encode($err);
+    die();
+
+}
+
+add_action('wp_ajax_email_verify', 'email_verify_func');
 

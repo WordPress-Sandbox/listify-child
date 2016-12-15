@@ -752,3 +752,44 @@ span#error-msg {
 .user_profile input:-moz-placeholder { 
   color: #A9A9A9;
 }
+
+
+
+/* email verification */
+.email_verification {
+    text-align: center;
+    margin: 10em auto;
+}
+.email_verify {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.email_verify input[name="email"] {
+    width: 100%;
+    border-radius: 0;
+    padding: 10px 20px;
+    margin-right: 20px;
+}
+.email_verify input[name="email_submit"] {
+    padding: 10px 20px;
+    border-radius: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

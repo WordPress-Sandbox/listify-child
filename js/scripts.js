@@ -364,4 +364,40 @@ jQuery(function($){
 	 
 	});
 
+
+
+	/* email verification */
+
+	$('input[name="email_submit"]').click(function(e){
+
+		e.preventDefault();
+
+		var data = {
+			action: 'email_verify',
+			email_verify_nonce: $('.email_verify input[name="email_verify_nonce"]').val(), 
+			user_id: $('.email_verify input[name="user_id"]').val(), 
+			email: $('.email_verify input[name="email"]').val()
+		}
+
+		function codebox(){
+			$('.email_verify').html('<input type="text" name="verification_code">');
+		}
+
+		$.post( local.ajax_url, data, function(res) {
+			if( res ) {
+				if(res = 'success') {
+					$('.email_verify').after('<span class="success_message">✓ Please check your inbox.</span>');
+					window.setTimeout(codebox, 3000);
+				} else {
+					$('.email_verify').after('<span class="error_message">x something went wrong!</span>');
+				}
+			}
+		});
+
+	});
+
+
+
+
+
 });

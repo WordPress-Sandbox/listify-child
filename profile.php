@@ -2,12 +2,40 @@
 /*
 Template name: Profile 
 */
+
+if(!is_user_logged_in()){
+    wp_redirect(get_template_page_link('login_register.php'));
+    exit();
+}
+
 get_header();
 
+$user_id = get_current_user_id();
+$user = new WP_User($user_id);
+$email_status = get_user_meta($user_id, 'email_status', true);
 
-echo get_user_meta('11', 'phone_status', true);
+if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
 
-?>
+    <div class="container email_verification">
+        <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <h2>Please verify your email</h2>
+                <p> Verifying your email is important before proceeding to profile </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="email_verify">
+                <input type="text" name="email" value="<?php echo $user->user_email; ?>" disabled>
+                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                <?php wp_nonce_field('email_verify','email_verify_nonce', true, true ); ?>
+                <input type="submit" name="email_submit" value="Verify email">
+            </div>
+        </div>
+    </div>
+
+<?php else : ?>
+
 <div id="primary">
 	<div class="container user_profile">
         <div class="row">
@@ -262,5 +290,6 @@ echo get_user_meta('11', 'phone_status', true);
         </div>   
     </div>
 </div>
+<?php endif; ?>
 
 <?php get_footer(); ?>
