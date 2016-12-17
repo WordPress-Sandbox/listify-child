@@ -24,7 +24,7 @@ $key = $_GET['key'];
 
 <?php 
 
-if($user->roles[0] != 'administrator' && $email_status != 'verified' ) : ?>
+if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  && ( $email_status != 'pending' ) ) :  ?>
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -43,13 +43,13 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified' ) : ?>
         </div>
     </div>
 
-<?php elseif ( $key && $key == $email_code && $email_status == 'pending' ) :  ?>
+<?php elseif ( ( $key == $email_code ) && ( $email_status == 'pending' ) ) :  ?>
 
     <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
     <h2> Your Email Verified Successfully </h2>
     <script>window.setTimeout(location.reload, 2000);</script>
 
-<?php elseif ( $email_status == 'verified') : ?>
+<?php else : ?>
 
 <div id="primary">
 	<div class="container user_profile">
