@@ -23,7 +23,7 @@ get_header();
 				<div class="container">
 					<div class="row">
 						<div class="col-md-6 visible-mobile">
-							<?php echo do_shortcode('[apsl-login-lite login_text="Login with Social Media"]'); ?>
+							<?php echo do_shortcode('[wordpress_social_login]'); ?>
 						</div>
 						<div class="col-md-6">
 							<div class="form">

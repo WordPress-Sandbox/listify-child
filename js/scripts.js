@@ -52,7 +52,7 @@ jQuery(function($){
 		var telInput = $("#phone");
 		telInput.intlTelInput({
 		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-		  onlyCountries: ["us"],
+		  // onlyCountries: ["us"],
 		  preferredCountries: []
 		});
 		if(telInput.intlTelInput("isValidNumber")){
@@ -96,7 +96,7 @@ jQuery(function($){
 	// initialise plugin
 	telInput.intlTelInput({
 	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  onlyCountries: ["us"],
+	  // onlyCountries: ["us"],
 	  preferredCountries: []
 	});
 
@@ -244,9 +244,6 @@ jQuery(function($){
 	    var that = $(this);
 	    var btn = that.find('.register_customer');
 
-	    // console.log(savingwallet.phone_verify);
-	    // console.log($('#phone').val());
-
 	    btn.text('Please wait...');
 
 	    savingwallet.hasEmptyInvalidField();
@@ -273,7 +270,7 @@ jQuery(function($){
 			gender 			: $('#gender').val(),
 			dd 				: $('#dd').val(),
 			email 			: $('#email').val(),
-			phone 			: $('#phone').val(),
+			phone 			: $("#phone").intlTelInput("getNumber"),
 			streetaddress 	: $('#streetaddress').val(),
 			apartmentsuite 	: $('#apartmentsuite').val(),
 			city 			: $('#locality').val(),

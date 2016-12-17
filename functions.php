@@ -12,6 +12,7 @@ function listify_child_styles() {
 
     /* JS */
     wp_enqueue_script( 'inttelinput', get_stylesheet_directory_uri() . '/assets/inttelinput/js/intlTelInput.min.js', array('jquery'), '1.0', true);
+    wp_enqueue_script( 'utils', get_stylesheet_directory_uri() . '/assets/inttelinput/js/utils.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'remodal_js', get_stylesheet_directory_uri() . '/assets/remodal/remodal.min.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'geolocate', get_stylesheet_directory_uri() . '/js/geolocate.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'bs_gelocate', get_stylesheet_directory_uri() . '/js/bs_geolocate.js', array('jquery'), '1.0', true);
@@ -95,4 +96,9 @@ add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 
 
 require get_stylesheet_directory() . '/inc/ajax.php';
-require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';
+
+
+
+
+
+

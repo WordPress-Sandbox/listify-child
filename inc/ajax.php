@@ -1,8 +1,6 @@
 <?php 
 
-// Use the REST API Client to make requests to the Twilio REST API
 require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
-use Twilio\Rest\Client;
 
 function new_user_register() {
 

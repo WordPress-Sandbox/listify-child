@@ -1,5 +1,6 @@
 <?php 
 
+require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';
 use Twilio\Rest\Client;
 
 class Mysavingwallet {
@@ -16,19 +17,19 @@ class Mysavingwallet {
 
 	}
 
-	public function sendPin() { 
+	public function sendPin($to) { 
 
-		// $client = new Client($this->sid, $this->token);
+		$client = new Client($this->sid, $this->token);
 		$pin = rand(1000, 9999);
 
 		/* send verfication sms */
-        // $client->messages->create(
-        //     $to,
-        //     array(
-        //         'from' => $this->from_phone,
-        //         'body' => 'Your mysavingswallet pin is: ' . $pin
-        //     )
-        // );
+        $client->messages->create(
+            $to,
+            array(
+                'from' => $this->from_phone,
+                'body' => 'Your mysavingswallet pin is: ' . $pin
+            )
+        );
 
         echo json_encode(array('pin'=>$pin));
         die();
