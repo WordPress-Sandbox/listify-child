@@ -13,10 +13,18 @@ get_header();
 $user_id = get_current_user_id();
 $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
+$email_code = get_user_meta($user_id, 'email_code', true);
+$key = $_GET['key'];
 
-if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
+?>
+
     <?php echo get_user_meta($user_id, 'email_code', true); ?>
     <?php echo get_user_meta($user_id, 'email_status', true); ?>
+    <?php echo $key; ?>
+
+<?php 
+
+if($user->roles[0] != 'administrator' && $email_status != 'verified' ) : ?>
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -35,7 +43,13 @@ if($user->roles[0] != 'administrator' && $email_status != 'verified') : ?>
         </div>
     </div>
 
-<?php else : ?>
+<?php elseif ( $key && $key == $email_code && $email_status == 'pending' ) :  ?>
+
+    <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
+    <h2> Your Email Verified Successfully </h2>
+    <script>window.setTimeout(location.reload, 2000);</script>
+
+<?php elseif ( $email_status == 'verified') : ?>
 
 <div id="primary">
 	<div class="container user_profile">

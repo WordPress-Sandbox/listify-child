@@ -293,12 +293,19 @@ function email_verify_func() {
     $email_status = get_user_meta($user_id, 'email_status', true);
 
     $sub = "Mysavingwallet email verification";
+
     $code = mysql_escape_string(md5(rand(1000,5000))) ;
-    $message = "Hi {$user->display_name}, your email verfication code is: {$code}";
+    $pagelink = get_template_page_link('profile.php');
+    $link = add_query_arg('key', $code, $pagelink);
+
+    $message = "Hi <strong>{$user->display_name}<strong>, 
+    <h2> Thanks for registaring with mysavingwallet. </h2>
+    Click on the verify email button to confirm your email. <a style=\" display: inline-block; padding: 5px 10px; background-color: #2854A1;\" href=\"{$link}\"> Verify email</a>";
+
     $headers = 'From:admin@mysavingswallet.com' . "\r\n";
 
     //
-    if( $user->user_email == $email && $email_status != 'vkerified' ) {
+    if( $user->user_email == $email && $email_status != 'verified' ) {
         $mail = wp_mail( $email, $sub, $message, $headers);
         if($mail) {
             update_user_meta($user_id, 'email_code', $code);
