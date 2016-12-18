@@ -303,7 +303,7 @@ function email_verify_func() {
     $message = "<html><body>";
     $message .= "Hi <strong>" . $user->display_name . "<strong>"; 
     $message .= "<h2> Thanks for registering with mysavingwallet. </h2>";
-    $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1;" href="'.$link.'"> Verify email</a>';
+    $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1; color: #FFF;" href="'.$link.'"> Verify email</a>';
     $message .= "</body></html>";
 
     $headers = 'From:info@mysavingswallet.com' . "\r\n";
