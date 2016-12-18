@@ -45,9 +45,13 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
 
 <?php elseif ( ( $key == $email_code ) && ( $email_status == 'pending' ) ) :  ?>
 
-    <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
-    <h2> Your Email Verified Successfully </h2>
-    <script>window.setTimeout(location.reload, 2000);</script>
+    <div class="container">
+        <div class="email_confirmed">
+            <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
+            <h2> Your Email Verified Successfully </h2>
+            <script>window.setTimeout(location.reload, 2000);</script>
+        </div>
+    </div>
 
 <?php else : ?>
 

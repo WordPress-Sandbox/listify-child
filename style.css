@@ -778,6 +778,14 @@ span#error-msg {
     border-radius: 0;
 }
 
+.email_confirmed h2 {
+  background-image: url('assets/img/check.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding: 20px;
+  background-size: 40px;
+  padding-left: 60px
+}
 
 /* profile edit */
 .user_profile_img img {

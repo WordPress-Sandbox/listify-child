@@ -201,7 +201,7 @@ jQuery(function($){
 			bs_gender 		: $('#bs_gender').val(),
 			bs_dd 			: $('#bs_dd').val(),
 			bs_email 		: $('#bs_email').val(),
-			bs_phone 		: $('#bs_phone').val(),
+			bs_phone 		: $("#bs_phone").intlTelInput("getNumber"),
 			bs_streetaddress: $('#bs_streetaddress').val(),
 			bs_apartmentsuite : $('#bs_apartmentsuite').val(),
 			bslocality 		: $('#bs_locality').val(),
@@ -211,9 +211,10 @@ jQuery(function($){
 			bs_pass 		: $('#bs_pass').val(),
 			phone_status 	: bssavingwallet.phone_status,
 	    };
-	 
+	 console.log(data);
 	    // Do AJAX request
 	    $.post( local.ajax_url, data, function(response) {
+	    	console.log(response);
 	      if( response ) {
 	        var data = $.parseJSON(response);
 	        if( typeof data.pin == 'number') {

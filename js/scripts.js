@@ -381,6 +381,7 @@ jQuery(function($){
 
 		$.post( local.ajax_url, data, function(res) {
 			var res = $.parseJSON(res);
+			console.log(res);
 			if(res == 'success') {
 				$('.email_verify').html('<span class="success_message">✓ Please check your inbox.</span>');
 			}

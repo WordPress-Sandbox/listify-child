@@ -112,6 +112,8 @@ add_action('wp_ajax_nopriv_register_user', 'new_user_register');
 
 /* business user registration */
 
+$mysavingwallet2 = new Mysavingwallet;
+
 function new_business_register() {
 
     $mysavingwallet2 = new Mysavingwallet;
@@ -125,7 +127,7 @@ function new_business_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $mysavingwallet2->sendPin($_POST['phone']);
+        $mysavingwallet2->sendPin($_POST['bs_phone']);
     }
  
     // Get data 
@@ -318,7 +320,7 @@ function email_verify_func() {
         $err[] = 'Something went wrong!';
     }
 
-    echo json_encode($err);
+    echo json_encode($err[0]);
     die();
 
 }
