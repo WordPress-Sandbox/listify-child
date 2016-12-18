@@ -70,7 +70,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                     <?php echo get_avatar($user_id, 170); ?>
                 </div>
                 <div class="user_profile_desc">
-                    <h2 class="user_name"><?php echo $user->display_name; ?></h2>
+                    <h2 class="user_name"><?php echo $user->first_name; ?> <?php echo $user->last_name; ?></h2>
                     <p class="user_bio"><?php echo $user->description; ?></p>
 				
                     <ul class="social_media model-2">
