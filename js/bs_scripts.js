@@ -89,7 +89,39 @@ jQuery(function($){
 		});
 	}
 
+
+	Bs_savingWallet.prototype.addother = function(){
+
+		var otherfield = `<div class="field-wrap">
+							<label class="active"> Your business name</label>
+						  	<input type="text" name="bs_other_business_name" id="bs_other_business_name">
+						</div>`;
+		var selectedValue = $('#bs_type').val();
+		if (selectedValue == "other")
+		{
+			$('#bs_type').parent().parent().parent().after(otherfield);
+		} else {
+			$('#bs_other_business_name').parent().remove();
+		}
+	} 
+
+
 	var bssavingwallet = new Bs_savingWallet();
+
+	// add other field 
+	$('#bs_type').on('change', function(){
+		bssavingwallet.addother();
+	});
+
+	/* map autocomplete */ 
+	// $('.bs_streetaddress').on('keyup blur focus change', function(){
+	// 	$('#bs_locality, #bs_administrative_area_level_1, #bs_postal_code, #bs_country').prev('label').addClass('active highlight');
+	// });
+
+	// customer pass check
+	$(document).ready(function () {
+	   $("#bs_pass, #bs_confpass").on( 'keyup blur focus change', bscheckPasswordMatch);
+	});
 
 	// inttelinput 
 	var bstelInput = $("#bs_phone");
@@ -161,12 +193,6 @@ jQuery(function($){
 	    }
 	}
 
-	// customer pass check
-	$(document).ready(function () {
-	   $("#bs_pass, #bs_confpass").on( 'keyup blur focus change', bscheckPasswordMatch);
-	});
-
-
 	// Business registration 
 	$('form#register_business').submit(function(event){
 
@@ -194,6 +220,7 @@ jQuery(function($){
 			action: 'register_business',
 			reg_nonce 		: $('#register_business_nonce').val(),
 			bs_name 	 	: $('#bs_name').val(),
+			bs_other 	 	: $('#bs_other_business_name').val(),
 			bs_type 	 	: $('#bs_type').val(),
 			bs_username 	: $('#bs_username').val(),
 			bs_fname 		: $('#bs_fname').val(),

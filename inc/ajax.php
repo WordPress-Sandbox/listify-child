@@ -300,11 +300,15 @@ function email_verify_func() {
     $pagelink = get_template_page_link('profile.php');
     $link = add_query_arg('key', $code, $pagelink);
 
-    $message = "Hi <strong>{$user->display_name}<strong>, 
-    <h2> Thanks for registaring with mysavingwallet. </h2>
-    Click on the verify email button to confirm your email. <a style=\" display: inline-block; padding: 5px 10px; background-color: #2854A1;\" href=\"{$link}\"> Verify email</a>";
+    $message = "<html><body>";
+    $message .= "Hi <strong>" . $user->display_name . "<strong>"; 
+    $message .= "<h2> Thanks for registering with mysavingwallet. </h2>";
+    $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1;" href="'.$link.'"> Verify email</a>';
+    $message .= "</body></html>";
 
-    $headers = 'From:admin@mysavingswallet.com' . "\r\n";
+    $headers = 'From:info@mysavingswallet.com' . "\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
     //
     if( $user->user_email == $email && $email_status != 'verified' ) {
@@ -314,7 +318,7 @@ function email_verify_func() {
             update_user_meta($user_id, 'email_status', 'pending');
             $err[] = 'success';
         } else {
-            $err[] = 'Counldn\'t sent the mail.';
+            $err[] = 'Couldn\'t sent the mail.';
         }
     } else {
         $err[] = 'Something went wrong!';
@@ -326,29 +330,4 @@ function email_verify_func() {
 }
 
 add_action('wp_ajax_email_verify', 'email_verify_func');
-
-
-function code_verify_func() {
-
-    $err = array();
-
-    // Get data 
-    $user_id = mysql_escape_string($_POST['user_id']);
-    $code = mysql_escape_string($_POST['code']);
-    $email_status = get_user_meta($user_id, 'email_status', true);
-    $email_code = get_user_meta($user_id, 'email_code', true);
-
-    if( !empty($code) && $email_code == $code ) {
-        update_user_meta($user_id, 'email_status', 'verified');
-        $err[] = 'success';
-    } else {
-        $err[] = 'someting went wrong!';
-    }
-
-    echo json_encode($err[0]);
-    die();
-
-}
-
-add_action('wp_ajax_code_verify', 'code_verify_func');
 

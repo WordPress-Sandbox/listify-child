@@ -47,8 +47,8 @@ jQuery(function($){
 	        var addressType = place.address_components[i].types[0];
 	        if (componentForm[addressType]) {
 	            var val = place.address_components[i][componentForm[addressType]];
+	            document.getElementById(addressType).previousElementSibling.className += ' active';
 	            document.getElementById(addressType).value = val;
-	            // document.getElementById(addressType).previousSibling.className += ' active';
 	        }
 	    }
 	}

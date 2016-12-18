@@ -179,19 +179,20 @@ get_header();
 													<label class="active"> Business type <span class="req">*</span></label>
 													<select name="bs_type" id="bs_type">
 														<option value="accountant">Accountant</option>
-														<option value="accountant">Arts & Entertainment</option>
-														<option value="accountant">Automotive</option>
-														<option value="accountant">Business Services</option>
-														<option value="accountant">Cleaning Services</option>
-														<option value="accountant">Doctors & Health Professionals</option>
-														<option value="accountant">Grocery Store</option>
-														<option value="accountant">Hair Salon & Spa</option>
-														<option value="accountant">Home Improvement</option>
-														<option value="accountant">Hotels & Lodging</option>
-														<option value="accountant">Legal Services</option>
-														<option value="accountant">Outdoors</option>
-														<option value="accountant">Restaurants & Bars</option>
-														<option value="accountant">Transportation</option>
+														<option value="arts&Entertainment">Arts & Entertainment</option>
+														<option value="automotive">Automotive</option>
+														<option value="businessservices">Business Services</option>
+														<option value="clearningservices">Cleaning Services</option>
+														<option value="doctores">Doctors & Health Professionals</option>
+														<option value="grocery">Grocery Store</option>
+														<option value="hearsalon">Hair Salon & Spa</option>
+														<option value="homeimprovement">Home Improvement</option>
+														<option value="hotels">Hotels & Lodging</option>
+														<option value="legalservices">Legal Services</option>
+														<option value="outdoors">Outdoors</option>
+														<option value="restaurants">Restaurants & Bars</option>
+														<option value="transportantion">Transportation</option>
+														<option value="other">other</option>
 													</select>
 												</div>
 								          	</div>
@@ -239,7 +240,7 @@ get_header();
 								          	</div>
 
 											<div class="field-wrap">
-											  	<input id="bs_streetaddress" class="bs_streetaddress_customer" name="bs_streetaddress" type="text">
+											  	<input id="bs_streetaddress" class="bs_streetaddress" name="bs_streetaddress" type="text">
 											</div>
 
 											<div class="field-wrap">
@@ -256,7 +257,7 @@ get_header();
 
 												<div class="field-wrap">
 													<label> State </label>
-													<input type="text" name="bs_state" id="bs_administrative_area_level_2">
+													<input type="text" name="bs_state" id="bs_administrative_area_level_1">
 												</div><!-- /State -->
 											</div>
 

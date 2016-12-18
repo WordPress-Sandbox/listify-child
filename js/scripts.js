@@ -52,7 +52,7 @@ jQuery(function($){
 		var telInput = $("#phone");
 		telInput.intlTelInput({
 		  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-		  // onlyCountries: ["us"],
+		  onlyCountries: ["us"],
 		  preferredCountries: []
 		});
 		if(telInput.intlTelInput("isValidNumber")){
@@ -96,7 +96,7 @@ jQuery(function($){
 	// initialise plugin
 	telInput.intlTelInput({
 	  utilsScript: local.themepath + '/assets/inttelinput/js/utils.js',
-	  // onlyCountries: ["us"],
+	  onlyCountries: ["us"],
 	  preferredCountries: []
 	});
 
@@ -170,11 +170,6 @@ jQuery(function($){
 	    }
 
 	});
-
-	$('.streetaddress_customer, .streetaddress_business').on('keyup blur focus change', function(){
-		$('#locality, #administrative_area_level_1, #postal_code, #country').prev('label').addClass('active highlight');
-	});
-
 
 	$('.tab-group').each(function(){
 	    // For each set of tabs, we want to keep track of
@@ -384,35 +379,6 @@ jQuery(function($){
 			console.log(res);
 			if(res == 'success') {
 				$('.email_verify').html('<span class="success_message">✓ Please check your inbox.</span>');
-			}
-		});
-
-	});
-
-	$('body').on('click', 'input[name="code_submit"]', function(e){
-
-		e.preventDefault();
-
-		var data = {
-			action: 'code_verify',
-			user_id: $('.email_verify input[name="user_id"]').val(), 
-			code: $('.email_verify input[name="verification_code"]').val()
-		}
-
-		console.log(data);
-
-		function reload() {
-			location.reload();
-		}
-
-		$.post( local.ajax_url, data, function(res) {
-			var res = $.parseJSON(res);
-			if(res == 'success') {
-				$('.email_verify').after(' ');
-				$('.email_verify').html('<span class="success_message">✓ Email successfully verified! </span>');
-				window.setTimeout(reload, 2000);
-			} else {
-				$('.email_verify').after('<span class="error_message">Email wasn\'t verified. </span>');
 			}
 		});
 

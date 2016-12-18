@@ -172,6 +172,21 @@ input#datedropper {
   margin-right: 4%;
 }
 
+@media only screen and (max-width: 768px) {
+  .log_reg_form .form form .field-wrap {
+    margin-bottom: 20px;
+  }
+  .log_reg_form .form form .top-row {
+    margin-bottom: 20px;
+  }
+  .log_reg_form .form form .top-row > div {
+    float: none;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
+
 .log_reg_form .form form .top-row > div:last-child {
   margin: 0;
 }
@@ -387,6 +402,9 @@ span#error-msg {
     -moz-appearance: none;
     -o-appearance: none;
     appearance: none;
+}
+input[type="date"] {
+    min-height: 35px;
 }
 .verification_content .custom_btn {
   padding: 12px 25px;

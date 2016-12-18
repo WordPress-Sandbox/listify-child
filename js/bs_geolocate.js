@@ -5,38 +5,37 @@ jQuery(function($){
 
 	$("#bs_streetaddress").on('focus', function () {
 		$(this).attr('placeholder', 'Street Address');
-	    geolocate();
+	    bs_geolocate();
 	});
 
-	var placeSearch, autocomplete;
-	var componentForm = {
+	var bs_placeSearch, bs_autocomplete;
+	var bs_componentForm = {
 	    bs_locality: 'long_name',
 	    bs_administrative_area_level_1: 'short_name',
 	    bs_country: 'long_name',
 	    bs_postal_code: 'short_name'
 	};
 
-	function initialize() {
+	function bs_initialize() {
 	    // Create the autocomplete object, restricting the search
 	    // to geographical location types.
-	    autocomplete = new google.maps.places.Autocomplete(
+	    bs_autocomplete = new google.maps.places.Autocomplete(
 	    /** @type {HTMLInputElement} */ (document.getElementById('bs_streetaddress')), {
 	        types: ['geocode'],
 	        // componentRestrictions: ['us'],
 	    });
 	    // When the user selects an address from the dropdown,
 	    // populate the address fields in the form.
-	    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-	        fillInAddress();
+	    google.maps.event.addListener(bs_autocomplete, 'place_changed', function () {
+	        bs_fillInAddress();
 	    });
 	}
 
 	// [START region_fillform]
-	function fillInAddress() {
+	function bs_fillInAddress() {
 	    // Get the place details from the autocomplete object.
-	    var place = autocomplete.getPlace();
-
-	    for (var component in componentForm) {
+	    var place = bs_autocomplete.getPlace();
+	    for (var component in bs_componentForm) {
 	        document.getElementById(component).value = '';
 	        document.getElementById(component).disabled = false;
 	    }
@@ -44,11 +43,11 @@ jQuery(function($){
 	    // Get each component of the address from the place details
 	    // and fill the corresponding field on the form.
 	    for (var i = 0; i < place.address_components.length; i++) {
-	        var addressType = place.address_components[i].types[0];
-	        if (componentForm[addressType]) {
-	            var val = place.address_components[i][componentForm[addressType]];
+	        var addressType = 'bs_' + place.address_components[i].types[0];
+	        if (bs_componentForm[addressType]) {
+	            var val = place.address_components[i][bs_componentForm[addressType]];
+	            document.getElementById(addressType).previousElementSibling.className += ' active';
 	            document.getElementById(addressType).value = val;
-	            // document.getElementById(addressType).previousSibling.className += ' active';
 	        }
 	    }
 	}
@@ -57,7 +56,7 @@ jQuery(function($){
 	// [START region_geolocation]
 	// Bias the autocomplete object to the user's geographical location,
 	// as supplied by the browser's 'navigator.geolocation' object.
-	function geolocate() {
+	function bs_geolocate() {
 		if (navigator.geolocation) {
 		  navigator.geolocation.getCurrentPosition(function(position) {
 		    var geolocation = {
@@ -68,12 +67,12 @@ jQuery(function($){
 		      center: geolocation,
 		      radius: position.coords.accuracy
 		    });
-		    autocomplete.setBounds(circle.getBounds());
+		    bs_autocomplete.setBounds(circle.getBounds());
 		  });
 		}
 	}
 
-	initialize();
+	bs_initialize();
 	// [END region_geolocation]
 
 });
