@@ -474,6 +474,132 @@ input[type="date"] {
 /*----------------------------------
           Profile Page                   
 -----------------------------------*/
+.edit_profile {
+  font-family: 'FontAwesome';
+}
+.input-text {
+    width: 100%;
+    padding: 5px 15px;
+    border-color: transparent;
+}
+.social_change input {
+    border-color: rgb(229, 229, 229, 0.2);
+}
+.form-edit-account .fa-pencil {
+    line-height: 25px;
+}
+/* WP Avater css custom */
+form.wpua-edit {
+    position: relative;
+    margin: 10px 0;
+}
+form.wpua-edit h3, #wpua-undo-existing, 
+#wpua-preview-existing .description, 
+div#wpua-images-existing, 
+#wpua-upload-button-existing button, 
+#wpua-upload-messages-existing {
+  display: none;
+}
+button#wpua-undo-existing {
+  display: none !important;
+}
+p#wpua-preview-existing {
+    margin: 10px 0 0;
+}
+#wpua-add-button-existing {
+    border: 1px dashed #2854A1;
+    width: 80%;
+    padding: 0px;
+    background-color: transparent;
+    cursor: pointer;
+    margin: 0;
+}
+#wpua-add-existing {
+    width: 100%;
+    height: 100%;
+    padding: 7px 15px;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    color: #717a8f;
+    box-shadow: none;
+}
+.wpua-edit #submit {
+    right: 0;
+    position: absolute;
+    top: 0;
+}
+/* WP Avater css custom */
+/* social_media */
+.social_media {
+  padding: 0;
+  list-style: none;
+  display: inline-block;
+  margin: 10px auto;
+}
+.social_media li {
+  display: inline-block;
+}
+.social_media li a {
+  display: inline-block;
+  overflow: hidden;
+  float: left;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  color: #FFF;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+  line-height: 30px;
+  background: #000;
+  position: relative;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.social_media li a:hover {
+  background: rgb(229, 229, 229);
+  text-shadow: 0px 0px #d5d5d5, 1px 1px #d5d5d5, 
+  2px 2px #d5d5d5, 3px 3px #d5d5d5, 4px 4px #d5d5d5, 
+  5px 5px #d5d5d5, 6px 6px #d5d5d5, 7px 7px #d5d5d5, 
+  8px 8px #d5d5d5, 9px 9px #d5d5d5, 10px 10px #d5d5d5, 
+  11px 11px #d5d5d5, 12px 12px #d5d5d5, 13px 13px #d5d5d5, 
+  14px 14px #d5d5d5, 15px 15px #d5d5d5, 16px 16px #d5d5d5, 
+  17px 17px #d5d5d5, 18px 18px #d5d5d5, 19px 19px #d5d5d5, 
+  20px 20px #d5d5d5, 21px 21px #d5d5d5, 22px 22px #d5d5d5, 
+  23px 23px #d5d5d5, 24px 24px #d5d5d5, 25px 25px #d5d5d5, 
+  26px 26px #d5d5d5, 27px 27px #d5d5d5, 28px 28px #d5d5d5, 
+  29px 29px #d5d5d5, 30px 30px #d5d5d5;
+}
+.social_media li .fa-facebook { background: #3B579D;}
+.social_media li .fa-twitter { background: #00ACED;}
+.social_media li .fa-linkedin {background: #007BB6;}
+.social_media li .fa-google-plus {background: #DD4A3A;}
+.social_media li .fa-instagram {background: #8a3ab9;}
+.social_media li .fa-pinterest {background: #CB2026;}
+.social_media li .fa-github {background: #000;}
+.social_media li .fa-google {background: #DD4A3A;}
+.social_media li .fa-yahoo {background: #400090;}
+.social_media li .fa-buysellads {background: #13A1D7;}
+
+.social_media li .fa-twitter:hover { color: #00ACED;}
+.social_media li .fa-facebook:hover { color: #3B579D;}
+.social_media li .fa-linkedin:hover {color: #007BB6;}
+.social_media li .fa-google-plus:hover {color: #DD4A3A;}
+.social_media li .fa-instagram:hover {color: #8a3ab9;}
+.social_media li .fa-pinterest:hover {color: #CB2026;}
+.social_media li .fa-github:hover {color: #000;}
+.social_media li .fa-google:hover {color: #DD4A3A;}
+.social_media li .fa-yahoo:hover {color: #400090;}
+.social_media li .fa-buysellads:hover {color: #13A1D7;}
+
+
 .page-template-profile nav#site-navigation {
     display: none;
 }
@@ -500,7 +626,7 @@ input[type="date"] {
     color: #555;
     display: block;
     font-size: 15px;
-    padding: 8px 15px;
+    padding: 8px 10px;
     text-align: center;
 }
 .user_profile .tab-group li a.active,
@@ -517,6 +643,9 @@ input[type="date"] {
 }
 .user_profile .user_profile_edit h2 {
   margin: 5px 0 10px;
+}
+.user_profile .user_name {
+    margin: 24px 0 !important;
 }
 .user_profile .dl-horizontal dt {
     text-align: inherit;

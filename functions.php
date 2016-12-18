@@ -29,7 +29,7 @@ function listify_child_styles() {
 add_action( 'wp_enqueue_scripts', 'listify_child_styles', 999 );
 
 function listify_child_theme_setup() {
-    load_child_theme_textdomain( 'lisify_child', get_stylesheet_directory() . '/languages' );
+    load_child_theme_textdomain( 'listify_child', get_stylesheet_directory() . '/languages' );
 }
 add_action( 'after_setup_theme', 'listify_child_theme_setup' );
 
