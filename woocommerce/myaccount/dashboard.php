@@ -162,53 +162,53 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
 	                            <dl class="dl-horizontal">
 	                                <dt><strong><?php esc_html_e( 'First name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="account_first_name" id="account_first_name" value="<?php echo esc_attr( $user->first_name ); ?>">
+							            <input type="text" class="input-text" name="account_first_name" id="account_first_name" value="<?php echo esc_attr( $user->first_name ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Last name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="account_last_name" id="account_last_name" value="<?php echo esc_attr( $user->last_name ); ?>">
+							            <input type="text" class="input-text" name="account_last_name" id="account_last_name" value="<?php echo esc_attr( $user->last_name ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Your ID', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text" name="user_login" id="user_login" value="<?php echo esc_attr( $user->user_login ); ?>" disabled >
+	                                    <input type="text" class="input-text" name="user_login" id="user_login" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 
 	                                <dt><strong><?php esc_html_e( 'Company name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="billing_company" id="billing_company" value="<?php echo esc_attr( $user->billing_company ); ?>"> 
+	                                    <input type="text" class="input-text " name="billing_company" id="billing_company" value="<?php echo esc_attr( $user->billing_company ); ?>" disabled> 
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Primary Email Address', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="email" class="input-text" name="account_email" id="account_email" value="<?php echo esc_attr( $user->user_email ); ?>">
+	                                    <input type="email" class="input-text" name="account_email" id="account_email" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Phone Number', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="tel" class="input-text " name="billing_phone" id="billing_phone" autocomplete="tel" value="<?php echo esc_attr( $user->billing_phone ); ?>">
+	                                    <input type="tel" class="input-text " name="billing_phone" id="billing_phone" autocomplete="tel" value="<?php echo esc_attr( $user->billing_phone ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Address', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="billing_address_1" id="billing_address_1" autocomplete="address-line1" value="<?php echo esc_attr( $user->billing_address_1 ); ?>">
+	                                    <input type="text" class="input-text " name="billing_address_1" id="billing_address_1" autocomplete="address-line1" value="<?php echo esc_attr( $user->billing_address_1 ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'City', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="City" id="City" value="<?php echo esc_attr( $user->City ); ?>">
+	                                    <input type="text" class="input-text " name="City" id="City" value="<?php echo esc_attr( $user->City ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Country', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="country" id="country" value="<?php echo esc_attr( $user->country ); ?>">
+	                                    <input type="text" class="input-text " name="country" id="country" value="<?php echo esc_attr( $user->country ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'About', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                	<textarea name="description" id="description" class="input-text" rows="5" cols="30"><?php echo esc_attr( $user->description ); ?></textarea>
+	                                	<textarea name="description" id="description" class="input-text" rows="5" cols="30" disabled><?php echo esc_attr( $user->description ); ?></textarea>
 	                                </dd>
 	                                <hr>
 	                            </dl>
@@ -252,7 +252,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                         <section>
                                             <label for="account_email" class="input">
                                                 <i class="icon_append fa fa-envelope"></i>
-                                                <input type="email" class="input-text" name="account_email" id="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>">
+                                                <input type="email" class="input-text" name="account_email" id="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
                                                 <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                                             </label>
                                         </section>
@@ -263,7 +263,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" class="input-text" name="password_1" placeholder="Enter your current password" id="password_1">
+                                                <input type="password" class="input-text" name="password_1" placeholder="Enter your current password" id="password_1" disabled>
                                                 <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
                                             </label>
                                         </section>
@@ -274,7 +274,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" class="input-text" name="password_2" placeholder="Confirm password" id="password_2" />
+                                                <input type="password" class="input-text" name="password_2" placeholder="Confirm password" id="password_2" disabled>
                                                 <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
                                             </label>
                                         </section>
@@ -398,7 +398,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="facebook" class="input">
                                             <i class="icon_append fa fa-facebook"></i>
-                                            <input type="text" class="input-text" name="facebook" id="facebook" value="<?php echo esc_attr( $user->facebook ); ?>">
+                                            <input type="text" class="input-text" name="facebook" id="facebook" value="<?php echo esc_attr( $user->facebook ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the facebook</b>
                                         </label>
                                     </section>
@@ -409,7 +409,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="twitter" class="input">
                                             <i class="icon_append fa fa-twitter"></i>
-                                            <input type="text" class="input-text" name="twitter" id="twitter" value="<?php echo esc_attr( $user->twitter ); ?>">
+                                            <input type="text" class="input-text" name="twitter" id="twitter" value="<?php echo esc_attr( $user->twitter ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the twitter</b>
                                         </label>
                                     </section>
@@ -420,7 +420,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="googleplus" class="input">
                                             <i class="icon_append fa fa-google-plus"></i>
-                                            <input type="text" class="input-text" name="googleplus" id="googleplus" value="<?php echo esc_attr( $user->googleplus ); ?>">
+                                            <input type="text" class="input-text" name="googleplus" id="googleplus" value="<?php echo esc_attr( $user->googleplus ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the google plus</b>
                                         </label>
                                     </section>
@@ -431,7 +431,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="linkedin" class="input">
                                             <i class="icon_append fa fa-linkedin"></i>
-                                            <input type="text" class="input-text" name="linkedin" id="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>">
+                                            <input type="text" class="input-text" name="linkedin" id="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the linkedin</b>
                                         </label>
                                     </section>
@@ -442,7 +442,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="instagram" class="input">
                                             <i class="icon_append fa fa-instagram"></i>
-                                            <input type="text" class="input-text" name="instagram" id="instagram" value="<?php echo esc_attr( $user->instagram ); ?>">
+                                            <input type="text" class="input-text" name="instagram" id="instagram" value="<?php echo esc_attr( $user->instagram ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the instagram</b>
                                         </label>
                                     </section>
@@ -453,7 +453,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="pinterest" class="input">
                                             <i class="icon_append fa fa-pinterest"></i>
-                                            <input type="text" class="input-text" name="pinterest" id="pinterest" value="<?php echo esc_attr( $user->pinterest ); ?>">
+                                            <input type="text" class="input-text" name="pinterest" id="pinterest" value="<?php echo esc_attr( $user->pinterest ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the pinterest</b>
                                         </label>
                                     </section>
@@ -464,7 +464,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="github" class="input">
                                             <i class="icon_append fa fa-github"></i>
-                                            <input type="text" class="input-text" name="github" id="github" value="<?php echo esc_attr( $user->github ); ?>">
+                                            <input type="text" class="input-text" name="github" id="github" value="<?php echo esc_attr( $user->github ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the github</b>
                                         </label>
                                     </section>
@@ -475,7 +475,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="jabber" class="input">
                                             <i class="icon_append fa fa-google"></i>
-                                            <input type="text" class="input-text" name="jabber" id="jabber" value="<?php echo esc_attr( $user->jabber ); ?>">
+                                            <input type="text" class="input-text" name="jabber" id="jabber" value="<?php echo esc_attr( $user->jabber ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the google talk</b>
                                         </label>
                                     </section>
@@ -486,7 +486,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="yim" class="input">
                                             <i class="icon_append fa fa-yahoo"></i>
-                                            <input type="text" class="input-text" name="yim" id="yim" value="<?php echo esc_attr( $user->yim ); ?>">
+                                            <input type="text" class="input-text" name="yim" id="yim" value="<?php echo esc_attr( $user->yim ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the yahoo</b>
                                         </label>
                                     </section>
@@ -497,7 +497,7 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                     <section>
                                         <label for="aim" class="input">
                                             <i class="icon_append fa fa-buysellads"></i>
-                                            <input type="text" class="input-text" name="aim" id="aim" value="<?php echo esc_attr( $user->aim ); ?>">
+                                            <input type="text" class="input-text" name="aim" id="aim" value="<?php echo esc_attr( $user->aim ); ?>" disabled>
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the aim</b>
                                         </label>
                                     </section>
