@@ -331,3 +331,31 @@ function email_verify_func() {
 
 add_action('wp_ajax_email_verify', 'email_verify_func');
 
+/* cashback */
+function cashback_func() {
+    $business_id = get_current_user_id();
+    $customer_id = $_POST['customer_id'];
+    $amount = $_POST['amount'];
+
+    if( !class_exists('UserModel')) {
+        echo 'wpdepost plugin isn\'t activated!';
+        exit();
+    }
+
+    $userModel = new UserModel(); // wpdepost class
+
+    if(get_user_role() !== 'business') {
+        echo 'Only businesses can send cashback';
+    } else if ( (int) $business_id === (int) $customer_id ) {
+        echo 'You can\'t send cashback yourself';
+    } else if (!$userModel->canAfford($amount)) {
+        echo 'You don\'t have enough fund to send cashback. Please top up.';
+    } else {
+        $userModel->incrementBalance($amount, $customer_id);
+        $userModel->decrementBalance($amount);
+    }
+
+    die();
+}
+add_action('wp_ajax_cashback', 'cashback_func');
+

@@ -387,6 +387,33 @@ jQuery(function($){
 			}
 		});
 
+	});	
+
+	$('#cashback_btn').click(function(e){
+
+		e.preventDefault();
+
+		var data = {
+			action: 'cashback', 
+			amount: $('#cashback_amout').val(),
+			customer_id: $('#customer_id').val(),
+		}
+
+		console.log(data);
+
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'text',
+			success: function(resp) {
+				$('.cashback_message').html( resp );
+			},
+			error: function( req, status, err ) {
+				$('.cashback_message').html( 'something went wrong', status, err );
+			}
+		});
+
 	});
 
 

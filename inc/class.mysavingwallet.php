@@ -1,5 +1,9 @@
 <?php 
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';
 use Twilio\Rest\Client;
 
@@ -38,6 +42,12 @@ class Mysavingwallet {
 
 	public function isValidEmail($email){ 
 	    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+	}
+
+	public function qrurl() {
+		$cashback_page = get_template_page_link('cashback.php');
+		$user_id = get_current_user_id();
+		return add_query_arg('customer_id', $user_id, $cashback_page);
 	}
 
 }

@@ -28,7 +28,7 @@ if(!is_user_logged_in()){
     exit();
 }
 
-
+$mysavingwallet = new Mysavingwallet;
 $user_id = get_current_user_id();
 $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
@@ -46,7 +46,7 @@ if(in_array($key, $_GET)) {
 
 <?php 
 
-if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  && ( $email_status != 'pending' ) ) :  ?>
+if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) :  ?>
     <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
@@ -77,10 +77,14 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
 
 <?php else : ?>
 
-
 	<div class="container user_profile">
         <div class="row">
             <div class="col-md-3">
+                <?php if(get_user_role() == 'customer'): ?>
+                <div class="qr_code">
+                    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
+                </div>
+                <?php endif; ?>
                 <div class="user_profile_img">
                     <?php echo get_avatar($user_id, 170); ?>
                 </div>
