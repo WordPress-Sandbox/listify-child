@@ -90,10 +90,9 @@ jQuery(function($){
 	});
 
 	/* profile page */
-	$(".edit_profile").click(function(){
-        $(".input-text").css("border-color", "#e5e5e5");
+    $(".edit_profile").click(function(){
+        $(".input-text").removeAttr('disabled').css("border-color", "#e5e5e5");
     });
-
 
 	// inttelinput 
 	var telInput = $("#phone");
