@@ -297,7 +297,7 @@ function email_verify_func() {
     $sub = "Mysavingwallet email verification";
 
     $code = mysql_escape_string(md5(rand(1000,5000))) ;
-    $pagelink = get_template_page_link('profile.php');
+    $pagelink = get_permalink( get_option('woocommerce_myaccount_page_id') );
     $link = add_query_arg('key', $code, $pagelink);
 
     $message = "<html><body>";

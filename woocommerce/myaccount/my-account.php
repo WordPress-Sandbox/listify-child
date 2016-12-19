@@ -21,13 +21,16 @@ $user_id = get_current_user_id();
 $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
 $email_code = get_user_meta($user_id, 'email_code', true);
-$key = $_GET['key'];
+$key;
+if($_GET) {
+    $key = $_GET['key'];
+}
 
 ?>
 
     <?php echo get_user_meta($user_id, 'email_code', true); ?>
     <?php echo get_user_meta($user_id, 'email_status', true); ?>
-    <?php echo $key; ?>
+    <?php if($key) echo $key; ?>
 
 <?php 
 
@@ -284,8 +287,24 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                             <h2>Manage your Payment Settings</h2>
                             <p>Below are the payment options for your account.</p>
                             <br>
-                            <form action="#" method="post" class="payment_method">
-                                <!--Checkout-Form-->
+                            <p> Deposit payment interface </p>
+                            <?php echo do_shortcode('[wpdeposit_payment_interface]'); ?>
+
+                            <p> Deposit balance: </p>
+                            <?php echo do_shortcode('[wpdeposit_deposit_balance]'); ?>
+
+                            <p> Deposit history: </p>
+                            <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
+
+                            <p> Transaction history: </p>
+                            <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
+
+                            <p> widthdraw: </p>
+                            <?php echo do_shortcode('[wpdeposit_withdrawals]'); ?>
+
+
+
+<!--                             <form action="#" method="post" class="payment_method">
                                 <section>
                                     <div class="inline-group">
                                         <label class="radio"><input type="radio" checked="" name="radio-inline"><i class="rounded-x"></i>Visa</label>
@@ -344,9 +363,8 @@ if( ($user->roles[0] != 'administrator' ) &&  ( $email_status != 'verified' )  &
                                 <br>
                                 <button type="button" class="button button_u">Cancel</button>
                                 <button type="submit" class="button">Save Changes</button>
-                                <!--End Checkout-Form-->
                             </form>    
-
+ -->
                         </div><!-- /payment -->
 
                         <div id="social" class="user_profile_edit fade">

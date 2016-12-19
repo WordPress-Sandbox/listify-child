@@ -2,10 +2,6 @@ jQuery(function($){
 
 	//
 
-	$(".edit_profile").click(function(){
-        $(".input-text").css("border-color", "#e5e5e5");
-    });
-
 	function SavingWallet() {
 		this.errors = {};
 		this.requiredFields = ['reg_username', 'fname', 'lname', 'dd', 'email', 'phone', 'pass', 'confpass'];
@@ -92,6 +88,11 @@ jQuery(function($){
 	$('input').on('keyup change', function(e){
 		$(this).removeClass('error-msg');
 	});
+
+	/* profile page */
+	$(".edit_profile").click(function(){
+        $(".input-text").css("border-color", "#e5e5e5");
+    });
 
 
 	// inttelinput 

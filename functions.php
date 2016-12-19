@@ -57,6 +57,24 @@ function get_template_page_link($t) {
 }
 
 
+/* remove box shadow padding on myaccount page */
+function add_css_if_has_shortcode( $content ) { 
+    if (is_page() && has_shortcode($content, 'woocommerce_my_account')) {
+        $style = '<style>
+                    .content-box {
+                        box-shadow: none;
+                    }
+                    .type-page.content-box.content-box-wrapper .content-box-inner {
+                        padding: 0 !important;
+                    }
+                </style>';
+        $content = $content . $style;
+    }
+    return $content;
+}
+add_filter( 'the_content', 'add_css_if_has_shortcode' );
+
+
 /**
  * redirect after login
  */
@@ -65,7 +83,7 @@ function mysavingwallet_redirect_after_login( $url, $request, $user ){
         if( $user->has_cap( 'administrator' ) ) {
             $url = admin_url();
         } else {
-            $url = get_template_page_link('profile.php');
+            $url = get_permalink( get_option('woocommerce_myaccount_page_id') );
         }
     }
     return $url;
@@ -87,7 +105,7 @@ function mysavingwallet_redirect_if_admin_page()
         return;
 
     if ( is_admin() && !current_user_can('administrator') ) {
-            wp_redirect(get_template_page_link('profile.php'));
+            wp_redirect(get_permalink( get_option('woocommerce_myaccount_page_id') ));
             exit();
     }
 }
