@@ -34,20 +34,32 @@ $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
 $email_code = get_user_meta($user_id, 'email_code', true);
 $key = '';
-if(in_array($key, $_GET)) {
+if(array_key_exists('key', $_GET)) {
     $key = $_GET['key'];
 }
 
 ?>
 
+    <div class="woocommerce-message" style="display: none"></div>
     <?php echo get_user_meta($user_id, 'email_code', true); ?>
     <?php echo get_user_meta($user_id, 'email_status', true); ?>
     <?php if($key) echo $key; ?>
 
 <?php 
 
-if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) :  ?>
-    <div class="container email_verification">
+if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
+
+    <div class="container">
+        <div class="email_confirmed">
+            <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
+            <h2> Your Email Verified Successfully </h2>
+            <script>window.setTimeout(function(){location.reload()}, 2000);</script>
+        </div>
+    </div>
+
+<?php elseif ( $email_status != 'verified' ) :  ?>
+
+   <div class="container email_verification">
         <img class="email_icon" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/email_icon.png" alt="">
         <div class="row">
             <div class="col-md-offset-3 col-md-6">
@@ -65,32 +77,46 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
         </div>
     </div>
 
-<?php elseif ( ( $key == $email_code ) && ( $email_status == 'pending' ) ) :  ?>
-
-    <div class="container">
-        <div class="email_confirmed">
-            <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
-            <h2> Your Email Verified Successfully </h2>
-            <script>window.setTimeout(location.reload, 2000);</script>
-        </div>
-    </div>
-
-<?php else : ?>
-
+<?php elseif ($email_status == 'verified') : ?>
 	<div class="container user_profile">
         <div class="row">
             <div class="col-md-3">
-                <?php if(get_user_role() == 'customer'): ?>
-                <div class="qr_code">
-                    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
-                </div>
-                <?php endif; ?>
-                <div class="user_profile_img">
-                    <?php echo get_avatar($user_id, 170); ?>
+                <div class="qr_profile">
+                    <?php if(get_user_role() == 'customer'): ?>
+                        <div class="qr_code">
+                            <img src="https://chart.googleapis.com/chart?chs=262x262&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
+                        </div>
+                        <style>
+                        .qr_profile {
+                            position: relative;
+                        }
+                        .user_profile_img,
+                        .qr_code {
+                            position: absolute;
+                            top: 0;
+                        }
+                         .qr_code {
+                          display: none;
+                          z-index: 9;
+                        }
+                        .user_profile_img:before {
+                            content: "";
+                            position: absolute;
+                            background-image: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/img/qr-corner.png');
+                            height: 50px;
+                            width: 50px;
+                            right:0;
+                            z-index: 99;
+                            cursor: pointer;
+                        }</style>
+                    <?php endif; ?>
+                    <div class="user_profile_img">
+                        <?php echo get_avatar($user_id, 262); ?>
+                    </div>
                 </div>
                 <div class="user_profile_desc">
                     <h2 class="user_name"><?php echo $user->first_name; ?> <?php echo $user->last_name; ?></h2>
-                    <p class="user_bio"><?php echo $user->description; ?></p>
+                    <p class="user_bio"><?php echo esc_attr( $user->description ); ?></p>
 				
                     <ul class="social_media model-2">
                     	<?php if ($user->facebook): ?>
@@ -148,30 +174,25 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
 
                     <div class="tab-content">
                         <div id="profile" class="user_profile_edit fade">
-                            <h2>Manage your Name, ID and Email Addresses.</h2>
-                            <p>Below are the name and email addresses on file for your account.</p>
-
-							<div class="row">
-								<div class="col-md-12">
-									<span class="edit_profile button fa fa-pencil pull-right"></span>
-								</div>
-							</div>
-							<hr>
-							
+                            <h2> Upload profile photo</h2>
                             <?php echo do_shortcode('[avatar_upload]'); ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="edit_profile button fa fa-pencil pull-right"></span>
+                                </div>
+                            </div>
 							<hr>
-							<form action="" class="form-edit-account" method="post">
-								<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
+							<form id="basic_info" action="" class="form-edit-account" method="post">
 
 	                            <dl class="dl-horizontal">
 	                                <dt><strong><?php esc_html_e( 'First name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="account_first_name" id="account_first_name" value="<?php echo esc_attr( $user->first_name ); ?>" disabled>
+							            <input type="text" class="input-text" name="first_name" id="first_name" value="<?php echo esc_attr( $user->first_name ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Last name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="account_last_name" id="account_last_name" value="<?php echo esc_attr( $user->last_name ); ?>" disabled>
+							            <input type="text" class="input-text" name="first_name" id="first_name" value="<?php echo esc_attr( $user->last_name ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Your ID', 'listify_child' ); ?></strong></dt>
@@ -202,7 +223,7 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'City', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="City" id="City" value="<?php echo esc_attr( $user->City ); ?>" disabled>
+	                                    <input type="text" class="input-text " name="billing_city" id="billing_city" value="<?php echo esc_attr( $user->billing_city ); ?>" disabled>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Country', 'listify_child' ); ?></strong></dt>
@@ -217,20 +238,13 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
 	                                <hr>
 	                            </dl>
 
-	                            <?php wp_nonce_field( 'save_account_details' ); ?>
-	                            <button type="submit" name="Cancel" class="button button_u">Cancel</button>
-	                            <button type="submit" name="save_account_details" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
-	                            <input type="hidden" name="action" value="save_account_details">
+	                            <button type="submit" name="basic_info" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
 
-	                            <?php do_action( 'woocommerce_edit_account_form_end' ); ?>
                             </form>
                         </div><!-- /profile -->
 
                         <div id="passwordTab" class="user_profile_edit fade">
                             <h2>Manage your Security Settings</h2>
-                            <p>Change your password.</p>
-                            <p></p>
-                            
                             <div class="row">
 								<div class="col-md-12">
 									<span class="edit_profile button fa fa-pencil pull-right"></span>
@@ -286,10 +300,6 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
                                 </dl>
                                 <hr>
                                 <br>
-                                <section>
-                                    <label class="checkbox"><input type="checkbox" id="terms" name="terms"><i></i><p>I agree with the Terms and Conditions</p></label>
-                                </section>
-                                <br>
                                 <?php wp_nonce_field( 'save_account_details' ); ?>
 	                            	<button type="submit" name="Cancel" class="button button_u">Cancel</button>
 	                           		<button type="submit" name="save_account_details" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
@@ -300,11 +310,17 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
                         </div><!-- /passwordTab -->
 
                         <div id="payment" class="user_profile_edit fade">
-                            <h2>Manage your Payment Settings</h2>
-                            <p>Below are the payment options for your account.</p>
+                            <h2>Manage your Payment</h2>
                             <br>
-                            <p> Deposit payment interface </p>
-                            <?php echo do_shortcode('[wpdeposit_payment_interface]'); ?>
+                            
+                            <?php if(get_user_role() == 'customer')
+                                {
+                                    echo do_shortcode('[wpdeposit_withdrawals]');
+                                } else if(get_user_role() != 'customer') 
+                                {
+                                    echo do_shortcode('[wpdeposit_payment_interface]');
+                                }
+                            ?>
 
                             <p> Deposit balance: </p>
                             <?php echo do_shortcode('[wpdeposit_deposit_balance]'); ?>
@@ -314,9 +330,6 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
 
                             <p> Transaction history: </p>
                             <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
-
-                            <p> widthdraw: </p>
-                            <?php echo do_shortcode('[wpdeposit_withdrawals]'); ?>
 
 
 
@@ -385,15 +398,13 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
 
                         <div id="social" class="user_profile_edit fade">
                         	<h2>Manage your Social Media.</h2>
-                            <p>Below are the notifications you may manage.</p>
-
 							<div class="row">
 								<div class="col-md-12">
 									<span class="edit_profile button fa fa-pencil pull-right"></span>
 								</div>
 							</div>
 							<hr>
-                            <form action="" class="social_change password_change" method="post">
+                            <form id="save_social_details" action="" class="social_change password_change" method="post">
 							<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 							
 							<dl class="dl-horizontal">
@@ -508,19 +519,12 @@ if( ( get_user_role() != 'administrator') &&  ( $email_status != 'verified' ) ) 
                                 </dd> 
                                 <hr>  
                             </dl>
-
-                            <?php wp_nonce_field( 'save_account_details' ); ?>
-                            	<button type="submit" name="Cancel" class="button button_u">Cancel</button>
-                           		<button type="submit" name="save_account_details" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
-                            	<input type="hidden" name="action" value="save_account_details">
-
-                            <?php do_action( 'woocommerce_edit_account_form_end' ); ?>
+                           	<button type="submit" name="save_social_details" class="save_social_details button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
                             </form>
                         </div><!-- /social -->
 
                         <div id="settings" class="user_profile_edit fade">
                             <h2>Manage your Notifications.</h2>
-                            <p>Below are the notifications you may manage.</p>
                             <br>
                             <form action="#" method="post" class="user_settings">
                                 <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Email notification</label>

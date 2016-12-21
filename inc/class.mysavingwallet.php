@@ -27,13 +27,13 @@ class Mysavingwallet {
 		$pin = rand(1000, 9999);
 
 		/* send verfication sms */
-        // $client->messages->create(
-        //     $to,
-        //     array(
-        //         'from' => $this->from_phone,
-        //         'body' => 'Your mysavingswallet pin is: ' . $pin
-        //     )
-        // );
+        $client->messages->create(
+            $to,
+            array(
+                'from' => $this->from_phone,
+                'body' => 'Your mysavingswallet pin is: ' . $pin
+            )
+        );
 
         echo json_encode(array('pin'=>$pin));
         die();

@@ -259,6 +259,8 @@ jQuery(function($){
 	          that.prev().show();
 	          btn.text('Get started');
 	        }
+	      } else {
+	      	location.reload();
 	      }
 	    });
 

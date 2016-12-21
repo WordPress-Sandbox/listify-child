@@ -91,7 +91,16 @@ jQuery(function($){
 
 	/* profile page */
     $(".edit_profile").click(function(){
-        $(".input-text").removeAttr('disabled').css("border-color", "#e5e5e5");
+	    if ($('.input-text').attr('disabled')) {
+	        $('.input-text').removeAttr('disabled').css("border-color", "#e5e5e5");
+	    } else {
+	        $('.input-text').attr('disabled', 'disabled').css("border-color", "transparent");
+	    }
+    });
+
+    /* toggle QR code */
+    $('.user_profile_img').click(function(){
+    	$('.qr_code').toggle();
     });
 
 	// inttelinput 
@@ -410,6 +419,60 @@ jQuery(function($){
 			},
 			error: function( req, status, err ) {
 				$('.cashback_message').html( 'something went wrong', status, err );
+			}
+		});
+
+	});
+
+
+
+
+	/* edit profile */
+	$('#basic_info').submit(function(e){
+		e.preventDefault();
+
+		var data = {
+			action: 'save_basic',
+			dd: $(this).serializeArray()
+		}
+
+		console.log(data);
+
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'text',
+			success: function(resp) {
+				console.log(resp);
+				$('.woocommerce-message').slideDown('slow').text( 'Social Media Successfully updated!' );
+			},
+			error: function( req, status, err ) {
+				$('.message').html( 'something went wrong', status, err );
+			}
+		});
+
+	});	
+
+	$('#save_social_details').submit(function(e){
+		e.preventDefault();
+
+		var data = {
+			action: 'save_social',
+			dd: $(this).serializeArray()
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'text',
+			success: function(resp) {
+				console.log(resp);
+				$('.woocommerce-message').slideDown('slow').text( 'Social Media Successfully updated!' );
+			},
+			error: function( req, status, err ) {
+				$('.message').html( 'something went wrong', status, err );
 			}
 		});
 

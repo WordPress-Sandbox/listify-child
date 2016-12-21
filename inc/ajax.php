@@ -112,8 +112,6 @@ add_action('wp_ajax_nopriv_register_user', 'new_user_register');
 
 /* business user registration */
 
-$mysavingwallet2 = new Mysavingwallet;
-
 function new_business_register() {
 
     $mysavingwallet2 = new Mysavingwallet;
@@ -358,4 +356,38 @@ function cashback_func() {
     die();
 }
 add_action('wp_ajax_cashback', 'cashback_func');
+
+/* edit profile */
+function save_basic_func(){
+    $dd = $_POST['dd'];
+    $user_id = get_current_user_id();
+
+    foreach ($dd as $key => $value) {
+        if(!empty($value['value'])) {
+            update_user_meta($user_id, $value['name'], $value['value']);
+        }
+    }
+
+    echo json_encode('success');
+
+}
+
+add_action('wp_ajax_save_basic', 'save_basic_func');
+
+
+function save_social_func(){
+    $dd = $_POST['dd'];
+    $user_id = get_current_user_id();
+
+    foreach ($dd as $key => $value) {
+        if(!empty($value['value'])) {
+            update_user_meta($user_id, $value['name'], $value['value']);
+        }
+    }
+
+    echo json_encode('success');
+
+}
+
+add_action('wp_ajax_save_social', 'save_social_func');
 
