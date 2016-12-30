@@ -41,9 +41,9 @@ if(array_key_exists('key', $_GET)) {
 ?>
 
     <div class="woocommerce-message" style="display: none"></div>
-    <?php echo get_user_meta($user_id, 'email_code', true); ?>
-    <?php echo get_user_meta($user_id, 'email_status', true); ?>
-    <?php if($key) echo $key; ?>
+    <?php //echo get_user_meta($user_id, 'email_code', true); ?>
+    <?php //echo get_user_meta($user_id, 'email_status', true); ?>
+    <?php //if($key) echo $key; ?>
 
 <?php 
 
@@ -81,12 +81,13 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 	<div class="container user_profile">
         <div class="row">
             <div class="col-md-3">
+                <div>
                 <div class="qr_profile">
                     <?php if(get_user_role() == 'customer'): ?>
                         <div class="qr_code">
                             <img src="https://chart.googleapis.com/chart?chs=262x262&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
                         </div>
-                        <style>
+    <!--                     <style>
                         .qr_profile {
                             position: relative;
                         }
@@ -108,56 +109,36 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             right:0;
                             z-index: 99;
                             cursor: pointer;
-                        }</style>
+                        }</style> -->
                     <?php endif; ?>
                     <div class="user_profile_img">
                         <?php echo get_avatar($user_id, 262); ?>
                     </div>
+                    <br/>
+                    <?php if(get_user_role() == 'customer'): ?>
+                        <h2> Customer ID: <?php echo $user_id; ?></h2>
+                    <?php endif; ?>
+                </div>
                 </div>
                 <div class="user_profile_desc">
                     <h2 class="user_name"><?php echo $user->first_name; ?> <?php echo $user->last_name; ?></h2>
                     <p class="user_bio"><?php echo esc_attr( $user->description ); ?></p>
-				
                     <ul class="social_media model-2">
-                    	<?php if ($user->facebook): ?>
-                    		<li><a href="<?php echo $user->facebook; ?>" class="fa fa-facebook"></a></li>
-                    	<?php endif ?>
-                    	
-                    	<?php if ($user->twitter): ?>
-                    		<li><a href="<?php echo $user->twitter; ?>" class="fa fa-twitter"></a></li>
-                    	<?php endif ?>
+                        <?php if ($user->facebook): ?>
+                            <li><a href="<?php echo $user->facebook; ?>" class="fa fa-facebook"></a></li>
+                        <?php endif ?>
+                        
+                        <?php if ($user->twitter): ?>
+                            <li><a href="<?php echo $user->twitter; ?>" class="fa fa-twitter"></a></li>
+                        <?php endif ?>
 
-                    	<?php if ($user->googleplus): ?>
-                    		<li><a href="<?php echo $user->googleplus; ?>" class="fa fa-google-plus"></a></li>
-                    	<?php endif ?>
+                        <?php if ($user->linkedin): ?>
+                            <li><a href="<?php echo $user->linkedin; ?>" class="fa fa-linkedin"></a></li>
+                        <?php endif ?>
 
-                    	<?php if ($user->linkedin): ?>
-                    		<li><a href="<?php echo $user->linkedin; ?>" class="fa fa-linkedin"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->instagram): ?>
-                    		<li><a href="<?php echo $user->instagram; ?>" class="fa fa-instagram"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->pinterest): ?>
-                    		<li><a href="<?php echo $user->pinterest; ?>" class="fa fa-pinterest"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->github): ?>
-                    		<li><a href="<?php echo $user->github; ?>" class="fa fa-github"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->jabber): ?>
-                    		<li><a href="<?php echo $user->jabber; ?>" class="fa fa-google"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->yim): ?>
-                    		<li><a href="<?php echo $user->yim; ?>" class="fa fa-yahoo"></a></li>
-                    	<?php endif ?>
-
-                    	<?php if ($user->aim): ?>
-                    		<li><a href="<?php echo $user->aim; ?>" class="fa fa-buysellads"></a></li>
-                    	<?php endif ?>
+                        <?php if ($user->instagram): ?>
+                            <li><a href="<?php echo $user->instagram; ?>" class="fa fa-instagram"></a></li>
+                        <?php endif ?>
                     </ul><!-- /social_media -->
                 </div>
             </div>
@@ -259,8 +240,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-user"></i>
-                                                <input type="text" class="input-text" name="user_login" id="user_login" placeholder="Username" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
-                                                <b class="tooltip tooltip-bottom-right">Needed to enter the website</b>
+                                                <input type="text" name="user_login" id="user_login" placeholder="Username" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
                                             </label>
                                         </section>
                                     </dd>
@@ -270,8 +250,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label for="account_email" class="input">
                                                 <i class="icon_append fa fa-envelope"></i>
-                                                <input type="email" class="input-text" name="account_email" id="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
-                                                <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                                                <input type="email" name="account_email" id="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
                                             </label>
                                         </section>
                                     </dd>
@@ -311,7 +290,58 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
-                            <br>
+                            <?php if(get_user_role() == 'customer'): ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="edit_profile button fa fa-pencil pull-right"></span>
+                                </div>
+                            </div>
+                            <br/>
+                            <?php 
+                                $bank = get_user_meta($user_id, 'bank', true);
+                                $bank = json_decode($bank);
+                                // var_dump($bank); 
+                            ?>
+                            <form id="bank_account" action="#" method="post">
+                                <dl class="dl-horizontal">
+                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <input type="text" class="input-text" name="bank_name" value="<?php echo esc_attr( $bank->bank_name ); ?>">
+                                    </dd>                                 
+
+                                    <dt><?php esc_html_e( 'Bank Routing Number (9 Digits only)', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <input type="text" class="input-text" name="bank_routing" value="<?php echo esc_attr( $bank->bank_routing ); ?>">
+                                    </dd>
+
+                                    <dt><?php esc_html_e( 'Bank Account Number (up to 16 digits)', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <input type="text" class="input-text" name="account_number" value="<?php echo esc_attr( $bank->account_number ); ?>">
+                                    </dd>
+                                    <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <select name="account_type">
+                                            <option>Checking</option>
+                                            <option>Savings</option>
+                                        </select>
+                                    </dd>
+
+                                    <dt><?php esc_html_e( 'Please provide proof of Account Info – Voided Check or Bank Letter', 'listify_child' ); ?></dt>
+
+                                        <!-- http://www.kvcodes.com/2013/12/create-front-end-multiple-file-upload-wordpress/ 
+
+                                        https://hugh.blog/2014/03/20/wordpress-upload-user-submitted-files-frontend/
+
+                                        -->
+                                    <dd>
+                                        <input type="file" name="kv_multiple_attachments[]"  multiple="multiple" >
+                                    </dd>     
+
+                                </dl>
+
+                                <button type="submit" class="button">Save bank info </button>
+                            </form>  
+                            <?php endif; ?>  
                             
                             <?php if(get_user_role() == 'customer')
                                 {
@@ -331,69 +361,6 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <p> Transaction history: </p>
                             <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
 
-
-
-<!--                             <form action="#" method="post" class="payment_method">
-                                <section>
-                                    <div class="inline-group">
-                                        <label class="radio"><input type="radio" checked="" name="radio-inline"><i class="rounded-x"></i>Visa</label>
-                                        <label class="radio"><input type="radio" name="radio-inline"><i class="rounded-x"></i>MasterCard</label>
-                                        <label class="radio"><input type="radio" name="radio-inline"><i class="rounded-x"></i>PayPal</label>
-                                    </div>
-                                </section>                  
-
-                                <section>
-                                    <label class="input">
-                                        <input type="text" name="name" placeholder="Name on card">
-                                    </label>
-                                </section>
-                                
-                                <div class="row">
-                                    <section class="col-md-10">
-                                        <label class="input">
-                                            <input type="text" name="card" id="card" placeholder="Card number">
-                                        </label>
-                                    </section>
-                                    <section class="col-md-2">
-                                        <label class="input">
-                                            <input type="text" name="cvv" id="cvv" placeholder="CVV2">
-                                        </label>
-                                    </section>
-                                </div>                                        
-                                <br>
-                                <div class="row">
-                                    <label class="label col-md-4">Expiration date</label>
-                                    <section class="col-md-5">
-                                        <label class="select">
-                                            <select name="month">
-                                                <option disabled="" selected="" value="0">Month</option>
-                                                <option value="1">January</option>
-                                                <option value="1">February</option>
-                                                <option value="3">March</option>
-                                                <option value="4">April</option>
-                                                <option value="5">May</option>
-                                                <option value="6">June</option>
-                                                <option value="7">July</option>
-                                                <option value="8">August</option>
-                                                <option value="9">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
-                                            </select>
-                                            <i></i>
-                                        </label>
-                                    </section>
-                                    <section class="col-md-3">
-                                        <label class="input">
-                                            <input type="text" placeholder="Year" id="year" name="year">
-                                        </label>
-                                    </section>
-                                </div>
-                                <br>
-                                <button type="button" class="button button_u">Cancel</button>
-                                <button type="submit" class="button">Save Changes</button>
-                            </form>    
- -->
                         </div><!-- /payment -->
 
                         <div id="social" class="user_profile_edit fade">
@@ -430,17 +397,6 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     </section>
                                 </dd>
                                 <hr>
-                                <dt><?php esc_html_e( 'Google +', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="googleplus" class="input">
-                                            <i class="icon_append fa fa-google-plus"></i>
-                                            <input type="text" class="input-text" name="googleplus" id="googleplus" value="<?php echo esc_attr( $user->googleplus ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the google plus</b>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
                                 <dt><?php esc_html_e( 'Linkedin', 'listify_child' ); ?></dt>
                                 <dd>
                                     <section>
@@ -462,61 +418,6 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         </label>
                                     </section>
                                 </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Pinterest', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="pinterest" class="input">
-                                            <i class="icon_append fa fa-pinterest"></i>
-                                            <input type="text" class="input-text" name="pinterest" id="pinterest" value="<?php echo esc_attr( $user->pinterest ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the pinterest</b>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Github', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="github" class="input">
-                                            <i class="icon_append fa fa-github"></i>
-                                            <input type="text" class="input-text" name="github" id="github" value="<?php echo esc_attr( $user->github ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the github</b>
-                                        </label>
-                                    </section>
-                                </dd> 
-                                <hr>
-                                <dt><?php esc_html_e( 'Google Talk', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="jabber" class="input">
-                                            <i class="icon_append fa fa-google"></i>
-                                            <input type="text" class="input-text" name="jabber" id="jabber" value="<?php echo esc_attr( $user->jabber ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the google talk</b>
-                                        </label>
-                                    </section>
-                                </dd> 
-                                <hr>
-                                <dt><?php esc_html_e( 'Yahoo IM', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="yim" class="input">
-                                            <i class="icon_append fa fa-yahoo"></i>
-                                            <input type="text" class="input-text" name="yim" id="yim" value="<?php echo esc_attr( $user->yim ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the yahoo</b>
-                                        </label>
-                                    </section>
-                                </dd> 
-                                <hr>
-                                <dt><?php esc_html_e( 'Aim', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="aim" class="input">
-                                            <i class="icon_append fa fa-buysellads"></i>
-                                            <input type="text" class="input-text" name="aim" id="aim" value="<?php echo esc_attr( $user->aim ); ?>" disabled>
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the aim</b>
-                                        </label>
-                                    </section>
-                                </dd> 
                                 <hr>  
                             </dl>
                            	<button type="submit" name="save_social_details" class="save_social_details button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
@@ -546,27 +447,4 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
             </div><!-- /col-md-9 -->
         </div>   
     </div>
-<?php 
-	endif; 
-
-	/**
-	 * My Account dashboard.
-	 *
-	 * @since 2.6.0
-	 */
-	do_action( 'woocommerce_account_dashboard' );
-
-	/**
-	 * Deprecated woocommerce_before_my_account action.
-	 *
-	 * @deprecated 2.6.0
-	 */
-	do_action( 'woocommerce_before_my_account' );
-
-	/**
-	 * Deprecated woocommerce_after_my_account action.
-	 *
-	 * @deprecated 2.6.0
-	 */
-	do_action( 'woocommerce_after_my_account' );
-?>
+<?php endif; ?>

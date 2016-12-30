@@ -4,6 +4,7 @@ require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
 
 function new_user_register() {
 
+
     $mysavingwallet = new Mysavingwallet;
 
     $err = array();
@@ -114,7 +115,7 @@ add_action('wp_ajax_nopriv_register_user', 'new_user_register');
 
 function new_business_register() {
 
-    $mysavingwallet2 = new Mysavingwallet;
+    $mysavingwallet = new Mysavingwallet;
 
     $err = array();
 
@@ -125,7 +126,7 @@ function new_business_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $mysavingwallet2->sendPin($_POST['bs_phone']);
+        $mysavingwallet->sendPin($_POST['bs_phone']);
     }
  
     // Get data 
@@ -166,7 +167,7 @@ function new_business_register() {
     if(empty($bs_dd)) {
         $err[] = 'Date required';
     } 
-    if(empty($bs_email) || !$mysavingwallet2->isValidEmail($bs_email) ){
+    if(empty($bs_email) || !$mysavingwallet->isValidEmail($bs_email) ){
         $err[] = 'Valid Email required';
     }
     if(empty($bs_phone)){
@@ -369,6 +370,7 @@ function save_basic_func(){
     }
 
     echo json_encode('success');
+    die();
 
 }
 
@@ -381,13 +383,58 @@ function save_social_func(){
 
     foreach ($dd as $key => $value) {
         if(!empty($value['value'])) {
-            update_user_meta($user_id, $value['name'], $value['value']);
+            $es_value = mysql_escape_string($value);
+            update_user_meta($user_id, $value['name'], $es_value);
         }
     }
 
     echo json_encode('success');
-
+    die();
 }
 
 add_action('wp_ajax_save_social', 'save_social_func');
+
+/* save bank info */
+function save_bank_func(){
+
+    $mysavingwallet = new Mysavingwallet;
+
+    $dd = $_POST['dd'];
+    // $user_id = get_current_user_id();
+    // $dd = json_decode(get_user_meta($user_id, 'bank', true), true);
+    $data_array = array();
+    $error = array();
+    foreach($dd as $k => $v) {
+        if($v['name'] == 'bank_name') {
+            $data_array['bank_name'] = $v['value'];
+        } else if ($v['name'] == 'bank_routing') {
+            if($mysavingwallet->checkRoutingNumber($v['value'])) {
+                $data_array['bank_routing'] = $v['value'];
+            } else {
+                $error[] = 'Incorrect routing number';
+            }
+        } else if ($v['name'] == 'account_number') {
+            if($mysavingwallet->checkAccountNumber($v['value'])) {
+                $data_array['account_number'] = $v['value'];
+            } else {
+                $error[] = 'Incorrect account number';
+            }
+        }
+    }
+    if(count($error) == 0 ) {
+        $json_data = json_encode($data_array);
+        $user_id = get_current_user_id();
+        update_user_meta($user_id, 'bank', $json_data);
+        echo json_encode('Bank info updated successfully');
+    } else {
+        echo json_encode($error);
+    }
+    
+    die();
+
+}
+
+// save_bank_func();
+
+add_action('wp_ajax_save_bank', 'save_bank_func');
 

@@ -478,5 +478,31 @@ jQuery(function($){
 
 	});
 
+	$('#bank_account').submit(function(e){
+		e.preventDefault();
+
+		var data = {
+			action: 'save_bank',
+			dd: $(this).serializeArray()
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				// var res = $.parseJSON(resp);
+				console.log(resp);
+				$('.woocommerce-message').slideDown('slow').text(resp);
+			},
+			error: function( req, status, err ) {
+				console.log('error in ajax request');
+				$('.woocommerce-message').html( 'something went wrong', status, err );
+			}
+		});
+
+	});
+
 
 });
