@@ -29,10 +29,26 @@ if(!is_user_logged_in()){
 }
 
 $mysavingwallet = new Mysavingwallet;
+
 $user_id = get_current_user_id();
 $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
 $email_code = get_user_meta($user_id, 'email_code', true);
+$email_code = get_user_meta($user_id, 'email_code', true);
+$gender = get_user_meta($user_id, 'gender', true);
+$billing_phone = get_user_meta($user_id, 'billing_phone', true);
+$billing_company = get_user_meta($user_id, 'billing_company', true);
+$bs_type = get_user_meta($user_id, 'bs_type', true);
+$dd = get_user_meta($user_id, 'dd', true);
+$apartmentsuite = get_user_meta($user_id, 'apartmentsuite', true);
+$billing_country = get_user_meta($user_id, 'billing_country', true);
+$facebook = get_user_meta($user_id, 'facebook', true);
+$description = get_user_meta($user_id, 'description', true);
+$bank = get_user_meta($user_id, 'bank', true);
+$bank = json_decode($bank);
+
+var_dump($bank);
+
 $key = '';
 if(array_key_exists('key', $_GET)) {
     $key = $_GET['key'];
@@ -43,7 +59,6 @@ if(array_key_exists('key', $_GET)) {
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
     <?php //echo get_user_meta($user_id, 'email_status', true); ?>
-    <?php //if($key) echo $key; ?>
 
 <?php 
 
@@ -85,31 +100,25 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                 <div class="qr_profile">
                     <?php if(get_user_role() == 'customer'): ?>
                         <div class="qr_code">
-                            <img src="https://chart.googleapis.com/chart?chs=262x262&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
+                            <img src="https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
                         </div>
-    <!--                     <style>
-                        .qr_profile {
-                            position: relative;
-                        }
-                        .user_profile_img,
-                        .qr_code {
-                            position: absolute;
-                            top: 0;
-                        }
-                         .qr_code {
-                          display: none;
-                          z-index: 9;
-                        }
-                        .user_profile_img:before {
-                            content: "";
-                            position: absolute;
-                            background-image: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/img/qr-corner.png');
-                            height: 50px;
-                            width: 50px;
-                            right:0;
-                            z-index: 99;
-                            cursor: pointer;
-                        }</style> -->
+                        <style>
+                            .qr_code {
+                                position: absolute;
+                                z-index: -1;
+                            }
+                             .user_profile_img:before {
+                                content: "";
+                                position: absolute;
+                                background-image: url('<?php echo get_stylesheet_directory_uri(); ?>/assets/img/qr-corner.png');
+                                background-repeat: no-repeat;
+                                height: 50px;
+                                width: 50px;
+                                right:12px;
+                                z-index: 99;
+                                cursor: pointer;
+                            }
+                        </style>
                     <?php endif; ?>
                     <div class="user_profile_img">
                         <?php echo get_avatar($user_id, 262); ?>
@@ -125,7 +134,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                     <p class="user_bio"><?php echo esc_attr( $user->description ); ?></p>
                     <ul class="social_media model-2">
                         <?php if ($user->facebook): ?>
-                            <li><a href="<?php echo $user->facebook; ?>" class="fa fa-facebook"></a></li>
+                            <li><a href="<?php echo $facebook; ?>" class="fa fa-facebook"></a></li>
                         <?php endif ?>
                         
                         <?php if ($user->twitter): ?>
@@ -157,64 +166,106 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <div id="profile" class="user_profile_edit fade">
                             <h2> Upload profile photo</h2>
                             <?php echo do_shortcode('[avatar_upload]'); ?>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span class="edit_profile button fa fa-pencil pull-right"></span>
-                                </div>
-                            </div>
 							<hr>
 							<form id="basic_info" action="" class="form-edit-account" method="post">
 
 	                            <dl class="dl-horizontal">
+                                    <?php if(get_user_role() == 'business') : ?>
+                                    <dt><strong><?php esc_html_e( 'Business name', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                        <input type="text" name="billing_company" value="<?php echo esc_attr( $billing_company ); ?>"> 
+                                    </dd>
+                                    <hr>                                    
+
+                                    <dt><strong><?php esc_html_e( 'Business type', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                        <select name="bs_type">
+                                            <option value="accountant" <?php if($bs_type == "accountant") echo "selected"; ?>>Accountant</option>
+                                            <option value="arts&Entertainment" <?php if($bs_type == "arts&Entertainment") echo "selected"; ?>>Arts & Entertainment</option>
+                                            <option value="automotive" <?php if($bs_type == "automotive") echo "selected"; ?>>Automotive</option>
+                                            <option value="businessservices" <?php if($bs_type == "businessservices") echo "selected"; ?>>Business Services</option>
+                                            <option value="clearningservices" <?php if($bs_type == "clearningservices") echo "selected"; ?>>Cleaning Services</option>
+                                            <option value="doctores" <?php if($bs_type == "doctores") echo "selected"; ?>>Doctors & Health Professionals</option>
+                                            <option value="grocery" <?php if($bs_type == "grocery") echo "selected"; ?>>Grocery Store</option>
+                                            <option value="hearsalon" <?php if($bs_type == "hearsalon") echo "selected"; ?>>Hair Salon & Spa</option>
+                                            <option value="homeimprovement" <?php if($bs_type == "homeimprovement") echo "selected"; ?>>Home Improvement</option>
+                                            <option value="hotels" <?php if($bs_type == "hotels") echo "selected"; ?>>Hotels & Lodging</option>
+                                            <option value="legalservices" <?php if($bs_type == "legalservices") echo "selected"; ?>>Legal Services</option>
+                                            <option value="outdoors" <?php if($bs_type == "outdoors") echo "selected"; ?>>Outdoors</option>
+                                            <option value="restaurants" <?php if($bs_type == "restaurants") echo "selected"; ?>>Restaurants & Bars</option>
+                                            <option value="transportantion" <?php if($bs_type == "transportantion") echo "selected"; ?>>Transportation</option>
+                                            <option value="other" <?php if($bs_type == "other") echo "selected"; ?>>other</option>
+                                        </select>
+                                    </dd>
+                                    <hr>
+                                    <?php endif; ?>
 	                                <dt><strong><?php esc_html_e( 'First name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="first_name" id="first_name" value="<?php echo esc_attr( $user->first_name ); ?>" disabled>
+							            <input type="text" name="first_name" id="first_name" value="<?php echo esc_attr( $user->first_name ); ?>">
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Last name', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-							            <input type="text" class="input-text" name="first_name" id="first_name" value="<?php echo esc_attr( $user->last_name ); ?>" disabled>
+							            <input type="text" name="last_name" value="<?php echo esc_attr( $user->last_name ); ?>">
 	                                </dd>
 	                                <hr>
-	                                <dt><strong><?php esc_html_e( 'Your ID', 'listify_child' ); ?></strong></dt>
+                                    <dt><strong><?php esc_html_e( 'Gender', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                       <select name="gender" id="gender">
+                                            <option value="male" <?php if($gender == "male") echo "selected"; ?>>Male</option>
+                                            <option value="female" <?php if($gender == "female") echo "selected"; ?>>Female</option>
+                                        </select>
+                                    </dd>
+                                    <hr>
+	                                <dt><strong><?php esc_html_e( 'Date of birth', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text" name="user_login" id="user_login" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
-	                                </dd>
-	                                <hr>
-
-	                                <dt><strong><?php esc_html_e( 'Company name', 'listify_child' ); ?></strong></dt>
-	                                <dd>
-	                                    <input type="text" class="input-text " name="billing_company" id="billing_company" value="<?php echo esc_attr( $user->billing_company ); ?>" disabled> 
-	                                </dd>
-	                                <hr>
-	                                <dt><strong><?php esc_html_e( 'Primary Email Address', 'listify_child' ); ?></strong></dt>
-	                                <dd>
-	                                    <input type="email" class="input-text" name="account_email" id="account_email" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
+                                        <input type="date" id="bs_dd" name="dd" value="<?php echo $dd; ?>">
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Phone Number', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="tel" class="input-text " name="billing_phone" id="billing_phone" autocomplete="tel" value="<?php echo esc_attr( $user->billing_phone ); ?>" disabled>
+	                                    <input type="tel" name="billing_phone" id="billing_phone" autocomplete="tel" value="<?php echo esc_attr( $billing_phone ); ?>">
 	                                </dd>
 	                                <hr>
-	                                <dt><strong><?php esc_html_e( 'Address', 'listify_child' ); ?></strong></dt>
+                                    <dt><strong><?php esc_html_e( 'Address', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                        <input type="text" name="billing_address_1" value="<?php echo esc_attr( $user->billing_address_1 ); ?>">
+                                    </dd>
+                                    <hr>	                                
+
+                                    <dt><strong><?php esc_html_e( 'Apartment/Suite #', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="billing_address_1" id="billing_address_1" autocomplete="address-line1" value="<?php echo esc_attr( $user->billing_address_1 ); ?>" disabled>
+	                                    <input type="text" name="bs_apartmentsuite" value="<?php echo esc_attr($apartmentsuite); ?>">
 	                                </dd>
 	                                <hr>
-	                                <dt><strong><?php esc_html_e( 'City', 'listify_child' ); ?></strong></dt>
+                                    <dt><strong><?php esc_html_e( 'City', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                        <input type="text" name="billing_city" value="<?php echo esc_attr( $user->billing_city ); ?>" >
+                                    </dd>
+                                    <hr>	                                
+                                    <dt><strong><?php esc_html_e( 'State', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="billing_city" id="billing_city" value="<?php echo esc_attr( $user->billing_city ); ?>" disabled>
+	                                   <input type="text" name="billing_state" value="<?php echo esc_attr( $user->billing_state ); ?>">
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'Country', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                    <input type="text" class="input-text " name="country" id="country" value="<?php echo esc_attr( $user->country ); ?>" disabled>
+                                    <?php  
+                                        $countries_obj   = new WC_Countries();
+                                        $countries   = $countries_obj->get_allowed_countries();
+
+                                        woocommerce_form_field('billing_country', array(
+                                        'type'       => 'select',
+                                        'input_class'=> array('input-text'),
+                                        'options'    => $countries,
+                                        ), $billing_country
+                                        ); 
+                                    ?>
 	                                </dd>
 	                                <hr>
 	                                <dt><strong><?php esc_html_e( 'About', 'listify_child' ); ?></strong></dt>
 	                                <dd>
-	                                	<textarea name="description" id="description" class="input-text" rows="5" cols="30" disabled><?php echo esc_attr( $user->description ); ?></textarea>
+	                                	<textarea name="description" rows="5" cols="30"><?php echo esc_attr( $description ); ?></textarea>
 	                                </dd>
 	                                <hr>
 	                            </dl>
@@ -226,13 +277,8 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                         <div id="passwordTab" class="user_profile_edit fade">
                             <h2>Manage your Security Settings</h2>
-                            <div class="row">
-								<div class="col-md-12">
-									<span class="edit_profile button fa fa-pencil pull-right"></span>
-								</div>
-							</div>
 							<hr>
-                            <form action="" class="password_change" method="post">
+                            <form id="change_password" action="" class="password_change" method="post">
                             	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
                                 <dl class="dl-horizontal">
                                     <dt><?php esc_html_e( 'Username', 'listify_child' ); ?></dt>
@@ -240,7 +286,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-user"></i>
-                                                <input type="text" name="user_login" id="user_login" placeholder="Username" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
+                                                <input type="text" name="user_login" placeholder="Username" value="<?php echo esc_attr( $user->user_login ); ?>" disabled>
                                             </label>
                                         </section>
                                     </dd>
@@ -250,7 +296,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label for="account_email" class="input">
                                                 <i class="icon_append fa fa-envelope"></i>
-                                                <input type="email" name="account_email" id="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
+                                                <input type="email" name="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
                                             </label>
                                         </section>
                                     </dd>
@@ -260,7 +306,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" class="input-text" name="password_1" placeholder="Enter your current password" id="password_1" disabled>
+                                                <input type="password" name="password_1" placeholder="Enter your current password">
                                                 <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
                                             </label>
                                         </section>
@@ -271,7 +317,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" class="input-text" name="password_2" placeholder="Confirm password" id="password_2" disabled>
+                                                <input type="password" name="password_2" placeholder="Confirm password">
                                                 <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
                                             </label>
                                         </section>
@@ -279,65 +325,52 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 </dl>
                                 <hr>
                                 <br>
-                                <?php wp_nonce_field( 'save_account_details' ); ?>
-	                            	<button type="submit" name="Cancel" class="button button_u">Cancel</button>
-	                           		<button type="submit" name="save_account_details" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
-	                            <input type="hidden" name="action" value="save_account_details">
-
-	                            <?php do_action( 'woocommerce_edit_account_form_end' ); ?>
+	                           		<button type="submit" name="change_password" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
                             </form>    
                         </div><!-- /passwordTab -->
 
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
                             <?php if(get_user_role() == 'customer'): ?>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <span class="edit_profile button fa fa-pencil pull-right"></span>
-                                </div>
-                            </div>
                             <br/>
-                            <?php 
-                                $bank = get_user_meta($user_id, 'bank', true);
-                                $bank = json_decode($bank);
-                                // var_dump($bank); 
-                            ?>
-                            <form id="bank_account" action="#" method="post">
-                                <dl class="dl-horizontal">
-                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <input type="text" class="input-text" name="bank_name" value="<?php echo esc_attr( $bank->bank_name ); ?>">
-                                    </dd>                                 
+                            <form id="bank_account" action="#" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label><?php esc_html_e( 'Bank name', 'listify_child' ); ?></label>
+                                    <input type="text" name="bank_name" value="<?php if($bank) {  echo $bank->bank_name; } ?>">
+                                </div>               
 
-                                    <dt><?php esc_html_e( 'Bank Routing Number (9 Digits only)', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <input type="text" class="input-text" name="bank_routing" value="<?php echo esc_attr( $bank->bank_routing ); ?>">
-                                    </dd>
+                                <div class="form-group">
+                                    <label><?php esc_html_e( 'Bank Routing Number (9 Digits only)', 'listify_child' ); ?></label>
+                                    <input type="text" name="bank_routing" value="<?php if($bank) { echo esc_attr( $bank->bank_routing ); } ?>">
+                                </div>                     
 
-                                    <dt><?php esc_html_e( 'Bank Account Number (up to 16 digits)', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <input type="text" class="input-text" name="account_number" value="<?php echo esc_attr( $bank->account_number ); ?>">
-                                    </dd>
-                                    <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <select name="account_type">
+                                <div class="form-group">
+                                    <label><?php esc_html_e( 'Bank Account Number (up to 16 digits)', 'listify_child' ); ?></label>
+                                    <input type="text" name="account_number" value="<?php if($bank) { echo esc_attr( $bank->account_number ); } ?>">
+                                </div>              
+
+                                <div class="form-group">
+                                    <label><?php esc_html_e( 'Account Type', 'listify_child' ); ?></label>
+                                    <select name="account_type">
                                             <option>Checking</option>
                                             <option>Savings</option>
                                         </select>
-                                    </dd>
+                                </div>
 
-                                    <dt><?php esc_html_e( 'Please provide proof of Account Info – Voided Check or Bank Letter', 'listify_child' ); ?></dt>
+                                <div class="form-group">
+                                    <label><?php esc_html_e( 'Please provide proof of Account Info – Voided Check or Bank Letter', 'listify_child' ); ?></label>
 
                                         <!-- http://www.kvcodes.com/2013/12/create-front-end-multiple-file-upload-wordpress/ 
 
                                         https://hugh.blog/2014/03/20/wordpress-upload-user-submitted-files-frontend/
 
-                                        -->
-                                    <dd>
-                                        <input type="file" name="kv_multiple_attachments[]"  multiple="multiple" >
-                                    </dd>     
+                                        http://theaveragedev.com/wordpress-files-ajax/
 
-                                </dl>
+                                        -->
+                                        <p class="image-notice"></p>
+                                        <input type="file" name="async-upload" class="bank_docs" accept="image/*" required>
+                                        <input type="hidden" name="image_id" class="image_id">
+                                </div>
 
                                 <button type="submit" class="button">Save bank info </button>
                             </form>  
@@ -365,14 +398,8 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                         <div id="social" class="user_profile_edit fade">
                         	<h2>Manage your Social Media.</h2>
-							<div class="row">
-								<div class="col-md-12">
-									<span class="edit_profile button fa fa-pencil pull-right"></span>
-								</div>
-							</div>
 							<hr>
                             <form id="save_social_details" action="" class="social_change password_change" method="post">
-							<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 							
 							<dl class="dl-horizontal">
                                 <dt><?php esc_html_e( 'Facebook', 'listify_child' ); ?></dt>
@@ -380,7 +407,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <section>
                                         <label for="facebook" class="input">
                                             <i class="icon_append fa fa-facebook"></i>
-                                            <input type="text" class="input-text" name="facebook" id="facebook" value="<?php echo esc_attr( $user->facebook ); ?>" disabled>
+                                            <input type="text" name="facebook" value="<?php echo esc_attr( $facebook ); ?>">
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the facebook</b>
                                         </label>
                                     </section>
@@ -391,7 +418,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <section>
                                         <label for="twitter" class="input">
                                             <i class="icon_append fa fa-twitter"></i>
-                                            <input type="text" class="input-text" name="twitter" id="twitter" value="<?php echo esc_attr( $user->twitter ); ?>" disabled>
+                                            <input type="text" name="twitter" value="<?php echo esc_attr( $user->twitter ); ?>">
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the twitter</b>
                                         </label>
                                     </section>
@@ -402,7 +429,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <section>
                                         <label for="linkedin" class="input">
                                             <i class="icon_append fa fa-linkedin"></i>
-                                            <input type="text" class="input-text" name="linkedin" id="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>" disabled>
+                                            <input type="text" name="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>">
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the linkedin</b>
                                         </label>
                                     </section>
@@ -413,7 +440,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <section>
                                         <label for="instagram" class="input">
                                             <i class="icon_append fa fa-instagram"></i>
-                                            <input type="text" class="input-text" name="instagram" id="instagram" value="<?php echo esc_attr( $user->instagram ); ?>" disabled>
+                                            <input type="text" name="instagram" value="<?php echo esc_attr( $user->instagram ); ?>">
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the instagram</b>
                                         </label>
                                     </section>

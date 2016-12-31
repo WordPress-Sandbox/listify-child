@@ -141,8 +141,16 @@ get_header();
 													</div><!-- /Zip -->
 
 													<div class="field-wrap">
-														<label> Country </label>
-														<input type="text" name="country" id="country">
+													<?php  
+														$countries_obj   = new WC_Countries();
+														$countries   = $countries_obj->get_allowed_countries();
+
+														woocommerce_form_field('country', array(
+														'type'       => 'select',
+														'options'    => $countries
+														)
+														); 
+													?>
 													</div>
 												</div><!-- /Country -->
 
@@ -268,8 +276,16 @@ get_header();
 												</div><!-- /Zip -->
 
 												<div class="field-wrap">
-													<label> Country </label>
-													<input type="text" name="bs_country" id="bs_country">
+													<?php  
+														$countries_obj   = new WC_Countries();
+														$countries   = $countries_obj->get_allowed_countries();
+
+														woocommerce_form_field('bs_country', array(
+														'type'       => 'select',
+														'options'    => $countries
+														)
+														); 
+													?>
 												</div>
 											</div><!-- /Country -->
 

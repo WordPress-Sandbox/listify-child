@@ -17,11 +17,13 @@ function listify_child_styles() {
     wp_enqueue_script( 'remodal_js', get_stylesheet_directory_uri() . '/assets/remodal/remodal.min.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'geolocate', get_stylesheet_directory_uri() . '/js/geolocate.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'bs_gelocate', get_stylesheet_directory_uri() . '/js/bs_geolocate.js', array('jquery'), '1.0', true);
+    // wp_enqueue_script( 'listify_ajax_file_upload', get_stylesheet_directory_uri() . '/js/ajax-file-upload.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'googlemap_api', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB0s2f700pfcaEjKUrYBkes4F9A3yg40M&libraries=places', array('jquery'), '1.0', true);
     wp_enqueue_script( 'listify-child-bs_script', get_stylesheet_directory_uri() . '/js/bs_scripts.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'listify-child-script', get_stylesheet_directory_uri() . '/js/scripts.js', array('jquery'), '1.0', true);
     $data = array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'upload_url' => admin_url('async-upload.php'),
         'nonce'   =>  wp_create_nonce( "test_nonce" ),
     	'themepath' => get_stylesheet_directory_uri()
     );

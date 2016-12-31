@@ -99,9 +99,11 @@ jQuery(function($){
     });
 
     /* toggle QR code */
-    $('.user_profile_img').click(function(){
-    	$('.qr_code').toggle();
-    });
+
+    $(".user_profile_img").toggle(
+        function(){$(".qr_code").css({"z-index": "1"});},
+        function(){$(".qr_code").css({"z-index": "-1"});}
+    );
 
 	// inttelinput 
 	var telInput = $("#phone");
@@ -445,7 +447,7 @@ jQuery(function($){
 			dataType: 'text',
 			success: function(resp) {
 				console.log(resp);
-				$('.woocommerce-message').slideDown('slow').text( 'Social Media Successfully updated!' );
+				$('.woocommerce-message').slideDown('slow').text( 'Basic Info Successfully updated!' );
 			},
 			error: function( req, status, err ) {
 				$('.message').html( 'something went wrong', status, err );
@@ -462,11 +464,13 @@ jQuery(function($){
 			dd: $(this).serializeArray()
 		}
 
+		console.log(data['dd']);
+
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
 			data: data,
-			dataType: 'text',
+			dataType: 'json',
 			success: function(resp) {
 				console.log(resp);
 				$('.woocommerce-message').slideDown('slow').text( 'Social Media Successfully updated!' );
@@ -478,6 +482,69 @@ jQuery(function($){
 
 	});
 
+
+	/* async upload bank doc */
+	var $imgFile = $('.bank_docs');
+	var $imgNotice = $('.image-notice');
+	var $imgId      = $('.image_id');
+	
+    $('body').on('change', $imgFile, function(e) {
+	    e.preventDefault();
+
+	    var formData = new FormData();
+
+	    formData.append('action', 'upload-attachment');
+	    formData.append('async-upload', $imgFile[0].files[0]);
+	    formData.append('name', $imgFile[0].files[0].name);
+	    formData.append('_wpnonce', local.nonce);
+
+	    $.ajax({
+	        url: local.upload_url,
+	        data: formData,
+	        processData: false,
+	        contentType: false,
+	        dataType: 'json',
+	        xhr: function() {
+	            var myXhr = $.ajaxSettings.xhr();
+
+	            if ( myXhr.upload ) {
+	                myXhr.upload.addEventListener( 'progress', function(e) {
+	                    if ( e.lengthComputable ) {
+	                        var perc = ( e.loaded / e.total ) * 100;
+	                        perc = perc.toFixed(2);
+	                        $imgNotice.html('Uploading&hellip;(' + perc + '%)');
+	                    }
+	                }, false );
+	            }
+
+	            return myXhr;
+	        },
+	        type: 'POST',
+	        beforeSend: function() {
+	            $imgFile.hide();
+	            $imgNotice.html('Uploading&hellip;').show();
+	        },
+	        success: function(resp) {
+	            if ( resp.success ) {
+	                $imgNotice.html('Successfully uploaded. <a href="#" class="btn-change-image">Change?</a>');
+
+	                var img = $('<img>', {
+	                    src: resp.data.url
+	                });
+
+	                $imgId.val( resp.data.id );
+	                // $imgPreview.html( img ).show();
+
+	            } else {
+	                $imgNotice.html('Fail to upload image. Please try again.');
+	                $imgFile.show();
+	                $imgId.val('');
+	            }
+	        }
+	    });
+	});
+
+	/* save bank info */
 	$('#bank_account').submit(function(e){
 		e.preventDefault();
 

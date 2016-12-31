@@ -79,11 +79,13 @@ function new_user_register() {
             update_user_meta($user_id, 'billing_phone', $phone);
             update_user_meta($user_id, 'gender', $gender);
             update_user_meta($user_id, 'dd', $dd);
-            update_user_meta($user_id, 'billing_state', $streetaddress);
+            update_user_meta($user_id, 'billing_address_1', $streetaddress);
+            update_user_meta($user_id, 'billing_state', $state);
             update_user_meta($user_id, 'apartmentsuite', $apartmentsuite);
             update_user_meta($user_id, 'billing_city', $city);
             update_user_meta($user_id, 'billing_postcode', $postal_code);
-            update_user_meta($user_id, 'country', $country);
+            update_user_meta($user_id, 'billing_country', $country);
+
             update_user_meta($user_id, 'phone_status', $phone_status);
             update_user_meta($user_id, 'email_status', 'unverified');
             // login user after successful registration
@@ -191,14 +193,17 @@ function new_business_register() {
         $user_id = wp_insert_user( $userdata );
         if( !is_wp_error($user_id) ) {
             // user meta field
+            update_user_meta($user_id, 'billing_company', $bs_name);
+            update_user_meta($user_id, 'bs_type', $bs_type);
             update_user_meta($user_id, 'billing_phone', $bs_phone);
             update_user_meta($user_id, 'gender', $bs_gender);
             update_user_meta($user_id, 'dd', $bs_dd);
-            update_user_meta($user_id, 'billing_state', $bs_streetaddress);
+            update_user_meta($user_id, 'billing_address_1', $bs_streetaddress);
+            update_user_meta($user_id, 'billing_state', $bs_state);
             update_user_meta($user_id, 'apartmentsuite', $bs_apartmentsuite);
             update_user_meta($user_id, 'billing_city', $bs_city);
             update_user_meta($user_id, 'billing_postcode', $bs_zip);
-            update_user_meta($user_id, 'country', $bs_country);
+            update_user_meta($user_id, 'billing_country', $bs_country);
             update_user_meta($user_id, 'phone_status', $phone_status);
             update_user_meta($user_id, 'email_status', 'unverified');
             // login user after successful registration
@@ -365,6 +370,7 @@ function save_basic_func(){
 
     foreach ($dd as $key => $value) {
         if(!empty($value['value'])) {
+            $es_value = mysql_escape_string($value['value']);
             update_user_meta($user_id, $value['name'], $value['value']);
         }
     }
@@ -383,7 +389,7 @@ function save_social_func(){
 
     foreach ($dd as $key => $value) {
         if(!empty($value['value'])) {
-            $es_value = mysql_escape_string($value);
+            $es_value = mysql_escape_string($value['value']);
             update_user_meta($user_id, $value['name'], $es_value);
         }
     }
@@ -400,8 +406,6 @@ function save_bank_func(){
     $mysavingwallet = new Mysavingwallet;
 
     $dd = $_POST['dd'];
-    // $user_id = get_current_user_id();
-    // $dd = json_decode(get_user_meta($user_id, 'bank', true), true);
     $data_array = array();
     $error = array();
     foreach($dd as $k => $v) {
@@ -425,7 +429,8 @@ function save_bank_func(){
         $json_data = json_encode($data_array);
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'bank', $json_data);
-        echo json_encode('Bank info updated successfully');
+        // echo json_encode('Bank info updated successfully');
+        echo json_encode($dd);
     } else {
         echo json_encode($error);
     }
