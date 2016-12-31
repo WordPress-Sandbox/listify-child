@@ -474,6 +474,26 @@ input[type="date"] {
 /*----------------------------------
           Profile Page                   
 -----------------------------------*/
+
+.verification_badge {}
+.verification_badge ul { 
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.verification_badge ul li {
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px;
+  padding-left: 30px;
+}
+.verification_badge ul li.check {
+  background-image: url('assets/img/check.png');
+}
+.verification_badge ul li.cross {
+  background-image: url('assets/img/cross.png');
+}
+
 .edit_profile {
   font-family: 'FontAwesome';
 }

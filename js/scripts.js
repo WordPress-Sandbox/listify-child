@@ -487,8 +487,8 @@ jQuery(function($){
 	var $imgFile = $('.bank_docs');
 	var $imgNotice = $('.image-notice');
 	var $imgId      = $('.image_id');
-	
-    $('body').on('change', $imgFile, function(e) {
+
+    $imgFile.on('change', function(e) {
 	    e.preventDefault();
 
 	    var formData = new FormData();

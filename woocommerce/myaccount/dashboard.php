@@ -46,15 +46,19 @@ $facebook = get_user_meta($user_id, 'facebook', true);
 $description = get_user_meta($user_id, 'description', true);
 $bank = get_user_meta($user_id, 'bank', true);
 $bank = json_decode($bank);
-
-var_dump($bank);
-
 $key = '';
 if(array_key_exists('key', $_GET)) {
     $key = $_GET['key'];
 }
 
 ?>
+
+
+    <div class="verification_badge">
+        <ul>
+            <?php $mysavingwallet->verificationBadge(); ?>
+        </ul>
+    </div>
 
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
