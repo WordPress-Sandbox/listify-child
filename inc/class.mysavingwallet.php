@@ -85,6 +85,18 @@ class Mysavingwallet {
 		return get_user_meta($user_id, $k, true);
 	}
 
+	public function verificationBadge() {
+		$items = array(
+			'email_status' => 'Email',
+			'phone_status' => 'Phone',
+			'bank_status'  => 'Bank'
+			);
+		foreach ($items as $k => $v) {
+			$class = $this->getMetaValue($k) == 'verified' ? 'check' : 'cross';
+			echo '<li class="'.$class.'">'.$v.' Verification</li>';
+		}
+	}
+
 }
 
 ?>

@@ -126,6 +126,23 @@ add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 require get_stylesheet_directory() . '/inc/ajax.php';
 
 
+/* allow customers to upload files */
+function su_allow_subscriber_to_uploads() {
+    $customers = get_role('customer');
+    if ( ! $customers->has_cap('upload_files') ) {
+        $customers->add_cap('upload_files');
+    }
+}
+add_action('admin_init', 'su_allow_subscriber_to_uploads');
 
+/* modify wp job manager shortcodes */
+function savingwallet_submit_job_form_func() {
+    if(get_user_role() == 'customer') {
+        echo '<p>Only businesses can add listing</p>';
+    } else {
+        echo do_shortcode('[submit_job_form]');
+    }
+}
+add_shortcode('savingwallet_submit_job_form', 'savingwallet_submit_job_form_func');
 
 

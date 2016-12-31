@@ -54,6 +54,13 @@ if(array_key_exists('key', $_GET)) {
 
 ?>
 
+
+    <div class="verification_badge">
+        <ul>
+            <?php $mysavingwallet->verificationBadge(); ?>
+        </ul>
+    </div>
+
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
     <?php //echo get_user_meta($user_id, 'email_status', true); ?>
