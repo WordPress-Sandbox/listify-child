@@ -947,9 +947,25 @@ p#wpua-preview-existing {
     width: 100%;
 }
 
-
-
-
+.user_profile_edit input[type="text"], 
+.user_profile_edit input[type="number"], 
+.user_profile_edit input[type="date"], 
+.user_profile_edit input[type="tel"], 
+.user_profile_edit select,
+.user_profile_edit textarea {
+    width: 100%;
+    border-radius: 0 !important;
+    padding: 6px 12px !important;
+}
+.user_profile_edit input[type="file"] {
+    border: 1px solid #e5e5e5;
+}
+#sbm_request_to_user {
+    padding: 8px 15px;
+}
+.payment_gateways img {
+    padding-right: 20px;
+}
 
 
 

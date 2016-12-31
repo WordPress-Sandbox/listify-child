@@ -423,20 +423,22 @@ function save_bank_func(){
             } else {
                 $error[] = 'Incorrect account number';
             }
-        } else if ($v['name'] == 'image_id') {
-            if($v['value']) {
-                $data_array['image_id'] = $v['value'];
-            } else {
-                $error[] = 'No Bank Doc Uploaded.';
-            }
-        }
+        } 
+
+        // else if ($v['name'] == 'image_id') {
+        //     if($v['value']) {
+        //         $data_array['image_id'] = $v['value'];
+        //     } else {
+        //         $error[] = 'No Bank Doc Uploaded.';
+        //     }
+        // }
     }
     if(count($error) == 0 ) {
         $json_data = json_encode($data_array);
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'bank', $json_data);
-        // echo json_encode('Bank info updated successfully');
-        echo json_encode($dd);
+        echo json_encode('Bank info updated successfully');
+        // echo json_encode($dd);
     } else {
         echo json_encode($error);
     }
