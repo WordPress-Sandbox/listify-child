@@ -423,6 +423,12 @@ function save_bank_func(){
             } else {
                 $error[] = 'Incorrect account number';
             }
+        } else if ($v['name'] == 'image_id') {
+            if($v['value']) {
+                $data_array['image_id'] = $v['value'];
+            } else {
+                $error[] = 'No Bank Doc Uploaded.';
+            }
         }
     }
     if(count($error) == 0 ) {
