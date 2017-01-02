@@ -44,8 +44,11 @@ $apartmentsuite = get_user_meta($user_id, 'apartmentsuite', true);
 $billing_country = get_user_meta($user_id, 'billing_country', true);
 $facebook = get_user_meta($user_id, 'facebook', true);
 $description = get_user_meta($user_id, 'description', true);
-$bank = get_user_meta($user_id, 'bank', true);
-$bank = json_decode($bank);
+$banks = get_user_meta($user_id, 'banks', true);
+
+var_dump($banks);
+
+        // delete_user_meta($user_id, 'banks');
 
 $key = '';
 if(array_key_exists('key', $_GET)) {
@@ -53,13 +56,6 @@ if(array_key_exists('key', $_GET)) {
 }
 
 ?>
-
-
-    <div class="verification_badge">
-        <ul>
-            <?php $mysavingwallet->verificationBadge(); ?>
-        </ul>
-    </div>
 
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
@@ -98,6 +94,13 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
     </div>
 
 <?php elseif ($email_status == 'verified') : ?>
+
+    <div class="verification_badge">
+        <ul>
+            <?php $mysavingwallet->verificationBadge(); ?>
+        </ul>
+    </div>
+
 	<div class="container user_profile">
         <div class="row">
             <div class="col-md-3">
@@ -341,124 +344,173 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <h2>Manage your Payment</h2>
                             <?php if(get_user_role() == 'customer'): ?>
                             <br/>
-                            <form id="bank_account" class="password_change" action="#" method="post" enctype="multipart/form-data">
+
+                            <div class="password_change banklist">
                                 <dl class="dl-horizontal">
-                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <section>
-                                            <label for="bank_name" class="input">
-                                                <i class="icon_append fa fa-university"></i>
-                                                <input type="text" name="bank_name" id="bank_name" value="<?php if($bank) {  echo $bank->bank_name; } ?>">
-                                                <b class="tooltip tooltip-bottom-right">Enter Your Bank Name</b>
-                                            </label>
-                                        </section>
-                                    </dd>
-                                    <hr>
-                                    <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <section>
-                                            <label for="bank_routing" class="input">
-                                                <i class="icon_append fa fa-wifi"></i>
-                                                <input type="text" name="bank_routing" id="bank_routing" value="<?php if($bank) { echo esc_attr( $bank->bank_routing ); } ?>">
-                                                <b class="tooltip tooltip-bottom-right">Bank Routing Number (9 Digits only)</b>
-                                            </label>
-                                        </section>
-                                    </dd>
-                                    <hr>
-                                    <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <section>
-                                            <label for="account_number" class="input">
-                                                <i class="icon_append fa fa-credit-card-alt"></i>
-                                                <input type="text" name="account_number" id="account_number" value="<?php if($bank) { echo esc_attr( $bank->account_number ); } ?>">
-                                                <b class="tooltip tooltip-bottom-right">Bank Account Number (up to 16 digits)</b>
-                                            </label>
-                                        </section>
-                                    </dd>
-                                    <hr>
-                                    <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
+                                <?php if(is_array($banks)) : foreach ($banks as $key => $bank) : ?>
+<?php 
+
+echo '<pre>';
+var_dump($bank);
+echo '</pre>';
+?>
                                     <dd>
                                         <section>
                                             <label class="input">
-                                                <select name="account_type">
-                                                    <option>Checking</option>
-                                                    <option>Savings</option>
-                                                </select>
+                                                <i class="icon_append fa fa-times" data-bankid="<?php echo $key; ?>"></i>
+                                                <p class="label"><?php echo $bank['bank_name']; ?></p>
                                             </label>
                                         </section>
+                                        <form class="password_change">
+                                            <dl class="dl-horizontal">
+                                                <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="bank_name" class="input">
+                                                            <i class="icon_append fa fa-university"></i>
+                                                            <input type="text" name="bank_name" id="bank_name" value="<?php echo $bank['bank_name']; ?>">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="bank_routing" class="input">
+                                                            <i class="icon_append fa fa-wifi"></i>
+                                                            <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $bank['bank_routing']; ?>">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="account_number" class="input">
+                                                            <i class="icon_append fa fa-credit-card-alt"></i>
+                                                            <input type="text" name="account_number" id="account_number" value="<?php echo $bank['account_number']; ?>">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label class="input">
+                                                            <select name="account_type">
+                                                                <option value="checking" <?php if($bank['account_type'] == "checking") echo "selected"; ?>>Checking</option>
+                                                                <option value="savings" <?php if($bank['account_type'] == "savings") echo "selected"; ?>>Savings</option>
+                                                            </select>
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="async-upload" class="input">
+                                                            <i class="icon_append fa fa-life-ring"></i>
+                                                            <p class="image-notice"></p>
+                                                            <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
+                                                            <input type="hidden" name="image_id" class="image_id">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                            </dl>        
+                                        </form> 
                                     </dd>
-                                    <hr>
-                                    <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <section>
-                                            <label for="async-upload" class="input">
-                                                <i class="icon_append fa fa-life-ring"></i>
-                                                <p class="image-notice"></p>
-                                                <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
-                                                <input type="hidden" name="image_id" class="image_id">
-                                                <b class="tooltip tooltip-bottom-right">Please provide proof of Account Info – Voided Check or Bank Letter</b>
-                                            </label>
-                                        </section>
-                                    </dd>
-                                    <hr>
-                                    <dt><?php esc_html_e( '', 'listify_child' ); ?></dt>
-                                    <dd>
-                                        <section>
-                                            <label class="input">
-                                                <button type="submit" class="button">Save bank info </button>
-                                            </label>
-                                        </section>
-                                    </dd>
-                                    <hr>
-                                </dl>        
-                            </form>  
+                                <?php endforeach; else : ?>
+                                    <p> You have no payment info </p>
+                                <?php endif; ?>
+                                </dl>
+                            </div>
+                            <br/>
+
+                            <a class="button add_bank"> Add a new bank </a>
+
+                            <div class="remodal" data-remodal-id="add_bank" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+                                <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+                                <h2>Add a new bank info</h2>
+                                <p class="add_bank_message"></p>
+                                <div class="verification_content">
+                                    <div id="modal1Desc">
+                                        <div class="password_change">
+                                        <form id="add_bank" class="password_change" action="#" method="post" enctype="multipart/form-data">
+                                            <dl class="dl-horizontal">
+                                                <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="bank_name" class="input">
+                                                            <i class="icon_append fa fa-university"></i>
+                                                            <input type="text" name="bank_name" id="bank_name" value="Your Bank name">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="bank_routing" class="input">
+                                                            <i class="icon_append fa fa-wifi"></i>
+                                                            <input type="text" name="bank_routing" id="bank_routing" value="Bank Routing Number (9 Digits only)">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="account_number" class="input">
+                                                            <i class="icon_append fa fa-credit-card-alt"></i>
+                                                            <input type="text" name="account_number" id="account_number" value="Bank Account Number (up to 16 digits)">
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label class="input">
+                                                            <select name="account_type">
+                                                                <option>Checking</option>
+                                                                <option>Savings</option>
+                                                            </select>
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label for="async-upload" class="input">
+                                                            <i class="icon_append fa fa-life-ring"></i>
+                                                            <p class="image-notice"></p>
+                                                            <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
+                                                            <input type="hidden" name="image_id" class="image_id">
+                                                            <b class="tooltip tooltip-bottom-right">Please provide proof of Account Info – Voided Check or Bank Letter</b>
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                                <dt><?php esc_html_e( '', 'listify_child' ); ?></dt>
+                                                <dd>
+                                                    <section>
+                                                        <label class="input">
+                                                            <input type="submit" class="button" value="Save bank info" >
+                                                        </label>
+                                                    </section>
+                                                </dd>
+                                                <hr>
+                                            </dl>        
+                                        </form>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+
+
                             <?php endif; ?>  
                             
-                            
-                            
-                            <dl class="dl-horizontal">
-                                <dt><?php esc_html_e( 'Withdraw Balance', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label class="input">
-                                            <?php if(get_user_role() == 'customer') {
-                                                    echo do_shortcode('[wpdeposit_withdrawals]');
-                                                } else if(get_user_role() != 'customer') {
-                                                    echo do_shortcode('[wpdeposit_payment_interface]');
-                                                }
-                                            ?>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Deposit balance', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label class="input">
-                                            <?php echo do_shortcode('[wpdeposit_deposit_balance]'); ?>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Deposit history', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label class="input">
-                                            <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Transaction history', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label class="input">
-                                            <?php echo do_shortcode('[wpdeposit_deposit_history]'); ?>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                            </dl>
                         </div><!-- /payment -->
 
                         <div id="social" class="user_profile_edit fade">

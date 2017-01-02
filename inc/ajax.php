@@ -406,24 +406,27 @@ function save_bank_func(){
     $mysavingwallet = new Mysavingwallet;
 
     $dd = $_POST['dd'];
-    $data_array = array();
+    $new_bank = array();
+    $new_bank['verification'] = 'unverified';
     $error = array();
     foreach($dd as $k => $v) {
         if($v['name'] == 'bank_name') {
-            $data_array['bank_name'] = $v['value'];
+            $new_bank['bank_name'] = $v['value'];
+        } else if ($v['name'] == 'account_type') {
+            $new_bank['account_type'] = $v['value'];
         } else if ($v['name'] == 'bank_routing') {
             if($mysavingwallet->checkRoutingNumber($v['value'])) {
-                $data_array['bank_routing'] = $v['value'];
+                $new_bank['bank_routing'] = $v['value'];
             } else {
                 $error[] = 'Incorrect routing number';
             }
         } else if ($v['name'] == 'account_number') {
             if($mysavingwallet->checkAccountNumber($v['value'])) {
-                $data_array['account_number'] = $v['value'];
+                $new_bank['account_number'] = $v['value'];
             } else {
                 $error[] = 'Incorrect account number';
             }
-        } 
+        }
 
         // else if ($v['name'] == 'image_id') {
         //     if($v['value']) {
@@ -434,13 +437,14 @@ function save_bank_func(){
         // }
     }
     if(count($error) == 0 ) {
-        $json_data = json_encode($data_array);
         $user_id = get_current_user_id();
-        update_user_meta($user_id, 'bank', $json_data);
-        echo json_encode('Bank info updated successfully');
-        // echo json_encode($dd);
+        $banks = get_user_meta($user_id, 'banks');
+        $banks[$new_bank['bank_routing']] = $new_bank;
+        update_user_meta($user_id, 'banks', $banks);
+        // echo json_encode('Bank info updated successfully');
+        echo json_encode($new_bank);
     } else {
-        echo json_encode($error);
+        echo json_encode(array('error' => $error));
     }
     
     die();

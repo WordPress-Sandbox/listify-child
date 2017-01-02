@@ -9,14 +9,14 @@ jQuery(function($){
 	}
 
 	// open remodal 
-	SavingWallet.prototype.openModal = function() {
-    	var inst = $('[data-remodal-id=phone_verification]').remodal();
+	SavingWallet.prototype.openModal = function(el) {
+    	var inst = $('[data-remodal-id='+ el +']').remodal();
     	inst.open();
 	}	
 
 	// close remodal 
-	SavingWallet.prototype.closeModal = function() {
-    	var inst = $('[data-remodal-id=phone_verification]').remodal();
+	SavingWallet.prototype.closeModal = function(el) {
+    	var inst = $('[data-remodal-id='+ el +']').remodal();
     	inst.close();
 	}	
 
@@ -299,7 +299,7 @@ jQuery(function($){
 	      if( response ) {
 	        var data = $.parseJSON(response);
 	        if( typeof data.pin == 'number') {
-	        	savingwallet.openModal();
+	        	savingwallet.openModal('phone_verification');
 	        	savingwallet.pin = data.pin;
 	        	console.log(savingwallet.pin);
 	        	return;
@@ -328,7 +328,7 @@ jQuery(function($){
 			$(this).find('.show_message').removeClass('error_message').addClass('success_message').text('✓ Success!');
 	        $('#phone').removeClass('error_message').addClass('success_message').text('Phone verified!');
 			savingwallet.phone_status = 'verified';
-			window.setTimeout(savingwallet.closeModal, 3000);
+			window.setTimeout(savingwallet.closeModal('phone_verification'), 3000);
 			$('form#register_customer').submit();
 		} else {
 			$(this).find('.show_message').removeClass('success_message').addClass('error_message').text('x Failed');
@@ -545,7 +545,7 @@ jQuery(function($){
 	});
 
 	/* save bank info */
-	$('#bank_account').submit(function(e){
+	$('#add_bank').submit(function(e){
 		e.preventDefault();
 
 		var data = {
@@ -559,17 +559,37 @@ jQuery(function($){
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				// var res = $.parseJSON(resp);
 				console.log(resp);
-				$('.woocommerce-message').slideDown('slow').text(resp);
+				if( typeof resp.error === 'object') {
+						$('.add_bank_message').css('color', 'red').html(resp.error);
+				} else {
+					$('.add_bank_message').css('color', 'green').html(resp);
+					window.setTimeout(location.reload(), 3000);
+				}
 			},
 			error: function( req, status, err ) {
 				console.log('error in ajax request');
-				$('.woocommerce-message').html( 'something went wrong', status, err );
+				$('.add_bank_message').css('color', 'red').html('something went wrong', status, err);
 			}
 		});
 
 	});
 
+	/* add bank info */
+	$('.add_bank').click(function(){
+		savingwallet.openModal('add_bank');
+	});
+
+	$('.banklist .dl-horizontal section label .label').click(function(){
+		$(this).parent().parent().next().toggle();
+	})	
+
+	$('.banklist .dl-horizontal section label i').click(function(){
+		confirm('Delete the bank info?');
+	});
+
+	// $('.add_bank_btn').click(function(){
+	// 	alert('clicked');
+	// });
 
 });

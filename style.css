@@ -822,6 +822,21 @@ p#wpua-preview-existing {
 }
 
 
+.banklist {}
+.banklist .dl-horizontal {}
+.banklist .dl-horizontal dd{
+  margin-left: 0;
+}
+.banklist .dl-horizontal section label {}
+.banklist .dl-horizontal section label .label {
+  border: 1px solid #ddd;
+  padding: 3px 10px;
+  background: #ddd;
+}
+.banklist .password_change {
+  display: none;
+}
+
 /* Settings Tab */
 .user_profile .user_settings {
 
