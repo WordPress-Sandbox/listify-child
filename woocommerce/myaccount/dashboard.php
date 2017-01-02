@@ -162,9 +162,12 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                     <ul class="tab-group">
                         <li><a href="#profile">Edit Profile</a></li>
                         <li><a href="#passwordTab">Change Password</a></li>
-                        <li><a href="#payment">Payment Options</a></li>
+                        <li><a href="#payment">Payment</a></li>
                         <li><a href="#social">Social Media</a></li>
-                        <li><a href="#settings">Notification Settings</a></li>
+                        <li><a href="#settings">Notification</a></li>
+                        <?php if(get_user_role() == 'business') : ?>
+                        <li><a href="#stats">Stats</a></li>
+                        <?php endif; ?>
                     </ul>
 
                     <div class="tab-content">
@@ -531,6 +534,12 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <button type="submit" class="button">Save Changes</button>
                             </form>
                         </div><!-- /settings -->
+                        <?php if(get_user_role() == 'business'): ?>
+                        <div id="stats">
+                            <?php echo do_shortcode('[stats_dashboard]'); ?>
+                        </div> <!-- stats -->
+                        <?php endif; ?>
+
                     </div><!-- /tab-content -->
                 </div><!-- /user_profile_body -->
             </div><!-- /col-md-9 -->
