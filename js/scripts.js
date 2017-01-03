@@ -559,7 +559,6 @@ jQuery(function($){
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
 				if( typeof resp.error === 'object') {
 						$('.add_bank_message').css('color', 'red').html(resp.error);
 				} else {
@@ -586,6 +585,43 @@ jQuery(function($){
 
 	$('.banklist .dl-horizontal section label i').click(function(){
 		confirm('Delete the bank info?');
+	});
+
+	/* add balance */
+	$('.add_balance').click(function(){
+		savingwallet.openModal('add_balance');
+	});
+
+	$('#add_balance').submit(function(e){
+		e.preventDefault();
+
+		var data = {
+			action: 'add_balance'
+		};
+
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
+
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp);
+				if( resp.response !== 1) {
+						$('.show_message').css('color', 'red').html(resp.responsetext);
+				} else {
+					$('.show_message').css('color', 'green').html('Top up ' + resp.amount + 'successful');
+				}
+			},
+			error: function( req, status, err ) {
+				console.log('error in ajax request');
+				$('.show_message').css('color', 'red').html('something went wrong', status, err);
+			}
+		});
+
 	});
 
 	// $('.add_bank_btn').click(function(){

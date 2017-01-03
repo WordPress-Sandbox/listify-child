@@ -46,10 +46,6 @@ $facebook = get_user_meta($user_id, 'facebook', true);
 $description = get_user_meta($user_id, 'description', true);
 $banks = get_user_meta($user_id, 'banks', true);
 
-var_dump($banks);
-
-        // delete_user_meta($user_id, 'banks');
-
 $key = '';
 if(array_key_exists('key', $_GET)) {
     $key = $_GET['key'];
@@ -342,18 +338,95 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
+                            <?php if(get_user_role() != 'customer') : ?>
+                                    <?php 
+                                        $balance = $mysavingwallet->getMetaValue('wallet_balance'); 
+                                    ?>
+                                    <p> Your current balance is: $<?php echo $balance ? $balance : '0.00';  ?>
+
+                                    <?php  
+
+                                    echo '<pre>'; 
+                                    var_dump($mysavingwallet->getMetaValue('transactions')); 
+                                    echo '</pre>'; 
+
+                                    ?>
+                                    <br/>
+                                <a class="button add_balance"> Add balance</a>
+
+                                <div class="remodal" data-remodal-id="add_balance"
+                                  data-remodal-options="hashTracking: false">
+
+                                  <button data-remodal-action="close" class="remodal-close"></button>
+                                    <form id="add_balance" class="credit-card">
+                                        <p class="show_message"></p>
+                                        <div class="form-header">
+                                            <h4 class="title">Credit Card Details</h4>
+                                        </div>
+                                        <div class="form-body">
+                                     
+                                            <!-- Card Number -->
+                                            <input name="card-number" type="text" placeholder="Card Number">
+                                     
+                                            <!-- Date Field -->
+                                            <div class="date-field">
+                                              <div class="month">
+                                                <select name="Month">
+                                                  <option value="january">January</option>
+                                                  <option value="february">February</option>
+                                                  <option value="march">March</option>
+                                                  <option value="april">April</option>
+                                                  <option value="may">May</option>
+                                                  <option value="june">June</option>
+                                                  <option value="july">July</option>
+                                                  <option value="august">August</option>
+                                                  <option value="september">September</option>
+                                                  <option value="october">October</option>
+                                                  <option value="november">November</option>
+                                                  <option value="december">December</option>
+                                                </select>
+                                              </div>
+                                              <div class="year">
+                                                <select name="Year">
+                                                  <option value="2016">2016</option>
+                                                  <option value="2017">2017</option>
+                                                  <option value="2018">2018</option>
+                                                  <option value="2019">2019</option>
+                                                  <option value="2020">2020</option>
+                                                  <option value="2021">2021</option>
+                                                  <option value="2022">2022</option>
+                                                  <option value="2023">2023</option>
+                                                  <option value="2024">2024</option>
+                                                </select>
+                                              </div>
+                                            </div>
+                                     
+                                            <!-- Card Verification Field -->
+                                            <div class="card-verification">
+                                                <div class="cvv-input">
+                                                    <input type="text" placeholder="CVV">
+                                                </div>
+                                                <div class="cvv-details">
+                                                    <p>3 or 4 digits usually found on the signature strip</p>
+                                                </div>
+                                            </div>
+                                     
+                                            <!-- Buttons -->
+                                            <button type="submit" class="proceed-btn"><a href="#">Proceed</a>
+                                            </button>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            <?php endif; ?>
                             <?php if(get_user_role() == 'customer'): ?>
                             <br/>
 
                             <div class="password_change banklist">
                                 <dl class="dl-horizontal">
                                 <?php if(is_array($banks)) : foreach ($banks as $key => $bank) : ?>
-<?php 
-
-echo '<pre>';
-var_dump($bank);
-echo '</pre>';
-?>
                                     <dd>
                                         <section>
                                             <label class="input">
@@ -378,7 +451,7 @@ echo '</pre>';
                                                     <section>
                                                         <label for="bank_routing" class="input">
                                                             <i class="icon_append fa fa-wifi"></i>
-                                                            <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $bank['bank_routing']; ?>">
+                                                            <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $mysavingwallet->ccMasking($bank['bank_routing']); ?>">
                                                         </label>
                                                     </section>
                                                 </dd>
@@ -388,7 +461,7 @@ echo '</pre>';
                                                     <section>
                                                         <label for="account_number" class="input">
                                                             <i class="icon_append fa fa-credit-card-alt"></i>
-                                                            <input type="text" name="account_number" id="account_number" value="<?php echo $bank['account_number']; ?>">
+                                                            <input type="text" name="account_number" id="account_number" value="<?php echo $mysavingwallet->ccMasking($bank['account_number']); ?>">
                                                         </label>
                                                     </section>
                                                 </dd>

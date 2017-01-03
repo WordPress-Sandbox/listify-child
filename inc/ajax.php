@@ -1,6 +1,7 @@
 <?php 
 
 require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
+require get_stylesheet_directory() . '/inc/class.MagicPayGateway.php';
 
 function new_user_register() {
 
@@ -438,11 +439,10 @@ function save_bank_func(){
     }
     if(count($error) == 0 ) {
         $user_id = get_current_user_id();
-        $banks = get_user_meta($user_id, 'banks');
-        $banks[$new_bank['bank_routing']] = $new_bank;
+        $banks = get_user_meta($user_id, 'banks', true);
+        $banks[] = $new_bank;
         update_user_meta($user_id, 'banks', $banks);
-        // echo json_encode('Bank info updated successfully');
-        echo json_encode($new_bank);
+        echo json_encode('Bank info updated successfully');
     } else {
         echo json_encode(array('error' => $error));
     }
@@ -454,4 +454,58 @@ function save_bank_func(){
 // save_bank_func();
 
 add_action('wp_ajax_save_bank', 'save_bank_func');
+
+/* add balance */
+function add_balance_func() {
+    $data = $_POST;
+    $amount = '50.00';
+    $gw = new gwapi;
+    $gw->setLogin("demo", "password");
+    $gw->setBilling("John","Smith","Acme, Inc.","123 Main St","Suite 200", "Beverly Hills",
+            "CA","90210","US","555-555-5555","555-555-5556","support@example.com",
+            "www.example.com");
+    $gw->setShipping("Mary","Smith","na","124 Shipping Main St","Suite Ship", "Beverly Hills",
+            "CA","90210","US","support@example.com");
+    $gw->setOrder("1234","Big Order",1, 2, "PO1234","65.192.14.10");
+
+    $gw->doSale($amount,"4111111111111111","1010");
+
+    if( $gw->responses['response'] == 1 ) {
+        $user_id = get_current_user_id();
+        $prev_balance = get_user_meta($user_id, 'wallet_balance', true);
+        $new_balance = (int) $prev_balance + (int) $amount;
+        update_user_meta($user_id, 'wallet_balance', $new_balance);
+        // delete_user_meta($user_id, 'wallet_balance');
+
+        $new_transaction = array();
+        $new_transaction['prev_balance'] = $prev_balance;
+        $new_transaction['new_balance'] = $new_balance;
+        $new_transaction['time'] = current_time('mysql');
+        $new_transaction['trans_amount'] = $amount;
+        $new_transaction['trans_id'] = $gw->responses['transactionid'];
+        $new_transaction['response'] = $gw->responses['response'];
+        $new_transaction['responsetext'] = $gw->responses['responsetext'];
+
+        $transactions = get_user_meta($user_id, 'transactions', true);
+        $transactions[] = $new_transaction;
+        update_user_meta($user_id, 'transactions', $transactions);
+        // delete_user_meta($user_id, 'transactions');
+    }
+
+
+    echo json_encode(
+            array(
+                'response' => $gw->responses['response'], 
+                'responsetext' => $gw->responses['responsetext'],
+                'amount' => $amount
+            )
+        );
+    die();
+}
+
+
+// add_balance_func();
+
+
+add_action('wp_ajax_add_balance', 'add_balance_func');
 
