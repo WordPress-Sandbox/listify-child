@@ -827,19 +827,15 @@ p#wpua-preview-existing {
 }
 
 
-.banklist {}
-.banklist .dl-horizontal {}
-.banklist .dl-horizontal dd{
-  margin-left: 0;
+
+dd.banklist_title {
+    margin-left: 0 !important;
 }
-.banklist .dl-horizontal section label {}
-.banklist .dl-horizontal section label .label {
+
+.banklist_title .label {
   border: 1px solid #ddd;
   padding: 3px 10px;
   background: #ddd;
-}
-.banklist .password_change {
-  display: none;
 }
 
 /* Credit Card */
