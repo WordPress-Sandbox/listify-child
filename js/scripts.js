@@ -579,11 +579,13 @@ jQuery(function($){
 		savingwallet.openModal('add_bank');
 	});
 
-	$('.banklist .dl-horizontal section label .label').click(function(){
-		$(this).parent().parent().next().toggle();
+	$('.banklist').next().hide();
+
+	$('.banklist').click(function(){
+		$(this).next().toggle();
 	})	
 
-	$('.banklist .dl-horizontal section label i').click(function(){
+	$('.banklist_title>section>label>i').click(function(){
 		confirm('Delete the bank info?');
 	});
 
