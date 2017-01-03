@@ -103,18 +103,22 @@ class Mysavingwallet {
 
 	public function transactions() {
 		$transactions = $this->getMetaValue('transactions');
-		$html = '<table>';
-		$html .= '<tr><th>Transaction ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
-		foreach ($transactions as $key => $trans) {
-			$html .= '<tr>';
-				$html .= '<td>' . $trans['trans_id'] . '</td>';
-				$html .= '<td>' . $trans['trans_amount'] . '</td>';
-				$html .= '<td>' . $trans['prev_balance'] . '</td>';
-				$html .= '<td>' . $trans['new_balance'] . '</td>';
-				$html .= '<td>' . $trans['time'] . '</td>';
-			$html .= '</tr>';
+		if(is_array($transactions)) {
+			$html = '<table>';
+			$html .= '<tr><th>Transaction ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
+			foreach ($transactions as $key => $trans) {
+				$html .= '<tr>';
+					$html .= '<td>' . $trans['trans_id'] . '</td>';
+					$html .= '<td>' . $trans['trans_amount'] . '</td>';
+					$html .= '<td>' . $trans['prev_balance'] . '</td>';
+					$html .= '<td>' . $trans['new_balance'] . '</td>';
+					$html .= '<td>' . $trans['time'] . '</td>';
+				$html .= '</tr>';
+			}
+			$html .= '</table>';
+		} else {
+			$html = 'No transaction found!';
 		}
-		$html .= '</table>';
 		return $html;
 	}
 

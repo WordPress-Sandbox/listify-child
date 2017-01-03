@@ -839,32 +839,60 @@ dd.banklist_title {
 }
 
 /* Credit Card */
+.remodal.creditcard_popup {
+    background: #F7F7F7;
+    padding: 10px 0;
+    margin: 0;
+}
+#add_balance .show_message {
+    margin: 0;
+    padding: 10px 0;
+    text-align: left;
+}
 .credit-card {
-    width: 360px;
+    max-width: 360px;
     height: 400px;
-    margin: 60px auto 0;
+    margin: 40px auto;
     border: 1px solid #ddd;
     border-radius: 6px;
     background-color: #fff;
     box-shadow: 1px 2px 3px 0 rgba(0,0,0,.10);
 }
-.form-header {
+#add_balance .form-header {
     height: 60px;
     padding: 20px 30px 0;
     border-bottom: 1px solid #e1e8ee;
 }
- 
-.form-body {
-    height: 340px;
-    padding: 30px 30px 20px;
-}
-
-.title {
+#add_balance .form-header .title {
     font-size: 18px;
     margin: 0;
     color: #5e6977;
 }
-/* Common */
+ 
+#add_balance .form-body {
+    height: 340px;
+    padding: 30px 30px 20px;
+}
+#add_balance .form-body .dl-horizontal dd {
+  margin-left: 0;
+}
+#add_balance .form-body .proceed-btn {
+    padding: 10px 25px;
+    width: 100%;
+}
+.form_inline  {
+    display: flex !important;
+    box-sizing: border-box;
+}
+.form_inline select {
+    margin: 1px !important;
+}
+.cvv_help {
+    padding: 10px 0;
+    color: #717a8f;
+    margin-bottom: 0;
+}
+/* Common
 .card-number,
 .cvv-input input,
 .month select,
@@ -890,7 +918,7 @@ dd.banklist_title {
     opacity: .7;
     color: #86939e;
 }
-/* Card Number */
+Card Number
 .card-number {
     width: 100%;
     margin-bottom: 20px;
@@ -898,7 +926,7 @@ dd.banklist_title {
     border: 2px solid #e1e8ee;
     border-radius: 6px;
 }
-/* Date Field */
+Date Field
 .month select,
 .year select {
     width: 145px;
@@ -919,7 +947,7 @@ dd.banklist_title {
 .year select {
     float: right;
 }
-/* Card Verification Field */
+Card Verification Field
 .cvv-input input {
     float: left;
     width: 145px;
@@ -940,7 +968,7 @@ dd.banklist_title {
 .cvv-details p {
     margin-top: 6px;
 }
-/* Buttons Section */
+Buttons Section
 .paypal-btn,
 .proceed-btn {
     cursor: pointer;
@@ -972,7 +1000,7 @@ dd.banklist_title {
     padding-right: 95px;
     background: url('paypal-logo.svg') no-repeat 65% 56% #009cde;
 }
-
+ */
 /* Settings Tab */
 .user_profile .user_settings {
 
