@@ -501,81 +501,84 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                             <a class="button add_bank"> Add a new bank </a>
 
-                            <div class="remodal" data-remodal-id="add_bank" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+                            <div class="remodal user_profile" data-remodal-id="add_bank" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
                                 <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
                                 <h2>Add a new bank info</h2>
                                 <p class="add_bank_message"></p>
                                 <div class="verification_content">
                                     <div id="modal1Desc">
                                         <div class="password_change">
-                                        <form id="add_bank" class="password_change" action="#" method="post" enctype="multipart/form-data">
-                                            <dl class="dl-horizontal">
-                                                <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label for="bank_name" class="input">
-                                                            <i class="icon_append fa fa-university"></i>
-                                                            <input type="text" name="bank_name" id="bank_name" value="Your Bank name">
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                                <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label for="bank_routing" class="input">
-                                                            <i class="icon_append fa fa-wifi"></i>
-                                                            <input type="text" name="bank_routing" id="bank_routing" value="Bank Routing Number (9 Digits only)">
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                                <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label for="account_number" class="input">
-                                                            <i class="icon_append fa fa-credit-card-alt"></i>
-                                                            <input type="text" name="account_number" id="account_number" value="Bank Account Number (up to 16 digits)">
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                                <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label class="input">
-                                                            <select name="account_type">
-                                                                <option>Checking</option>
-                                                                <option>Savings</option>
-                                                            </select>
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                                <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label for="async-upload" class="input">
-                                                            <i class="icon_append fa fa-life-ring"></i>
-                                                            <p class="image-notice"></p>
-                                                            <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
-                                                            <input type="hidden" name="image_id" class="image_id">
-                                                            <b class="tooltip tooltip-bottom-right">Please provide proof of Account Info – Voided Check or Bank Letter</b>
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                                <dt><?php esc_html_e( '', 'listify_child' ); ?></dt>
-                                                <dd>
-                                                    <section>
-                                                        <label class="input">
-                                                            <input type="submit" class="button" value="Save bank info" >
-                                                        </label>
-                                                    </section>
-                                                </dd>
-                                                <hr>
-                                            </dl>        
-                                        </form>  
+                                            <form id="add_bank" class="password_change" action="#" method="post" enctype="multipart/form-data">
+                                                <dl class="dl-horizontal">
+                                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label for="bank_name" class="input">
+                                                                <i class="icon_append fa fa-university"></i>
+                                                                <input type="text" name="bank_name" id="bank_name" placeholder="Your Bank name">
+                                                                <b class="tooltip tooltip-bottom-right">Enter Bank name</b>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label for="bank_routing" class="input">
+                                                                <i class="icon_append fa fa-wifi"></i>
+                                                                <input type="text" name="bank_routing" id="bank_routing" placeholder="Bank Routing Number (9 Digits only)">
+                                                                <b class="tooltip tooltip-bottom-right">Bank Routing Number (9 Digits only)</b>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label for="account_number" class="input">
+                                                                <i class="icon_append fa fa-credit-card-alt"></i>
+                                                                <input type="text" name="account_number" id="account_number" placeholder="Bank Account Number (up to 16 digits)">
+                                                                <b class="tooltip tooltip-bottom-right">Bank Account Number (up to 16 digits)</b>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt><?php esc_html_e( 'Account Type', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label class="input">
+                                                                <select name="account_type">
+                                                                    <option>Checking</option>
+                                                                    <option>Savings</option>
+                                                                </select>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label for="async-upload" class="input">
+                                                                <i class="icon_append fa fa-life-ring"></i>
+                                                                <p class="image-notice"></p>
+                                                                <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
+                                                                <input type="hidden" name="image_id" class="image_id">
+                                                                <b class="tooltip tooltip-bottom-right">Please provide proof of Account Info – Voided Check or Bank Letter</b>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt><?php esc_html_e( '', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label class="input">
+                                                                <input type="submit" class="button" value="Save bank info" >
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+                                                </dl>        
+                                            </form>  
                                         </div>
                                     </div>
                                 </div>
