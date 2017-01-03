@@ -506,6 +506,5 @@ function add_balance_func() {
 
 // add_balance_func();
 
-
 add_action('wp_ajax_add_balance', 'add_balance_func');
 

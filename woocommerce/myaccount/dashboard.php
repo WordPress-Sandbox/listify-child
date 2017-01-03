@@ -343,16 +343,11 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         $balance = $mysavingwallet->getMetaValue('wallet_balance'); 
                                     ?>
                                     <p> Your current balance is: $<?php echo $balance ? $balance : '0.00';  ?>
-
-                                    <?php  
-
-                                    echo '<pre>'; 
-                                    var_dump($mysavingwallet->getMetaValue('transactions')); 
-                                    echo '</pre>'; 
-
-                                    ?>
                                     <br/>
                                 <a class="button add_balance"> Add balance</a>
+
+                                <h4> Transaction history </h4>
+                                <?php echo $mysavingwallet->transactions(); ?>
 
                                 <div class="remodal" data-remodal-id="add_balance"
                                   data-remodal-options="hashTracking: false">

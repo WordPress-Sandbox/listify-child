@@ -603,6 +603,8 @@ jQuery(function($){
 		    data[field.name] = field.value;
 		});
 
+		console.log(data);
+
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
