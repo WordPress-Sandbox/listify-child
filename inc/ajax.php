@@ -486,6 +486,8 @@ function add_balance_func() {
     $gw->setBilling("John","Smith","Acme, Inc.","123 Main St","Suite 200", "Beverly Hills",
             "CA","90210","US","555-555-5555","555-555-5556","support@example.com",
             "www.example.com");
+    $gw->setShipping("Mary","Smith","na","124 Shipping Main St","Suite Ship", "Beverly Hills",
+        "CA","90210","US","support@example.com");
     $gw->setOrder("1234","Big Order",1, 2, "PO1234","65.192.14.10");
 
     $r = $gw->doSale($amount,"4111111111111111","1010");

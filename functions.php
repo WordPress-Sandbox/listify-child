@@ -123,7 +123,10 @@ function mysavingwallet_redirect_if_admin_page()
 add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 
 
-require get_stylesheet_directory() . '/inc/ajax.php';
+require_once locate_template('inc/ajax.php');
+if(is_admin()) {
+    require_once locate_template('inc/admin/savingwallet_page.php');
+}
 
 
 /* allow customers to upload files */
