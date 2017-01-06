@@ -66,11 +66,73 @@ function bank_verification() {
 			            		<li>Routing number: <?php echo $bank['bank_routing']; ?></li>
 			            		<li>Account number: <?php echo $bank['account_number']; ?></li>
 			            		<li>Support Doc: <a href="<?php echo $bank['account_number']; ?>">DOC</a></li>
-			            		<li>Support Doc: <?php echo $bank['verification']; ?></li>
 			            	</ul>
 			            	<div class="btn_area">
 			            		<a class="verify_btn" data-status="verified" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as verified</a>
 			            		<a class="verify_btn" data-status="declined" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as Declined</a>
+			            	</div>
+			            </div>
+			        </div>
+			    </div>
+
+				<?php 
+				endif;
+				
+			endforeach;
+		endif; 
+	endforeach;
+
+	?>
+
+	</div>
+</section>
+</div>
+<?php
+}
+
+
+
+function withdraw_request() {
+
+	$user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
+	$counter = 1;
+?>
+<div class="wrap">
+<h1> Pending Withdrawls </h1>
+<section id="banks_verification" data-accordion-group="">
+	<div data-accordion-group>
+
+	<?php
+
+		foreach ($user_ids as $id) : 
+		$withdrawls = get_user_meta($id, 'withdrawls', true);
+		if(is_array($withdrawls)) :
+			foreach ($withdrawls as $key => $with) :
+				if($with['status'] === 'pending') :
+					// $mysavingwallet = new Mysavingwallet;
+					// $bank = $mysavingwallet->filterBank('bank_name', 'Rupali Bank Ltd.');
+					// var_dump($bank);
+				?>
+
+				<div class="accordion" data-accordion>
+			        <div data-control> Withdrawl #<?php echo $counter; $counter++; ?></div>
+			        <div data-content>
+			            <div>
+			            	<h3 class="message"></h3>
+			            	<ul>
+			            		<?php $user = get_userdata($id); ?>
+			            		<li>Customer ID: <?php echo $id; ?></li>
+			            		<li>Customer username: <?php echo $user->user_login; ?></li>
+			            		<li>Customer Email: <?php echo $user->user_email; ?></li>
+			            		<li>Customer name: <?php echo $user->display_name; ?></li>
+			            		<li>Withdraw ID: <?php echo $with['id']; ?></li>
+			            		<li>Withdraw Amount: <?php echo $with['amount']; ?></li>
+			            		<li>Withdraw Time: <?php echo $with['time']; ?></li>
+			            		<li>Bank Name: <?php echo $with['bank']; ?></li>
+			            	</ul>
+			            	<div class="btn_area">
+			            		<a class="withdrawl_btn" data-status="approved" data-userid="<?php echo $id; ?>" data-withdrawkey="<?php echo $key; ?>">Approve</a>
+			            		<a class="withdrawl_btn" data-status="declined" data-userid="<?php echo $id; ?>" data-withdrawkey="<?php echo $key; ?>">Decline</a>
 			            	</div>
 			            </div>
 			        </div>

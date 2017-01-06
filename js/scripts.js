@@ -405,19 +405,22 @@ jQuery(function($){
 
 		var data = {
 			action: 'cashback', 
-			amount: $('#cashback_amout').val(),
+			cashback_amount: $('#cashback_amount').val(),
 			customer_id: $('#customer_id').val(),
 		}
-
-		console.log(data);
 
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
 			data: data,
-			dataType: 'text',
+			dataType: 'json',
 			success: function(resp) {
-				$('.cashback_message').html( resp );
+				console.log(resp);
+				if(resp.status == 'error') {
+					$('.cashback_message').css('color', 'red').html( resp.message );
+				} else if (resp.status == 'success') {
+					$('.cashback_message').css('color', 'green').html( resp.message );
+				}
 			},
 			error: function( req, status, err ) {
 				$('.cashback_message').html( 'something went wrong', status, err );
@@ -658,8 +661,48 @@ jQuery(function($){
 
 	});
 
-	// $('.add_bank_btn').click(function(){
-	// 	alert('clicked');
-	// });
+	/* withdraw request */
+	var withdrawClick = 1; 
+	$('.withdraw').click(function(e){
+		e.preventDefault();
+		if ( withdrawClick == 1 ) {
+	        $("form#withdraw").slideDown();
+	        withdrawClick = 2;
+    	} else {
+    		withdrawClick = 1;
+		    var data = {
+				action: 'withdraw_request',
+				bank: $('form#withdraw input[name="bank_name"]:checked').val(),
+				amount: $('form#withdraw input[name="amount"]').val()
+			}
+
+			console.log(data);
+
+			$.ajax({
+				type: 'POST',
+				url: local.ajax_url,
+				data: data,
+				dataType: 'json',
+				success: function(resp) {
+					console.log(resp);
+					if( resp.status == 'error') {
+						$('.message').css('color', 'red').text(resp.responsetext);
+					} else if (resp.status == 'success') {
+						$('.message').css('color', 'green').text(resp.responsetext);
+					}
+				},
+				error: function( req, status, err ) {
+					console.log('error in ajax request');
+					$('.message').css('color', 'red').text('something went wrong', status, err);
+				}
+			});
+
+	    }
+
+	});
+
+
+
+
 
 });

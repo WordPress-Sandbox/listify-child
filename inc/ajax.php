@@ -338,29 +338,28 @@ add_action('wp_ajax_email_verify', 'email_verify_func');
 
 /* cashback */
 function cashback_func() {
+    $mysavingwallet = new Mysavingwallet;
     $business_id = get_current_user_id();
     $customer_id = $_POST['customer_id'];
-    $amount = $_POST['amount'];
+    $amount = $_POST['cashback_amount'];
 
-    if( !class_exists('UserModel')) {
-        echo 'wpdepost plugin isn\'t activated!';
-        exit();
+    if(!$mysavingwallet->checkInteger($amount)) {
+        echo json_encode(array('status' => 'error', 'message' => 'Amount must be digit character' ));
+        die();
     }
-
-    $userModel = new UserModel(); // wpdepost class
-
-    if(get_user_role() !== 'business') {
-        echo 'Only businesses can send cashback';
-    } else if ( (int) $business_id === (int) $customer_id ) {
-        echo 'You can\'t send cashback yourself';
-    } else if (!$userModel->canAfford($amount)) {
-        echo 'You don\'t have enough fund to send cashback. Please top up.';
+    $business_balance = get_user_meta($business_id, 'wallet_balance', true);
+    $customer_balance = get_user_meta($customer_id, 'wallet_balance', true);
+    if( (int) $business_balance >= (int) $amount ) {
+        $business_new_balance = (int) $business_balance - (int) $amount;
+        $customer_new_balance = (int) $customer_balance + (int) $amount;
+        update_user_meta($business_id, 'wallet_balance', $business_new_balance);
+        update_user_meta($customer_id, 'wallet_balance', $customer_new_balance);
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount successful!' ));
+        die();
     } else {
-        $userModel->incrementBalance($amount, $customer_id);
-        $userModel->decrementBalance($amount);
+        echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
+        die();
     }
-
-    die();
 }
 add_action('wp_ajax_cashback', 'cashback_func');
 
@@ -525,11 +524,9 @@ function add_balance_func() {
     die();
 }
 
-
-// add_balance_func();
-
 add_action('wp_ajax_add_balance', 'add_balance_func');
 
+/* verify bank account */
 function verify_unverify_customer_account_func() {
     $userid = $_POST['userid'];
     $bankkey = $_POST['bankkey'];
@@ -543,5 +540,45 @@ function verify_unverify_customer_account_func() {
 
 }
 add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer_account_func'); 
+
+/* withdraw request */
+function withdraw_request_func() {
+    $amount = $_POST['amount'];
+    $mysavingwallet = new Mysavingwallet;
+    if(!$mysavingwallet->checkInteger($amount)) {
+        echo json_encode(array('status' => 'error', 'responsetext' => 'Amount must be digit character'));
+        die();
+    } else if($mysavingwallet->minwithdraw > $amount) {
+        echo json_encode(array('status' => 'error', 'responsetext' => 'Minimum withdraw amount is ' . $mysavingwallet->minwithdraw ));
+        die();
+    }
+    $verifiedbanks = $mysavingwallet->verifiedbanks();
+    $selected_bank = array_filter($verifiedbanks, function($v) { return $v['bank_name'] == $_POST['bank']; });
+    if(is_array($selected_bank) && count($selected_bank) === 1) {
+        $prev_balance = $mysavingwallet->getMetaValue('wallet_balance');
+        $new_balance = (int) $prev_balance - (int) $amount;
+
+        $new_withdraw = array();
+        $new_withdraw['prev_balance'] = $prev_balance;
+        $new_withdraw['new_balance'] = $new_balance;
+        $new_withdraw['time'] = current_time('mysql');
+        $new_withdraw['amount'] = $amount;
+        $new_withdraw['id'] = rand(100000, 999999);
+        $new_withdraw['status'] = 'pending';
+        $new_withdraw['bank'] = $_POST['bank'];
+
+        $withdrawls = $mysavingwallet->getMetaValue('withdrawls');
+        $withdrawls[] = $new_withdraw;
+        $mysavingwallet->updateUserMeta('withdrawls', $withdrawls);
+        $mysavingwallet->updateUserMeta('wallet_balance', $new_balance);
+        echo json_encode(array('status' => 'success', 'responsetext' => 'Your withdraw is pending for approval.'));
+        die();
+    } else {
+        echo json_encode(array('status' => 'error', 'responsetext' => 'Error in selecting bank.'));
+        die();
+    }
+}
+add_action('wp_ajax_withdraw_request', 'withdraw_request_func');
+
 
 ?>

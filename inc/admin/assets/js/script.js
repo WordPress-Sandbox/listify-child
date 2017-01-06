@@ -15,19 +15,16 @@ jQuery(function($){
 			status: $(this).data('status'),
 		}
 
-		console.log($(this).parent().parent());
-
 		$.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
-				$(this).parent().parent().html('Bank status set to ' + resp.status);
+				$('.message').text('Bank status set to ' + resp.status);
 			},
 			error: function( req, status, err ) {
-				$(this).parent().parent().html('something went wrong', status, err);
+				$('.message').text('something went wrong', status, err);
 			}
 		});
 

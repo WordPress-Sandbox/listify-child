@@ -12,12 +12,16 @@ class Mysavingwallet {
 	private $sid;
 	private $token;
 	private $from_phone;
+	public $minwithdraw;
+	public $user_id; 
 
 	public function __construct() {
 
 		$this->sid 			= 'ACf2609e774c67bbfc8af7844558d57608';
 		$this->token 		= '59b014bf2054a4e636a2daa66df6a08f';
 		$this->from_phone 	= '561 800-0461';
+		$this->minwithdraw 	= 5;
+		$this->user_id = get_current_user_id();
 
 	}
 
@@ -46,8 +50,7 @@ class Mysavingwallet {
 
 	public function qrurl() {
 		$cashback_page = get_template_page_link('cashback.php');
-		$user_id = get_current_user_id();
-		return add_query_arg('customer_id', $user_id, $cashback_page);
+		return add_query_arg('customer_id', $this->user_id, $cashback_page);
 	}
 
 	public function checkRoutingNumber($routingNumber = 0) {
@@ -80,9 +83,22 @@ class Mysavingwallet {
 	    }
 	}
 
+	public function checkInteger($int) {
+	    // if (is_string($int) && !ctype_digit($int)) {
+	    //     return false; // contains non digit characters
+	    // }
+	    if (!is_int((int) $int)) {
+	        return false; // other non-integer value or exceeds PHP_MAX_INT
+	    }
+	    return $int;
+	}
+
 	public function getMetaValue($k) {
-		$user_id = get_current_user_id();
-		return get_user_meta($user_id, $k, true);
+		return get_user_meta($this->user_id, $k, true);
+	}
+
+	public function updateUserMeta($k, $v) {
+		update_user_meta($this->user_id, $k, $v);
 	}
 
 	public function verificationBadge() {
@@ -92,7 +108,11 @@ class Mysavingwallet {
 			'bank_status'  => 'Bank'
 			);
 		foreach ($items as $k => $v) {
-			$class = $this->getMetaValue($k) == 'verified' ? 'check' : 'cross';
+			if($k == 'bank_status') {
+				$class = $this->hasverifiedbank() ? 'check' : 'cross';
+			} else {
+				$class = $this->getMetaValue($k) == 'verified' ? 'check' : 'cross';
+			}
 			echo '<li class="'.$class.'">'.$v.' Verification</li>';
 		}
 	}
@@ -108,8 +128,8 @@ class Mysavingwallet {
 
 	public function transactions() {
 		$transactions = $this->getMetaValue('transactions');
-		$transactions = array_reverse($transactions);
 		if(is_array($transactions)) {
+			$transactions = array_reverse($transactions);
 			$html = '<table>';
 			$html .= '<tr><th>Transaction ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
 			foreach ($transactions as $key => $trans) {
@@ -126,6 +146,50 @@ class Mysavingwallet {
 			$html = 'No transaction found!';
 		}
 		return $html;
+	}	
+
+	public function withdrawls() {
+		$withdrawls = $this->getMetaValue('withdrawls');
+		if(is_array($withdrawls)) {
+			$withdrawls = array_reverse($withdrawls);
+			$html = '<table>';
+			$html .= '<tr><th>ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th><th>Bank</th><th>Status</th></tr>';
+			foreach ($withdrawls as $key => $with) {
+				$html .= '<tr>';
+					$html .= '<td>' . $with['id'] . '</td>';
+					$html .= '<td>' . $with['amount'] . '</td>';
+					$html .= '<td>' . $with['prev_balance'] . '</td>';
+					$html .= '<td>' . $with['new_balance'] . '</td>';
+					$html .= '<td>' . $with['time'] . '</td>';
+					$html .= '<td>' . $with['bank'] . '</td>';
+					$html .= '<td>' . $with['status'] . '</td>';
+				$html .= '</tr>';
+			}
+			$html .= '</table>';
+		} else {
+			$html = 'No withdrawls found!';
+		}
+		return $html;
+	}
+
+	public function verifiedbanks() {
+		$banks = $this->getMetaValue('banks');
+		if(is_array($banks)) {
+			$filtered = array_filter($banks, function($v) { return $v['verification'] == 'verified'; });
+			return $filtered;
+		}
+	}	
+
+	public function filterBank($k, $v) {
+		$banks = $this->getMetaValue('banks');
+		if(is_array($banks)) {
+			$filtered = array_filter($banks, function($a) { return $a[$k] == $v; });
+			return $filtered;
+		}
+	}
+
+	public function hasverifiedbank() {
+		if(count($this->verifiedbanks()) > 0 ) return true;
 	}
 
 

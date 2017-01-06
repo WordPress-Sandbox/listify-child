@@ -701,7 +701,7 @@ p#wpua-preview-existing {
 
 /* Password Change Tab */
 .user_profile .password_change section {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 .user_profile .password_change .input {
     position: relative;
@@ -830,8 +830,6 @@ p#wpua-preview-existing {
     display: block;
 }
 
-
-
 dd.banklist_title {
     margin-left: 0 !important;
 }
@@ -841,6 +839,15 @@ dd.banklist_title {
   padding: 3px 10px;
   background: #ddd;
 }
+
+a.button.withdraw {
+  margin-bottom: 40px;
+}
+form#withdraw {
+  max-width: 200px;
+  display: none;
+}
+
 
 /* Credit Card */
 .remodal.creditcard_popup {
@@ -896,115 +903,6 @@ dd.banklist_title {
     color: #717a8f;
     margin-bottom: 0;
 }
-/* Common
-.card-number,
-.cvv-input input,
-.month select,
-.year select {
-    font-size: 14px;
-    font-weight: 100;
-    line-height: 14px;
-}
- 
-.card-number,
-.month select,
-.year select {
-    font-size: 14px;
-    font-weight: 100;
-    line-height: 14px;
-}
- 
-.card-number,
-.cvv-details,
-.cvv-input input,
-.month select,
-.year select {
-    opacity: .7;
-    color: #86939e;
-}
-Card Number
-.card-number {
-    width: 100%;
-    margin-bottom: 20px;
-    padding-left: 20px;
-    border: 2px solid #e1e8ee;
-    border-radius: 6px;
-}
-Date Field
-.month select,
-.year select {
-    width: 145px;
-    margin-bottom: 20px;
-    padding-left: 20px;
-    border: 2px solid #e1e8ee;
-    border-radius: 6px;
-    background: url('caret.png') no-repeat;
-    background-position: 85% 50%;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-}
- 
-.month select {
-    float: left;
-}
- 
-.year select {
-    float: right;
-}
-Card Verification Field
-.cvv-input input {
-    float: left;
-    width: 145px;
-    padding-left: 20px;
-    border: 2px solid #e1e8ee;
-    border-radius: 6px;
-    background: #fff;
-}
- 
-.cvv-details {
-    font-size: 12px;
-    font-weight: 300;
-    line-height: 16px;
-    float: right;
-    margin-bottom: 20px;
-}
- 
-.cvv-details p {
-    margin-top: 6px;
-}
-Buttons Section
-.paypal-btn,
-.proceed-btn {
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-    border-color: transparent;
-    border-radius: 6px;
-}
- 
-.proceed-btn {
-    margin-bottom: 10px;
-    background: #7dc855;
-}
- 
-.paypal-btn a,
-.proceed-btn a {
-    text-decoration: none;
-}
- 
-.proceed-btn a {
-    color: #fff;
-}
- 
-.paypal-btn a {
-    color: rgba(242, 242, 242, .7);
-}
- 
-.paypal-btn {
-    padding-right: 95px;
-    background: url('paypal-logo.svg') no-repeat 65% 56% #009cde;
-}
- */
 /* Settings Tab */
 .user_profile .user_settings {
 
@@ -1172,9 +1070,22 @@ Buttons Section
 
 
 
+/* cashback */
+.user_info_cashback {
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+}
+.user_info_cashback h4 {
+  margin: 0;
+  margin-bottom: 5px;
+}
 
-
-
+.user_info_cashback ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.user_info_cashback ul li {}
 
 
 

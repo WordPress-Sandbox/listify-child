@@ -21,7 +21,8 @@ div.btn_area {
 	padding-bottom: 10px;
 }
 
-div.btn_area .verify_btn {
+div.btn_area .verify_btn,
+div.btn_area .withdrawl_btn {
 	background-color: #2854a1;
 	color: #FFF;
 	padding: 5px 10px;

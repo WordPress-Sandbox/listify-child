@@ -339,9 +339,9 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
                             <p class="show_message"></p>
-                            <?php if(get_user_role() != 'customer') : ?>
-                                <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
+                            <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
                                 <br/>
+                            <?php if(get_user_role() != 'customer') : ?>
                                 <a class="button add_balance"> Add balance</a>
                                 <h4> Transaction history </h4>
                                 <?php 
@@ -351,6 +351,23 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
                             <?php endif; ?>
                             <?php if(get_user_role() == 'customer'): ?>
+                                <?php if( $mysavingwallet->wallet_balance() >= $mysavingwallet->minwithdraw ) : ?>
+                                    <p class="message"></p>
+                                    <form id="withdraw">
+                                    <?php if($mysavingwallet->hasverifiedbank()) : ?>
+                                        <input type="number" name="amount" placeholder="Enter withdraw amount">
+                                        <?php if( is_array($mysavingwallet->verifiedbanks())) : 
+                                                foreach ($mysavingwallet->verifiedbanks() as $key => $bank) : ?>
+                                        <input type="radio" name="bank_name" value="<?php echo $bank['bank_name']; ?>"><?php echo $bank['bank_name']; ?><br>
+                                        <?php endforeach; endif; ?>
+                                    <?php else : ?>
+                                        <p> No verified bank account found! Please verify a bank account proior requesting for withdraw.</p>
+                                    <?php endif; ?>
+                                    </form>
+                                <a class="button withdraw"> Withdraw </a>
+                                <?php endif; ?>
+                            <br/>
+                            <?php echo $mysavingwallet->withdrawls(); ?>
                             <br/>
                             <div class="password_change">
                                  <?php if(is_array($banks)) : foreach ($banks as $key => $bank) : ?>
@@ -361,7 +378,6 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                     <i class="icon_append fa fa-times" data-bankid="<?php echo $key; ?>"></i>
                                                     <?php 
                                                         $reviewText = '';
-
                                                         if ( $bank['verification'] == 'verified' ) {
                                                             $class = 'check';
                                                         } elseif ( $bank['verification'] == 'declined' ) {
