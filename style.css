@@ -481,16 +481,20 @@ input[type="date"] {
   padding: 0;
   margin: 0;
 }
-.verification_badge ul li {
+.verification_badge ul li,
+.banklist .label.check, 
+.banklist .label.cross {
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 20px;
   padding-left: 30px;
 }
-.verification_badge ul li.check {
+.verification_badge ul li.check,
+.banklist .label.check {
   background-image: url('assets/img/check.png');
 }
-.verification_badge ul li.cross {
+.verification_badge ul li.cross,
+.banklist .label.cross {
   background-image: url('assets/img/cross.png');
 }
 

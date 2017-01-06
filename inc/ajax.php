@@ -1,7 +1,7 @@
 <?php 
 
-require get_stylesheet_directory() . '/inc/class.mysavingwallet.php';
-require get_stylesheet_directory() . '/inc/class.MagicPayGateway.php';
+require_once locate_template('/inc/class.mysavingwallet.php'); 
+require_once locate_template('/inc/class.MagicPayGateway.php');
 
 function new_user_register() {
 
@@ -366,6 +366,7 @@ add_action('wp_ajax_cashback', 'cashback_func');
 
 /* edit profile */
 function save_basic_func(){
+
     $dd = $_POST['dd'];
     $user_id = get_current_user_id();
 
@@ -455,6 +456,27 @@ function save_bank_func(){
 
 add_action('wp_ajax_save_bank', 'save_bank_func');
 
+/* remove a bank */
+function remove_bank_func() {
+    $user_id = get_current_user_id();
+    $banks = get_user_meta($user_id, 'banks', true);
+    $bankid = $_POST['bankid'];
+    if(array_key_exists($bankid, $banks)) {
+        unset($banks[$bankid]);
+        update_user_meta($user_id, 'banks', $banks);
+        $message = array('status' => 'success', 'responsetext' => 'Bank removed successfully.');
+    } else {
+        $message = array('status' => 'error', 'responsetext' => 'Bank wasn\'t found.');
+    }
+    echo json_encode($message);
+    die();
+}
+
+// remove_bank_func();
+
+
+add_action('wp_ajax_remove_bank', 'remove_bank_func');
+
 /* add balance */
 function add_balance_func() {
     $data = $_POST;
@@ -464,11 +486,9 @@ function add_balance_func() {
     $gw->setBilling("John","Smith","Acme, Inc.","123 Main St","Suite 200", "Beverly Hills",
             "CA","90210","US","555-555-5555","555-555-5556","support@example.com",
             "www.example.com");
-    $gw->setShipping("Mary","Smith","na","124 Shipping Main St","Suite Ship", "Beverly Hills",
-            "CA","90210","US","support@example.com");
     $gw->setOrder("1234","Big Order",1, 2, "PO1234","65.192.14.10");
 
-    $gw->doSale($amount,"4111111111111111","1010");
+    $r = $gw->doSale($amount,"4111111111111111","1010");
 
     if( $gw->responses['response'] == 1 ) {
         $user_id = get_current_user_id();

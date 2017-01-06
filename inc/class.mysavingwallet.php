@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-require get_stylesheet_directory() . '/inc/twilio-php-master/Twilio/autoload.php';
+require_once locate_template('/inc/twilio-php-master/Twilio/autoload.php');
 use Twilio\Rest\Client;
 
 class Mysavingwallet {
@@ -101,8 +101,14 @@ class Mysavingwallet {
 	    return substr($number, 0, 4) . str_repeat($maskingCharacter, strlen($number) - 8) . substr($number, -4);
 	}
 
+	public function wallet_balance() {
+		$balance = $this->getMetaValue('wallet_balance');
+		return $balance ? $balance : '0.00';
+	}
+
 	public function transactions() {
 		$transactions = $this->getMetaValue('transactions');
+		$transactions = array_reverse($transactions);
 		if(is_array($transactions)) {
 			$html = '<table>';
 			$html .= '<tr><th>Transaction ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
@@ -121,6 +127,8 @@ class Mysavingwallet {
 		}
 		return $html;
 	}
+
+
 
 }
 

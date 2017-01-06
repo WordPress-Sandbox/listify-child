@@ -575,7 +575,8 @@ jQuery(function($){
 	});
 
 	/* add bank info */
-	$('.add_bank').click(function(){
+	$('.add_bank').click(function(e){
+		e.preventDefault();
 		savingwallet.openModal('add_bank');
 	});
 
@@ -586,7 +587,35 @@ jQuery(function($){
 	})	
 
 	$('.banklist_title>section>label>i').click(function(){
-		confirm('Delete the bank info?');
+		var conf_val = confirm('Delete the bank info?');
+		if(conf_val === true ) {
+
+			var data = {
+				action: 'remove_bank',
+				bankid: $(this).data('bankid')
+			};
+
+			$.ajax({
+				type: 'POST',
+				url: local.ajax_url,
+				data: data,
+				dataType: 'json',
+				success: function(resp) {
+					console.log(resp);
+					if( resp.status == 'success') {
+							$('.show_message').css('color', 'green').html(resp.responsetext);
+							// window.setTimeout(location.reload(), 5000);
+					} else if (resp.status == 'error') {
+						$('.show_message').css('color', 'red').html(resp.responsetext);
+					}
+				},
+				error: function( req, status, err ) {
+					console.log('error in ajax request');
+					$('.show_message').css('color', 'red').html('something went wrong', status, err);
+				}
+			});
+
+		}
 	});
 
 	/* add balance */
@@ -598,12 +627,13 @@ jQuery(function($){
 		e.preventDefault();
 
 		var data = {
-			action: 'add_balance'
+			action: 'add_balance',
+			dd: $(this).serializeArray()
 		};
 
-		$.each($(this).serializeArray(), function(i, field) {
-		    data[field.name] = field.value;
-		});
+		// $.each($(this).serializeArray(), function(i, field) {
+		//     data[field.name] = field.value;
+		// });
 
 		console.log(data);
 

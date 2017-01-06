@@ -24,7 +24,7 @@ function listify_child_styles() {
     $data = array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
         'upload_url' => admin_url('async-upload.php'),
-        'nonce'   =>  wp_create_nonce( "test_nonce" ),
+        'nonce'   =>  wp_create_nonce( "listify_none" ),
     	'themepath' => get_stylesheet_directory_uri()
     );
     wp_localize_script('listify-child-script', 'local', $data);
