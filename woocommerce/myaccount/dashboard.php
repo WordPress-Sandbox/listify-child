@@ -359,9 +359,20 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <section>
                                                 <label class="input">
                                                     <i class="icon_append fa fa-times" data-bankid="<?php echo $key; ?>"></i>
-                                                    <?php $class = $bank['verification'] == 'verified' ? 'check' : 'cross'; ?>
+                                                    <?php 
+                                                        $reviewText = '';
+
+                                                        if ( $bank['verification'] == 'verified' ) {
+                                                            $class = 'check';
+                                                        } elseif ( $bank['verification'] == 'declined' ) {
+                                                            $class = 'cross';
+                                                        } else {
+                                                            $class = 'review';
+                                                            $reviewText = '<strong>(Account is In Review)</strong>';
+                                                        }
+                                                    ?>
                                                     <p class="label <?php echo $class; ?>">
-                                                    <?php echo $bank['bank_name']; ?></p>
+                                                    <?php echo $bank['bank_name']; ?> <?php echo $reviewText; ?></p>
                                                 </label>
                                             </section>
                                         </dd>

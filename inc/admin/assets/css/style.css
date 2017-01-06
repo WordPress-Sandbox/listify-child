@@ -1,1 +1,29 @@
-h1 {color: red !important;}
+ #banks_verification { 
+}
+[data-accordion] {
+ 	border: 1px solid #e5e5e5;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    background: #FFF;
+    margin-bottom: 5px;
+}
+[data-accordion] [data-control] {
+	font-size: 16px;
+}
+[data-control], [data-content] > * {
+	border-bottom: 0;
+}
+[data-control], [data-content] > div {
+
+}
+
+div.btn_area {
+	padding-bottom: 10px;
+}
+
+div.btn_area .verify_btn {
+	background-color: #2854a1;
+	color: #FFF;
+	padding: 5px 10px;
+	cursor: pointer;
+}
