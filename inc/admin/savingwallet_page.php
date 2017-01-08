@@ -30,6 +30,19 @@ function enqueue_admin_scripts($hook) {
 add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
 
 
+function savingwallet_admin(){
+
+	?>
+	<div class="wrap">
+		<h1> Saving Wallet Settings </h1>
+		<h3> Company balance: <?php echo get_option('company_balance'); ?></h3>
+		<h4> Lastest Cashbacks </h4>
+		<?php echo do_shortcode('[cashbacks]'); ?>
+	</div>
+
+<?php 
+}
+
 
 function bank_verification() {
 

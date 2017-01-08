@@ -102,7 +102,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
             <div class="col-md-3">
                 <div>
                 <div class="qr_profile">
-                    <?php if(get_user_role() == 'customer'): ?>
+                    <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
                         <div class="qr_code">
                             <img src="https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
                         </div>
@@ -128,7 +128,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <?php echo get_avatar($user_id, 262); ?>
                     </div>
                     <br/>
-                    <?php if(get_user_role() == 'customer'): ?>
+                    <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
                         <h2> Customer ID: <?php echo $user_id; ?></h2>
                     <?php endif; ?>
                 </div>
@@ -164,7 +164,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <li><a href="#payment">Payment</a></li>
                         <li><a href="#social">Social Media</a></li>
                         <li><a href="#settings">Notification</a></li>
-                        <?php if(get_user_role() == 'business') : ?>
+                        <?php if($mysavingwallet->get_user_role() == 'business') : ?>
                         <li><a href="#stats">Stats</a></li>
                         <?php endif; ?>
                     </ul>
@@ -177,7 +177,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 							<form id="basic_info" action="" class="form-edit-account" method="post">
 
 	                            <dl class="dl-horizontal">
-                                    <?php if(get_user_role() == 'business') : ?>
+                                    <?php if($mysavingwallet->get_user_role() == 'business') : ?>
                                     <dt><strong><?php esc_html_e( 'Business name', 'listify_child' ); ?></strong></dt>
                                     <dd>
                                         <input type="text" name="billing_company" value="<?php echo esc_attr( $billing_company ); ?>"> 
@@ -341,16 +341,16 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <p class="show_message"></p>
                             <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
                                 <br/>
-                            <?php if(get_user_role() != 'customer') : ?>
+                            <?php if($mysavingwallet->get_user_role() != 'customer') : ?>
                                 <a class="button topup"> Topup </a>
                                 <h4> Topup history </h4>
-                                <?php 
-                                echo $mysavingwallet->topup();
-                                require_once locate_template( 'inc/templates/topup.php' ); 
-                                ?>
+                                <?php echo do_shortcode('[topup]'); ?>
+                                <h4> Cashback history </h4>
+                                <?php echo do_shortcode('[cashbacks]'); ?>
+                                <?php require_once locate_template( 'inc/templates/topup.php' ); ?>
 
                             <?php endif; ?>
-                            <?php if(get_user_role() == 'customer'): ?>
+                            <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
                                 <?php if( $mysavingwallet->wallet_balance() >= $mysavingwallet->minwithdraw ) : ?>
                                     <p class="message"></p>
                                     <form id="withdraw">
@@ -367,7 +367,10 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <a class="button withdraw"> Withdraw </a>
                                 <?php endif; ?>
                             <br/>
-                            <?php echo $mysavingwallet->withdrawls(); ?>
+                            <h4> Cashback history </h4>
+                            <?php echo do_shortcode('[cashbacks]'); ?>
+                            <h4> Withdraw history </h4>
+                            <?php echo do_shortcode('[withdrawls]'); ?>
                             <br/>
                             <div class="password_change">
                                  <?php if(is_array($banks)) : foreach ($banks as $key => $bank) : ?>
@@ -621,7 +624,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <button type="submit" class="button">Save Changes</button>
                             </form>
                         </div><!-- /settings -->
-                        <?php if(get_user_role() == 'business'): ?>
+                        <?php if($mysavingwallet->get_user_role() == 'business'): ?>
                         <div id="stats">
                             <?php echo do_shortcode('[stats_dashboard]'); ?>
                         </div> <!-- stats -->

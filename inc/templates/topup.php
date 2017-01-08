@@ -52,7 +52,16 @@
                     <label class="input">
                         <i class="icon_append fa fa-credit-card"></i>
                         <input type="text" name="cvv" placeholder="CVV">
-                        <p class="cvv_help">3 or 4 digits usually found on the signature strip</p>
+                        <b class="tooltip tooltip-bottom-right">3 or 4 digits usually found on the signature strip</b>
+                    </label>
+                </section>
+            </dd>
+            <dd>
+                <section>
+                    <label for="topup-amount" class="input">
+                        <i class="icon_append fa fa-money"></i>
+                        <input name="topup_amount" type="text" placeholder="Topup amount">
+                        <b class="tooltip tooltip-bottom-right">Enter the amount you want to topup</b>
                     </label>
                 </section>
             </dd>

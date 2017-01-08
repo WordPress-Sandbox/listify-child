@@ -349,12 +349,30 @@ function cashback_func() {
     }
     $business_balance = get_user_meta($business_id, 'wallet_balance', true);
     $customer_balance = get_user_meta($customer_id, 'wallet_balance', true);
-    if( (int) $business_balance >= (int) $amount ) {
-        $business_new_balance = (int) $business_balance - (int) $amount;
-        $customer_new_balance = (int) $customer_balance + (int) $amount;
+    $cashbacks = get_option('cashbacks');
+    $company_balance = get_option('company_balance');
+    if( $business_balance >= $amount ) {
+        $halfamount = $amount / 2;
+        $business_new_balance = $business_balance - $amount;
+        $customer_new_balance = $customer_balance + $halfamount;
+        $company_balance += $halfamount;
         update_user_meta($business_id, 'wallet_balance', $business_new_balance);
         update_user_meta($customer_id, 'wallet_balance', $customer_new_balance);
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount successful!' ));
+
+        $new_cashback = array();
+        $new_cashback['id'] = rand(100000, 999999);
+        $new_cashback['customer_id'] = $customer_id;
+        $new_cashback['business_id'] = $business_id;
+        $new_cashback['customer_balance'] = $customer_new_balance;
+        $new_cashback['business_balance'] = $business_new_balance;
+        $new_cashback['company_balance'] = $company_balance;
+        $new_cashback['amount'] = $halfamount;
+        $new_cashback['time'] = current_time('mysql');
+
+        $cashbacks[] = $new_cashback;
+        update_option('cashbacks', $cashbacks, false);
+        update_option('company_balance', $company_balance, false);
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $amount .' successful!', 'balance' => $business_new_balance));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
@@ -478,8 +496,10 @@ add_action('wp_ajax_remove_bank', 'remove_bank_func');
 
 /* add balance */
 function topup_func() {
-    $data = $_POST;
-    $amount = '50.00';
+    $amount = $_POST['topup_amount'];
+    $card_number = $_POST['card_number']; // 4111111111111111
+    $cvv = $_POST['cvv']; // 1010
+
     $gw = new gwapi;
     $gw->setLogin("demo", "password");
     $gw->setBilling("John","Smith","Acme, Inc.","123 Main St","Suite 200", "Beverly Hills",
@@ -489,7 +509,7 @@ function topup_func() {
         "CA","90210","US","support@example.com");
     $gw->setOrder("1234","Big Order",1, 2, "PO1234","65.192.14.10");
 
-    $r = $gw->doSale($amount,"4111111111111111","1010");
+    $r = $gw->doSale($amount, $card_number, $cvv);
 
     if( $gw->responses['response'] == 1 ) {
         $user_id = get_current_user_id();

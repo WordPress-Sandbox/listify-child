@@ -886,23 +886,20 @@ form#withdraw {
 }
 #topup .form-body .dl-horizontal dd {
   margin-left: 0;
+  margin-bottom: 10px;
 }
 #topup .form-body .proceed-btn {
     padding: 10px 25px;
     width: 100%;
 }
-.form_inline  {
+#topup .form-body .dl-horizontal .form_inline  {
     display: flex !important;
     box-sizing: border-box;
 }
-.form_inline select {
-    margin: 1px !important;
+#topup .form-body .dl-horizontal .form_inline .select {
+    width: 50%;
 }
-.cvv_help {
-    padding: 10px 0;
-    color: #717a8f;
-    margin-bottom: 0;
-}
+
 /* Settings Tab */
 .user_profile .user_settings {
 

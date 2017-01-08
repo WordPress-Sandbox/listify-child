@@ -3,8 +3,7 @@
 Template name: Cashback
 */
 get_header();
-if (!isset($_GET['customer_id'])) exit;
-
+if (!isset($_GET['customer_id']) || get_userdata( $_GET['customer_id'] ) == false ) exit;
 $mysavingwallet = new Mysavingwallet;
 ?>
 
@@ -39,13 +38,15 @@ $mysavingwallet = new Mysavingwallet;
 		          	</form><!-- /form -->
 		        </div><!-- / login -->
 	   		<?php else : ?>
-	   			<?php if(get_user_role() == 'business') : ?>
+	   			<?php if($mysavingwallet->get_user_role() == 'business') : ?>
 	   				<div class="row">
 	   					<div class="col-md-6">
-	   						<p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
+	   						<p> Your current balance is: <strong><span class="balance"><?php echo $mysavingwallet->wallet_balance(); ?></span></strong></p>
+	   						<p> You are giving <strong>5%</strong> cashback</p>
 				   			<div class="cashback">
 				   				<p class="cashback_message"></p>
-				   				<input type="number" name="cashback_amount" id="cashback_amount">
+				   				<input type="number" name="cashback_input">
+				   				<input type="number" name="cashback_amount" id="cashback_amount" disabled>
 				   				<input type="hidden" id="customer_id" value="<?php echo $_GET['customer_id']; ?>">
 				   				<button class="button button-block login_btn login" id="cashback_btn">Give cashback</button>
 				   			</div>
@@ -57,7 +58,8 @@ $mysavingwallet = new Mysavingwallet;
 	   							<?php echo get_avatar($_GET['customer_id']); ?>
 	   							<ul>
 		   							<li>Customer Email: <?php echo $user->user_email; ?></li>
-				            		<li>Customer name: <?php echo $user->display_name; ?></li>
+				            		<li>Customer name: <?php echo $user->first_name; ?> <?php echo $user->last_name; ?></li>
+				            		<li>Customer ID: <?php echo $_GET['customer_id']; ?></li>
 			            		</ul>
 	   						</div>
 	   					</div>

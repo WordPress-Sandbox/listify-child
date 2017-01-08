@@ -59,14 +59,6 @@ function get_template_page_link($t) {
         return get_permalink( $pages->post->ID );
 }
 
-/* get user role by ID */
-function get_user_role() {
-    global $user_ID;
-    $user = new WP_User($user_ID);
-    $role = array_shift($user -> roles);
-    return $role;
-}
-
 /* remove box shadow padding on myaccount page */
 function add_css_if_has_shortcode( $content ) { 
     if (is_page() && has_shortcode($content, 'woocommerce_my_account')) {
@@ -124,6 +116,7 @@ add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 
 
 require_once locate_template('inc/ajax.php');
+require_once locate_template('inc/shortcodes.php');
 if(is_admin()) {
     require_once locate_template('inc/admin/savingwallet_page.php');
 }

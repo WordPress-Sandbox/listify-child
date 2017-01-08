@@ -244,8 +244,6 @@ jQuery(function($){
 	   $("#pass, #confpass").on( 'keyup blur focus change', checkPasswordMatch);
 	});
 
-	
-
 	/* Customer registration */
 	$('form#register_customer').submit( function(event) {
 
@@ -399,16 +397,21 @@ jQuery(function($){
 
 	});	
 
+	/* cashback percentage */
+	$('input[name="cashback_input"]').on('change', function(){
+		var input = $(this).val();
+		var cashback = 5*input/100;
+		$('#cashback_amount').val(cashback);
+	});
+
 	$('#cashback_btn').click(function(e){
-
 		e.preventDefault();
-
 		var data = {
 			action: 'cashback', 
 			cashback_amount: $('#cashback_amount').val(),
 			customer_id: $('#customer_id').val(),
 		}
-
+		console.log(data);
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
@@ -417,9 +420,10 @@ jQuery(function($){
 			success: function(resp) {
 				console.log(resp);
 				if(resp.status == 'error') {
-					$('.cashback_message').css('color', 'red').html( resp.message );
+					$('.cashback_message').css('color', 'red').text( resp.message );
 				} else if (resp.status == 'success') {
-					$('.cashback_message').css('color', 'green').html( resp.message );
+					$('.cashback_message').css('color', 'green').text( resp.message );
+					$('span.balance').text(resp.balance);
 				}
 			},
 			error: function( req, status, err ) {
@@ -636,8 +640,6 @@ jQuery(function($){
 		$.each($(this).serializeArray(), function(i, field) {
 		    data[field.name] = field.value;
 		});
-
-		console.log(data);
 
 		$.ajax({
 			type: 'POST',

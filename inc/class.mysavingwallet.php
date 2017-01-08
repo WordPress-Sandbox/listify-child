@@ -93,6 +93,13 @@ class Mysavingwallet {
 	    return $int;
 	}
 
+	/* get user role by ID */
+	public function get_user_role() {
+	    $user = new WP_User($this->user_id);
+	    $role = array_shift($user -> roles);
+	    return $role;
+	}
+
 	public function getMetaValue($k) {
 		return get_user_meta($this->user_id, $k, true);
 	}
@@ -144,6 +151,40 @@ class Mysavingwallet {
 			$html .= '</table>';
 		} else {
 			$html = 'No topup found!';
+		}
+		return $html;
+	}	
+
+	public function cashbacks() {
+		$cashbacks = get_option('cashbacks');
+		$column = false;
+		if($this->get_user_role() == 'business') 
+		{
+			$column = 'business_id';
+		} else if ($this->get_user_role() == 'customer') 
+		{
+			$column = 'customer_id';
+		}
+		if($column) {
+			$cashbacks = array_filter($cashbacks, function($v) use ($column) { return $v[$column] == $this->user_id; });
+		}
+
+		if(is_array($cashbacks) && count($cashbacks) > 0 ) {
+			$cashbacks = array_reverse($cashbacks);
+			$html = '<table>';
+			$html .= '<tr><th>Cashback ID</th><th>Customer ID</th><th>Business ID</th><th> Amount </th><th>Time</th></tr>';
+			foreach ($cashbacks as $key => $cash) {
+				$html .= '<tr>';
+					$html .= '<td>' . $cash['id'] . '</td>';
+					$html .= '<td>' . $cash['customer_id'] . '</td>';
+					$html .= '<td>' . $cash['business_id'] . '</td>';
+					$html .= '<td>' . $cash['amount'] . '</td>';
+					$html .= '<td>' . $cash['time'] . '</td>';
+				$html .= '</tr>';
+			}
+			$html .= '</table>';
+		} else {
+			$html = 'No cashbacks found!';
 		}
 		return $html;
 	}	
