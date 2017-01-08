@@ -1067,24 +1067,58 @@ form#withdraw {
 
 
 
-/* cashback */
-.user_info_cashback {
-  border: 1px solid #ddd;
-  padding: 10px 15px;
+
+/* Cash Back Page */
+body.page-template-cashback .main-navigation {
+    display: none;
 }
-.user_info_cashback h4 {
-  margin: 0;
-  margin-bottom: 5px;
+.cashback_wrapper {
+    border: 1px solid #ddd;
+    padding: 20px 15px;
+    margin-bottom: 60px;
+}
+.cashback_wrapper p {
+    margin-bottom: 10px;
+}
+.padding-left-0 {
+  padding-left: 0;
+}
+.padding-right-0 {
+  padding-right: 0;
+}
+.cashback input {
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 11px 5px 11px 5px;
+}
+.cashback button#cashback_btn {
+    padding: 10px 15px;
 }
 
+.arrow_icon {
+    text-align: center;
+    font-size: 60px;
+    color: #f5f5f5;
+}
+.user_info_cashback {
+  border: 1px solid #ddd;
+  padding: 20px 15px;
+  overflow: hidden;
+}
 .user_info_cashback ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.user_info_cashback ul li {}
-
-
-
-
-
+.user_info_cashback h4 {
+  margin: 0 0 20px;
+}
+.user_info_cashback h5 {
+  margin: 0 0 10px;
+  line-height: 17px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.user_info_cashback img {
+    padding: 0 0 8px;
+}

@@ -40,27 +40,45 @@ $mysavingwallet = new Mysavingwallet;
 	   		<?php else : ?>
 	   			<?php if($mysavingwallet->get_user_role() == 'business') : ?>
 	   				<div class="row">
-	   					<div class="col-md-6">
-	   						<p> Your current balance is: <strong><span class="balance"><?php echo $mysavingwallet->wallet_balance(); ?></span></strong></p>
-	   						<p> You are giving <strong>5%</strong> cashback</p>
-				   			<div class="cashback">
-				   				<p class="cashback_message"></p>
-				   				<input type="number" name="cashback_input">
-				   				<input type="number" name="cashback_amount" id="cashback_amount" disabled>
-				   				<input type="hidden" id="customer_id" value="<?php echo $_GET['customer_id']; ?>">
-				   				<button class="button button-block login_btn login" id="cashback_btn">Give cashback</button>
-				   			</div>
+	   					<div class="col-md-4">
+	   						<div class="cashback_wrapper">
+	   							<p> Your current balance is: <strong><span class="balance"><?php echo $mysavingwallet->wallet_balance(); ?></span></strong></p>
+		   						<p> You are giving <strong>5%</strong> cashback</p>
+					   			<div class="cashback">
+					   				<p class="cashback_message"></p>
+					   				<div class="col-md-10 padding-left-0">
+					   					<input type="number" name="cashback_input" placeholder="Purchase amount">
+					   				</div>
+					   				<div class="col-md-2 padding-left-0 padding-right-0">
+					   					<input type="number" name="cashback_amount" id="cashback_amount" disabled>
+					   				</div>
+					   				<input type="hidden" id="customer_id" value="<?php echo $_GET['customer_id']; ?>">
+					   				<button class="button button-block login_btn login" id="cashback_btn">Give cashback</button>
+					   			</div>
+	   						</div><!-- /cashback_wrapper -->
 	   					</div>
-	   					<div class="col-md-6">
+
+	   					<div class="col-md-4">
+							<div class="arrow_icon">
+								<i class="fa fa-angle-double-right fa-3x"></i>
+							</div>
+						</div>
+
+	   					<div class="col-md-4">
 	   						<div class="user_info_cashback">
 	   							<h4> Your are giving cashback to </h4>
-	   							<?php $user = get_userdata($_GET['customer_id']); ?>
-	   							<?php echo get_avatar($_GET['customer_id']); ?>
-	   							<ul>
-		   							<li>Customer Email: <?php echo $user->user_email; ?></li>
-				            		<li>Customer name: <?php echo $user->first_name; ?> <?php echo $user->last_name; ?></li>
-				            		<li>Customer ID: <?php echo $_GET['customer_id']; ?></li>
-			            		</ul>
+	   							<div class="col-md-4 padding-left-0">
+	   								<?php $user = get_userdata($_GET['customer_id']); ?>
+	   								<?php echo get_avatar($_GET['customer_id']); ?>
+	   							</div>
+	   							<div class="col-md-8 padding-left-0 padding-right-0">
+	   								<h5>Customar Info</h5>
+		   							<ul>
+			   							<li>Email: <?php echo $user->user_email; ?></li>
+					            		<li>Name: <?php echo $user->first_name; ?> <?php echo $user->last_name; ?></li>
+					            		<li>User ID: <?php echo $_GET['customer_id']; ?></li>
+				            		</ul>
+	   							</div>
 	   						</div>
 	   					</div>
 	   				</div>
