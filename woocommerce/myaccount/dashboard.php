@@ -342,11 +342,11 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
                                 <br/>
                             <?php if(get_user_role() != 'customer') : ?>
-                                <a class="button add_balance"> Add balance</a>
-                                <h4> Transaction history </h4>
+                                <a class="button topup"> Topup </a>
+                                <h4> Topup history </h4>
                                 <?php 
-                                echo $mysavingwallet->transactions();
-                                require_once locate_template( 'inc/templates/add-balance.php' ); 
+                                echo $mysavingwallet->topup();
+                                require_once locate_template( 'inc/templates/topup.php' ); 
                                 ?>
 
                             <?php endif; ?>

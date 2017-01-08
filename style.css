@@ -855,7 +855,7 @@ form#withdraw {
     padding: 10px 0;
     margin: 0;
 }
-#add_balance .show_message {
+#topup .show_message {
     margin: 0;
     padding: 10px 0;
     text-align: left;
@@ -869,25 +869,25 @@ form#withdraw {
     background-color: #fff;
     box-shadow: 1px 2px 3px 0 rgba(0,0,0,.10);
 }
-#add_balance .form-header {
+#topup .form-header {
     height: 60px;
     padding: 20px 30px 0;
     border-bottom: 1px solid #e1e8ee;
 }
-#add_balance .form-header .title {
+#topup .form-header .title {
     font-size: 18px;
     margin: 0;
     color: #5e6977;
 }
  
-#add_balance .form-body {
+#topup .form-body {
     height: 340px;
     padding: 30px 30px 20px;
 }
-#add_balance .form-body .dl-horizontal dd {
+#topup .form-body .dl-horizontal dd {
   margin-left: 0;
 }
-#add_balance .form-body .proceed-btn {
+#topup .form-body .proceed-btn {
     padding: 10px 25px;
     width: 100%;
 }

@@ -1,7 +1,7 @@
-<div class="remodal creditcard_popup user_profile" data-remodal-id="add_balance" data-remodal-options="hashTracking: false">
+<div class="remodal creditcard_popup user_profile" data-remodal-id="topup" data-remodal-options="hashTracking: false">
 
 <button data-remodal-action="close" class="remodal-close"></button>
-<form id="add_balance" class="credit-card password_change">
+<form id="topup" class="credit-card password_change">
     <div class="form-header">
         <h4 class="title">Credit Card Details</h4>
     </div>

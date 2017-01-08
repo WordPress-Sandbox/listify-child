@@ -622,21 +622,20 @@ jQuery(function($){
 	});
 
 	/* add balance */
-	$('.add_balance').click(function(){
-		savingwallet.openModal('add_balance');
+	$('.topup').click(function(){
+		savingwallet.openModal('topup');
 	});
 
-	$('#add_balance').submit(function(e){
+	$('#topup').submit(function(e){
 		e.preventDefault();
 
 		var data = {
-			action: 'add_balance',
-			dd: $(this).serializeArray()
+			action: 'topup',
 		};
 
-		// $.each($(this).serializeArray(), function(i, field) {
-		//     data[field.name] = field.value;
-		// });
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
 
 		console.log(data);
 

@@ -477,7 +477,7 @@ function remove_bank_func() {
 add_action('wp_ajax_remove_bank', 'remove_bank_func');
 
 /* add balance */
-function add_balance_func() {
+function topup_func() {
     $data = $_POST;
     $amount = '50.00';
     $gw = new gwapi;
@@ -496,21 +496,19 @@ function add_balance_func() {
         $prev_balance = get_user_meta($user_id, 'wallet_balance', true);
         $new_balance = (int) $prev_balance + (int) $amount;
         update_user_meta($user_id, 'wallet_balance', $new_balance);
-        // delete_user_meta($user_id, 'wallet_balance');
 
-        $new_transaction = array();
-        $new_transaction['prev_balance'] = $prev_balance;
-        $new_transaction['new_balance'] = $new_balance;
-        $new_transaction['time'] = current_time('mysql');
-        $new_transaction['trans_amount'] = $amount;
-        $new_transaction['trans_id'] = $gw->responses['transactionid'];
-        $new_transaction['response'] = $gw->responses['response'];
-        $new_transaction['responsetext'] = $gw->responses['responsetext'];
+        $new_topup = array();
+        $new_topup['prev_balance'] = $prev_balance;
+        $new_topup['new_balance'] = $new_balance;
+        $new_topup['time'] = current_time('mysql');
+        $new_topup['trans_amount'] = $amount;
+        $new_topup['trans_id'] = $gw->responses['transactionid'];
+        $new_topup['response'] = $gw->responses['response'];
+        $new_topup['responsetext'] = $gw->responses['responsetext'];
 
-        $transactions = get_user_meta($user_id, 'transactions', true);
-        $transactions[] = $new_transaction;
-        update_user_meta($user_id, 'transactions', $transactions);
-        // delete_user_meta($user_id, 'transactions');
+        $topup = get_user_meta($user_id, 'topup', true);
+        $topup[] = $new_topup;
+        update_user_meta($user_id, 'topup', $topup);
     }
 
 
@@ -524,7 +522,7 @@ function add_balance_func() {
     die();
 }
 
-add_action('wp_ajax_add_balance', 'add_balance_func');
+add_action('wp_ajax_topup', 'topup_func');
 
 /* verify bank account */
 function verify_unverify_customer_account_func() {

@@ -126,12 +126,12 @@ class Mysavingwallet {
 		return $balance ? $balance : '0.00';
 	}
 
-	public function transactions() {
-		$transactions = $this->getMetaValue('transactions');
+	public function topup() {
+		$transactions = $this->getMetaValue('topup');
 		if(is_array($transactions)) {
 			$transactions = array_reverse($transactions);
 			$html = '<table>';
-			$html .= '<tr><th>Transaction ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
+			$html .= '<tr><th>Topup ID</th><th>Amount</th><th>Previous Balance</th><th>New Balance</th><th>Time</th></tr>';
 			foreach ($transactions as $key => $trans) {
 				$html .= '<tr>';
 					$html .= '<td>' . $trans['trans_id'] . '</td>';
@@ -143,7 +143,7 @@ class Mysavingwallet {
 			}
 			$html .= '</table>';
 		} else {
-			$html = 'No transaction found!';
+			$html = 'No topup found!';
 		}
 		return $html;
 	}	
