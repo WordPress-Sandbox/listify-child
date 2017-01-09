@@ -374,7 +374,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <br/>
                             <div class="password_change">
                                  <?php if(is_array($banks)) : foreach ($banks as $key => $bank) : ?>
-                                    <dl class="dl-horizontal banklist">
+                                    <dl class="dl-horizontal banklist" id="banklist<?php echo $key; ?>">
                                         <dd class="banklist_title">
                                             <section>
                                                 <label class="input">

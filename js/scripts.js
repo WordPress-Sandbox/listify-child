@@ -611,7 +611,8 @@ jQuery(function($){
 					console.log(resp);
 					if( resp.status == 'success') {
 							$('.show_message').css('color', 'green').html(resp.responsetext);
-							// window.setTimeout(location.reload(), 5000);
+							$('#banklist'+data.bankid).next().remove();
+							$('#banklist'+data.bankid).remove();
 					} else if (resp.status == 'error') {
 						$('.show_message').css('color', 'red').html(resp.responsetext);
 					}
