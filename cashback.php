@@ -4,7 +4,7 @@ Template name: Cashback
 */
 get_header();
 if (!isset($_GET['customer_id']) || get_userdata( $_GET['customer_id'] ) == false ) exit;
-$mysavingwallet = new Mysavingwallet;
+$msw = new Mysavingwallet;
 ?>
 
 
@@ -38,12 +38,12 @@ $mysavingwallet = new Mysavingwallet;
 		          	</form><!-- /form -->
 		        </div><!-- / login -->
 	   		<?php else : ?>
-	   			<?php if($mysavingwallet->get_user_role() == 'business') : ?>
+	   			<?php if($msw->get_user_role() == 'business') : ?>
 	   				<div class="row">
 	   					<div class="col-md-5">
 	   						<div class="cashback_wrapper">
-	   							<p> Your current balance is: <strong><span class="balance"><?php echo $mysavingwallet->wallet_balance(); ?></span></strong></p>
-		   						<p> You are giving <strong><?php echo $mysavingwallet->getMetaValue('cashback_percentage'); ?>%</strong> cashback</p>
+	   							<p> Your current balance is: <strong><span class="balance"><?php echo $msw->wallet_balance(); ?></span></strong></p>
+		   						<p> You are giving <strong><?php echo $msw->getMetaValue('cashback_percentage'); ?>%</strong> cashback</p>
 					   			<div class="cashback">
 					   				<p class="cashback_message"></p>
 					   				<div class="col-md-9 padding-left-0">
@@ -77,6 +77,7 @@ $mysavingwallet = new Mysavingwallet;
 	   								<h5><?php echo $user->first_name; ?> <?php echo $user->last_name; ?></h5>
 		   							<ul>
 			   							<li>Email: <?php echo $user->user_email; ?></li>
+			   							<li>Phone: <?php echo $msw->localize_us_number($user->billing_phone); ?></li>
 					            		<li>User ID: <?php echo $_GET['customer_id']; ?></li>
 				            		</ul>
 	   							</div>
