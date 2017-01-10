@@ -12,8 +12,9 @@ class Mysavingwallet {
 	private $sid;
 	private $token;
 	private $from_phone;
+	private $user_id;
 	public $minwithdraw;
-	public $user_id; 
+	public $currency_symbol;
 
 	public function __construct() {
 
@@ -22,6 +23,7 @@ class Mysavingwallet {
 		$this->from_phone 	= '561 800-0461';
 		$this->minwithdraw 	= 5;
 		$this->user_id = get_current_user_id();
+		$this->currency_symbol = '$';
 
 	}
 
@@ -130,7 +132,7 @@ class Mysavingwallet {
 
 	public function wallet_balance() {
 		$balance = $this->getMetaValue('wallet_balance');
-		return $balance ? $balance : '0.00';
+		return $balance ? $this->currency_symbol . $balance : $this->currency_symbol . '0.00';
 	}
 
 	public function topup() {
@@ -142,9 +144,9 @@ class Mysavingwallet {
 			foreach ($transactions as $key => $trans) {
 				$html .= '<tr>';
 					$html .= '<td>' . $trans['trans_id'] . '</td>';
-					$html .= '<td>' . $trans['trans_amount'] . '</td>';
-					$html .= '<td>' . $trans['prev_balance'] . '</td>';
-					$html .= '<td>' . $trans['new_balance'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $trans['trans_amount'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $trans['prev_balance'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $trans['new_balance'] . '</td>';
 					$html .= '<td>' . $trans['time'] . '</td>';
 				$html .= '</tr>';
 			}
@@ -178,7 +180,7 @@ class Mysavingwallet {
 					$html .= '<td>' . $cash['id'] . '</td>';
 					$html .= '<td>' . $cash['customer_id'] . '</td>';
 					$html .= '<td>' . $cash['business_id'] . '</td>';
-					$html .= '<td>' . $cash['amount'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $cash['amount'] . '</td>';
 					$html .= '<td>' . $cash['time'] . '</td>';
 				$html .= '</tr>';
 			}
@@ -198,9 +200,9 @@ class Mysavingwallet {
 			foreach ($withdrawls as $key => $with) {
 				$html .= '<tr>';
 					$html .= '<td>' . $with['id'] . '</td>';
-					$html .= '<td>' . $with['amount'] . '</td>';
-					$html .= '<td>' . $with['prev_balance'] . '</td>';
-					$html .= '<td>' . $with['new_balance'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $with['amount'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $with['prev_balance'] . '</td>';
+					$html .= '<td>' . $this->currency_symbol . $with['new_balance'] . '</td>';
 					$html .= '<td>' . $with['time'] . '</td>';
 					$html .= '<td>' . $with['bank'] . '</td>';
 					$html .= '<td>' . $with['status'] . '</td>';

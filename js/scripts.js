@@ -89,17 +89,7 @@ jQuery(function($){
 		$(this).removeClass('error-msg');
 	});
 
-	/* profile page */
-    $(".edit_profile").click(function(){
-	    if ($('.input-text').attr('disabled')) {
-	        $('.input-text').removeAttr('disabled').css("border-color", "#e5e5e5");
-	    } else {
-	        $('.input-text').attr('disabled', 'disabled').css("border-color", "transparent");
-	    }
-    });
-
     /* toggle QR code */
-
     $(".user_profile_img").toggle(
         function(){$(".qr_code").css({"z-index": "1"});},
         function(){$(".qr_code").css({"z-index": "-1"});}
@@ -400,15 +390,16 @@ jQuery(function($){
 	/* cashback percentage */
 	$('input[name="cashback_input"]').on('change', function(){
 		var input = $(this).val();
-		var cashback = 5*input/100;
-		$('#cashback_amount').val(cashback);
+		var cashback = local.cashback_percentage*input/100;
+		$('#cashback_amount').val(local.currency_symbol + cashback);
 	});
 
 	$('#cashback_btn').click(function(e){
 		e.preventDefault();
+		var cashback_amount = Number($('#cashback_amount').val().replace(/[^0-9\.]+/g,""));
 		var data = {
 			action: 'cashback', 
-			cashback_amount: $('#cashback_amount').val(),
+			cashback_amount: cashback_amount,
 			customer_id: $('#customer_id').val(),
 		}
 		console.log(data);
@@ -423,7 +414,7 @@ jQuery(function($){
 					$('.cashback_message').css('color', 'red').text( resp.message );
 				} else if (resp.status == 'success') {
 					$('.cashback_message').css('color', 'green').text( resp.message );
-					$('span.balance').text(resp.balance);
+					$('span.balance').text(local.currency_symbol + resp.balance);
 				}
 			},
 			error: function( req, status, err ) {
@@ -463,27 +454,30 @@ jQuery(function($){
 
 	});	
 
-	$('#save_social_details').submit(function(e){
+	$('#user_settings').submit(function(e){
 		e.preventDefault();
 
-		var data = {
-			action: 'save_social',
-			dd: $(this).serializeArray()
-		}
+		var data = {};
 
-		console.log(data['dd']);
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
+		console.log(data);
 
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
-			data: data,
+			data: { action: 'user_settings', dd: data },
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
-				$('.woocommerce-message').slideDown('slow').text( 'Social Media Successfully updated!' );
+				if(resp.status == 'success') {
+					$('.message').css('color', 'green').text( resp.responsetext );
+				} else {
+					$('.message').css('color', 'red').text( resp.responsetext );
+				}
 			},
 			error: function( req, status, err ) {
-				$('.message').html( 'something went wrong', status, err );
+				$('.message').slideDown('slow').text( 'something went wrong', status, err );
 			}
 		});
 

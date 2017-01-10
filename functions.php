@@ -2,8 +2,11 @@
 /**
  * Listify child theme.
  */
-function listify_child_styles() {
+require_once locate_template('inc/class.mysavingwallet.php');
+$GLOBALS['msw'] = new Mysavingwallet;
 
+function listify_child_styles() {
+    global $msw;
 	/* CSS */
     wp_enqueue_style('font_awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
 	wp_enqueue_style( 'inttelinput', get_stylesheet_directory_uri() . '/assets/inttelinput/css/intlTelInput.css');
@@ -24,6 +27,8 @@ function listify_child_styles() {
     $data = array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
         'upload_url' => admin_url('async-upload.php'),
+        'currency_symbol' => $msw->currency_symbol,
+        'cashback_percentage' => $msw->getMetaValue('cashback_percentage'),
         'nonce'   =>  wp_create_nonce( "listify_none" ),
     	'themepath' => get_stylesheet_directory_uri()
     );
@@ -117,6 +122,7 @@ add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 
 require_once locate_template('inc/ajax.php');
 require_once locate_template('inc/shortcodes.php');
+require_once locate_template('inc/hook-filters.php');
 if(is_admin()) {
     require_once locate_template('inc/admin/savingwallet_page.php');
 }
@@ -133,7 +139,8 @@ add_action('admin_init', 'su_allow_subscriber_to_uploads');
 
 /* modify wp job manager shortcodes */
 function savingwallet_submit_job_form_func() {
-    if(get_user_role() == 'customer') {
+    global $msw;
+    if($msw->get_user_role() == 'customer') {
         echo '<p>Only businesses can add listing</p>';
     } else {
         echo do_shortcode('[submit_job_form]');

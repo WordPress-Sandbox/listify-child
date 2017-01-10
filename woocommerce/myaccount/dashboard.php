@@ -162,8 +162,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <li><a href="#profile">Edit Profile</a></li>
                         <li><a href="#passwordTab">Change Password</a></li>
                         <li><a href="#payment">Payment</a></li>
-                        <li><a href="#social">Social Media</a></li>
-                        <li><a href="#settings">Notification</a></li>
+                        <li><a href="#settings">Settings</a></li>
                         <?php if($mysavingwallet->get_user_role() == 'business') : ?>
                         <li><a href="#stats">Stats</a></li>
                         <?php endif; ?>
@@ -277,6 +276,57 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 	                                <hr>
 	                            </dl>
 
+                                <!-- social media -->
+                                <h3> Social Media </h3>
+                                <div class="social_change password_change">
+                                <dl class="dl-horizontal">
+                                    <dt><?php esc_html_e( 'Facebook', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label for="facebook" class="input">
+                                                <i class="icon_append fa fa-facebook"></i>
+                                                <input type="text" name="facebook" value="<?php echo esc_attr( $facebook ); ?>">
+                                                <b class="tooltip tooltip-bottom-right">Needed to enter the facebook</b>
+                                            </label>
+                                        </section>
+                                    </dd>
+                                    <hr>
+                                    <dt><?php esc_html_e( 'Twitter', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label for="twitter" class="input">
+                                                <i class="icon_append fa fa-twitter"></i>
+                                                <input type="text" name="twitter" value="<?php echo esc_attr( $user->twitter ); ?>">
+                                                <b class="tooltip tooltip-bottom-right">Needed to enter the twitter</b>
+                                            </label>
+                                        </section>
+                                    </dd>
+                                    <hr>
+                                    <dt><?php esc_html_e( 'Linkedin', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label for="linkedin" class="input">
+                                                <i class="icon_append fa fa-linkedin"></i>
+                                                <input type="text" name="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>">
+                                                <b class="tooltip tooltip-bottom-right">Needed to enter the linkedin</b>
+                                            </label>
+                                        </section>
+                                    </dd>
+                                    <hr>
+                                    <dt><?php esc_html_e( 'Instagram', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label for="instagram" class="input">
+                                                <i class="icon_append fa fa-instagram"></i>
+                                                <input type="text" name="instagram" value="<?php echo esc_attr( $user->instagram ); ?>">
+                                                <b class="tooltip tooltip-bottom-right">Needed to enter the instagram</b>
+                                            </label>
+                                        </section>
+                                    </dd>
+                                    <hr>  
+                                </dl>
+                                </div>
+
 	                            <button type="submit" name="basic_info" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
 
                             </form>
@@ -341,6 +391,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <p class="show_message"></p>
                             <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
                                 <br/>
+
                             <?php if($mysavingwallet->get_user_role() != 'customer') : ?>
                                 <a class="button topup"> Topup </a>
                                 <h4> Topup history </h4>
@@ -348,8 +399,8 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <h4> Cashback history </h4>
                                 <?php echo do_shortcode('[cashbacks]'); ?>
                                 <?php require_once locate_template( 'inc/templates/topup.php' ); ?>
-
                             <?php endif; ?>
+
                             <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
                                 <?php if( $mysavingwallet->wallet_balance() >= $mysavingwallet->minwithdraw ) : ?>
                                     <p class="message"></p>
@@ -398,12 +449,12 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     </dl>
                                     <form>
                                         <dl class="dl-horizontal">
-                                            <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                            <dt><?php esc_html_e( 'Bank Name', 'listify_child' ); ?></dt>
                                             <dd>
                                                 <section>
                                                     <label for="bank_name" class="input">
                                                         <i class="icon_append fa fa-university"></i>
-                                                        <input type="text" name="bank_name" id="bank_name" value="<?php echo $bank['bank_name']; ?>">
+                                                        <input type="text" name="bank_name" value="<?php echo $bank['bank_name']; ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Enter Bank name</b>
                                                     </label>
                                                 </section>
@@ -414,7 +465,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="bank_routing" class="input">
                                                         <i class="icon_append fa fa-wifi"></i>
-                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $mysavingwallet->ccMasking($bank['bank_routing']); ?>">
+                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $mysavingwallet->ccMasking($bank['bank_routing']); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Routing Number</b>
                                                     </label>
                                                 </section>
@@ -425,7 +476,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="account_number" class="input">
                                                         <i class="icon_append fa fa-credit-card-alt"></i>
-                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $mysavingwallet->ccMasking($bank['account_number']); ?>">
+                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $mysavingwallet->ccMasking($bank['account_number']); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Account Number</b>
                                                     </label>
                                                 </section>
@@ -435,7 +486,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <dd>
                                                 <section>
                                                     <label class="input">
-                                                        <select name="account_type">
+                                                        <select name="account_type" disabled>
                                                             <option value="checking" <?php if($bank['account_type'] == "checking") echo "selected"; ?>>Checking</option>
                                                             <option value="savings" <?php if($bank['account_type'] == "savings") echo "selected"; ?>>Savings</option>
                                                         </select>
@@ -551,76 +602,28 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             
                         </div><!-- /payment -->
 
-                        <div id="social" class="user_profile_edit fade">
-                        	<h2>Manage your Social Media.</h2>
-							<hr>
-                            <form id="save_social_details" action="" class="social_change password_change" method="post">
-							
-							<dl class="dl-horizontal">
-                                <dt><?php esc_html_e( 'Facebook', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="facebook" class="input">
-                                            <i class="icon_append fa fa-facebook"></i>
-                                            <input type="text" name="facebook" value="<?php echo esc_attr( $facebook ); ?>">
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the facebook</b>
-                                        </label>
-                                    </section>
-                                </dd>
-								<hr>
-                                <dt><?php esc_html_e( 'Twitter', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="twitter" class="input">
-                                            <i class="icon_append fa fa-twitter"></i>
-                                            <input type="text" name="twitter" value="<?php echo esc_attr( $user->twitter ); ?>">
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the twitter</b>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Linkedin', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="linkedin" class="input">
-                                            <i class="icon_append fa fa-linkedin"></i>
-                                            <input type="text" name="linkedin" value="<?php echo esc_attr( $user->linkedin ); ?>">
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the linkedin</b>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>
-                                <dt><?php esc_html_e( 'Instagram', 'listify_child' ); ?></dt>
-                                <dd>
-                                    <section>
-                                        <label for="instagram" class="input">
-                                            <i class="icon_append fa fa-instagram"></i>
-                                            <input type="text" name="instagram" value="<?php echo esc_attr( $user->instagram ); ?>">
-                                            <b class="tooltip tooltip-bottom-right">Needed to enter the instagram</b>
-                                        </label>
-                                    </section>
-                                </dd>
-                                <hr>  
-                            </dl>
-                           	<button type="submit" name="save_social_details" class="save_social_details button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
-                            </form>
-                        </div><!-- /social -->
-
                         <div id="settings" class="user_profile_edit fade">
-                            <h2>Manage your Notifications.</h2>
-                            <br>
-                            <form action="#" method="post" class="user_settings">
-                                <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Email notification</label>
-                                <hr>
-                                <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Send me email notification when a user comments on my blog</label>
-                                <hr>
-                                <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Send me email notification for the latest update</label>
-                                <hr>
-                                <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Send me email notification when a user sends me message</label>
-                                <hr>
-                                <label class="toggle"><input type="checkbox" checked="" name="checkbox-toggle-1"><i></i>Receive our monthly newsletter</label>
-                                <hr>    
-                                <button type="button" class="button button_u">Reset</button>
+                            <h2>Manage your settings</h2>
+                            <p class="message"></p>
+                            <form id="user_settings" action="#" method="post" class="user_settings password_change">
+
+                                <dl class="dl-horizontal">
+                                    <?php if($mysavingwallet->get_user_role() == 'business'): ?>
+                                    <dt><?php esc_html_e( 'Cashback percentage %', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label class="input">
+                                                <input type="number" name="cashback_percentage" placeholder="Cashback percentange" value="<?php echo esc_attr( $mysavingwallet->getMetaValue('cashback_percentage') ); ?>">
+                                                <b class="tooltip tooltip-bottom-right">Min 5, Max 35</b>
+                                            </label>
+                                        </section>
+                                    </dd> 
+                                    <?php endif; ?>
+                                </dl>
+                                <br>
+
+                                <label class="toggle"><input type="checkbox" checked="" name="email_note"><i></i>Email notification</label>
+                                <hr>  
                                 <button type="submit" class="button">Save Changes</button>
                             </form>
                         </div><!-- /settings -->

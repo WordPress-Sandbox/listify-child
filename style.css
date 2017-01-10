@@ -1087,12 +1087,27 @@ body.page-template-cashback .main-navigation {
   padding-right: 0;
 }
 .cashback input {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     width: 100%;
     padding: 11px 5px 11px 5px;
+    position: relative;
 }
 .cashback button#cashback_btn {
     padding: 10px 15px;
+}
+span.cashback_percentage {
+    position: absolute;
+    z-index: 5;
+    height: 40px;
+    width: 40px;
+    background-color: #ffb400;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    top: 15px;
+    left: 20px;
+    color: #FFF;
+    font-size: 16px;
 }
 
 .arrow_icon {

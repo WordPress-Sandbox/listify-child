@@ -352,10 +352,10 @@ function cashback_func() {
     $cashbacks = get_option('cashbacks');
     $company_balance = get_option('company_balance');
     if( $business_balance >= $amount ) {
-        $halfamount = $amount / 2;
-        $business_new_balance = $business_balance - $amount;
-        $customer_new_balance = $customer_balance + $halfamount;
-        $company_balance += $halfamount;
+        $halfamount = bcdiv($amount, '2', 4);
+        $business_new_balance = bcsub($business_balance, $amount, 4);
+        $customer_new_balance = bcadd($customer_balance, $halfamount, 4);
+        $company_balance = bcadd($business_balance, $halfamount, 4);
         update_user_meta($business_id, 'wallet_balance', $business_new_balance);
         update_user_meta($customer_id, 'wallet_balance', $customer_new_balance);
 
@@ -372,7 +372,7 @@ function cashback_func() {
         $cashbacks[] = $new_cashback;
         update_option('cashbacks', $cashbacks, false);
         update_option('company_balance', $company_balance, false);
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $amount .' successful!', 'balance' => $business_new_balance));
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $mysavingwallet->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
@@ -402,22 +402,36 @@ function save_basic_func(){
 add_action('wp_ajax_save_basic', 'save_basic_func');
 
 
-function save_social_func(){
-    $dd = $_POST['dd'];
-    $user_id = get_current_user_id();
+function user_settings_func(){
+    $mysavingwallet = new Mysavingwallet;
+    $data = array_filter($_POST['dd']);
 
-    foreach ($dd as $key => $value) {
-        if(!empty($value['value'])) {
-            $es_value = mysql_escape_string($value['value']);
-            update_user_meta($user_id, $value['name'], $es_value);
+    $error = array();
+    $status = 'success';
+    $message = array('Settings saved!');
+
+    foreach ($data as $k => $v ) {
+        if($k === 'cashback_percentage') {
+            if(!intval($v) || $v < 5 || $v > 35 ) {
+                $error[] = 'Input percentage needs to be a number between 5 to 35';
+            } else {
+                $mysavingwallet->updateUserMeta($k, $v);
+            }
+        } else {
+            $mysavingwallet->updateUserMeta($k, $v);
         }
     }
 
-    echo json_encode('success');
+    if(count($error) >= 1 ) {
+        $status = 'error';
+        $message = $error;
+    }
+
+    echo json_encode( array('status' => $status, 'responsetext' => $message[0]));
     die();
 }
 
-add_action('wp_ajax_save_social', 'save_social_func');
+add_action('wp_ajax_user_settings', 'user_settings_func');
 
 /* save bank info */
 function save_bank_func(){
