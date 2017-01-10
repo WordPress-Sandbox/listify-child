@@ -295,7 +295,7 @@ function email_verify_func() {
     $user = new WP_User($user_id);
     $email_status = get_user_meta($user_id, 'email_status', true);
 
-    $sub = "msw email verification";
+    $sub = "MySavingsWallet email verification";
 
     $code = mysql_escape_string(md5(rand(1000,5000))) ;
     $pagelink = get_permalink( get_option('woocommerce_myaccount_page_id') );
@@ -303,7 +303,7 @@ function email_verify_func() {
 
     $message = "<html><body>";
     $message .= "Hi <strong>" . $user->display_name . "<strong>"; 
-    $message .= "<h2> Thanks for registering with msw. </h2>";
+    $message .= "<h2> Thanks for registering with mysavingswallet. </h2>";
     $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1; color: #FFF;" href="'.$link.'"> Verify email</a>';
     $message .= "</body></html>";
 
@@ -368,7 +368,25 @@ function cashback_func() {
         $cashbacks[] = $new_cashback;
         update_option('cashbacks', $cashbacks, false);
         update_option('company_balance', $company_balance, false);
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance));
+
+
+        // emailing
+        $business = new WP_User($business_id);
+        $customer = new WP_User($customer_id);
+        $b_email = $business->user_email;
+        $c_email = $customer->user_email;
+        $b_sub = "Cashback Sent Successful";
+        $c_sub = "New Cashback Received!";
+        $b_message = "<html><body>Hello {$business->first_name}, your cashback payment of {$msw->currency_symbol}{$amount} to {$customer->first_name} {$customer->last_name} has been completed. Your current wallet balance is {$msw->currency_symbol}{$business_new_balance}.</body></html>";
+        $c_message = "<html><body>Hello {$customer->first_name}, you just received {$msw->currency_symbol}{$halfamount} cashback from {$business->billing_company}. The amount has been credited to your account.</body></html>";
+
+        $headers = 'From:info@mysavingswallet.com' . "\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+        $b_mail = wp_mail( $b_email, $b_sub, $b_message, $headers);
+        $c_mail = wp_mail( $c_email, $c_sub, $c_message, $headers);
+
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance, 'b_message' => $b_message, 'c_message' => $c_message));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
