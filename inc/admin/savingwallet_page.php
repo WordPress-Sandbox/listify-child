@@ -31,11 +31,11 @@ add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
 
 
 function savingwallet_admin(){
-
+global $msw;
 	?>
 	<div class="wrap">
 		<h1> Saving Wallet Settings </h1>
-		<h3> Company balance: <?php echo get_option('company_balance'); ?></h3>
+		<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
 		<h4> Lastest Cashbacks </h4>
 		<?php echo do_shortcode('[cashbacks]'); ?>
 	</div>

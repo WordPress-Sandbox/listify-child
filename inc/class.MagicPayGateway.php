@@ -323,3 +323,5 @@ class gwapi {
     return $this->responses['response'];
   }
 }
+
+$GLOBALS['gw'] = new gwapi;

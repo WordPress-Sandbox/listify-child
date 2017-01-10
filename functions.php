@@ -2,8 +2,6 @@
 /**
  * Listify child theme.
  */
-require_once locate_template('inc/class.mysavingwallet.php');
-$GLOBALS['msw'] = new Mysavingwallet;
 
 function listify_child_styles() {
     global $msw;
@@ -123,6 +121,9 @@ add_action( 'admin_init', 'mysavingwallet_redirect_if_admin_page' );
 require_once locate_template('inc/ajax.php');
 require_once locate_template('inc/shortcodes.php');
 require_once locate_template('inc/hook-filters.php');
+require_once locate_template('/inc/class.mysavingwallet.php');
+require_once locate_template('/inc/class.MagicPayGateway.php');
+
 if(is_admin()) {
     require_once locate_template('inc/admin/savingwallet_page.php');
 }
@@ -156,10 +157,11 @@ function balance_columns_head( $column ) {
 }
 
 function balance_columns_content( $val, $column_name, $user_id ) {
+    global $msw;
     switch ($column_name) {
         case 'wallet_balance' :
             $balance = get_the_author_meta( 'wallet_balance', $user_id );
-            return $balance ? $balance : '0.00';
+            return $balance ? $msw->currency_symbol . $balance : $msw->currency_symbol . '0.00';
             break;
         default:
     }

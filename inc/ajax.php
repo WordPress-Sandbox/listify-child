@@ -1,12 +1,8 @@
 <?php 
 
-require_once locate_template('/inc/class.mysavingwallet.php'); 
-require_once locate_template('/inc/class.MagicPayGateway.php');
-
 function new_user_register() {
 
-
-    $mysavingwallet = new Mysavingwallet;
+    global $msw;
 
     $err = array();
 
@@ -17,7 +13,7 @@ function new_user_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $mysavingwallet->sendPin($_POST['phone']);
+        $msw->sendPin($_POST['phone']);
     }
  
     // Get data 
@@ -53,7 +49,7 @@ function new_user_register() {
     if(empty($dd)) {
         $err[] = 'Date required';
     } 
-    if(empty($email) || !$mysavingwallet->isValidEmail($email) ){
+    if(empty($email) || !$msw->isValidEmail($email) ){
         $err[] = 'Valid Email required';
     }
     if(empty($phone)){
@@ -118,7 +114,7 @@ add_action('wp_ajax_nopriv_register_user', 'new_user_register');
 
 function new_business_register() {
 
-    $mysavingwallet = new Mysavingwallet;
+    global $msw;
 
     $err = array();
 
@@ -129,7 +125,7 @@ function new_business_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $mysavingwallet->sendPin($_POST['bs_phone']);
+        $msw->sendPin($_POST['bs_phone']);
     }
  
     // Get data 
@@ -170,7 +166,7 @@ function new_business_register() {
     if(empty($bs_dd)) {
         $err[] = 'Date required';
     } 
-    if(empty($bs_email) || !$mysavingwallet->isValidEmail($bs_email) ){
+    if(empty($bs_email) || !$msw->isValidEmail($bs_email) ){
         $err[] = 'Valid Email required';
     }
     if(empty($bs_phone)){
@@ -299,7 +295,7 @@ function email_verify_func() {
     $user = new WP_User($user_id);
     $email_status = get_user_meta($user_id, 'email_status', true);
 
-    $sub = "Mysavingwallet email verification";
+    $sub = "msw email verification";
 
     $code = mysql_escape_string(md5(rand(1000,5000))) ;
     $pagelink = get_permalink( get_option('woocommerce_myaccount_page_id') );
@@ -307,7 +303,7 @@ function email_verify_func() {
 
     $message = "<html><body>";
     $message .= "Hi <strong>" . $user->display_name . "<strong>"; 
-    $message .= "<h2> Thanks for registering with mysavingwallet. </h2>";
+    $message .= "<h2> Thanks for registering with msw. </h2>";
     $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1; color: #FFF;" href="'.$link.'"> Verify email</a>';
     $message .= "</body></html>";
 
@@ -338,12 +334,12 @@ add_action('wp_ajax_email_verify', 'email_verify_func');
 
 /* cashback */
 function cashback_func() {
-    $mysavingwallet = new Mysavingwallet;
+    global $msw;
     $business_id = get_current_user_id();
     $customer_id = $_POST['customer_id'];
     $amount = $_POST['cashback_amount'];
 
-    if(!$mysavingwallet->checkInteger($amount)) {
+    if(!$msw->checkInteger($amount)) {
         echo json_encode(array('status' => 'error', 'message' => 'Amount must be digit character' ));
         die();
     }
@@ -352,10 +348,10 @@ function cashback_func() {
     $cashbacks = get_option('cashbacks');
     $company_balance = get_option('company_balance');
     if( $business_balance >= $amount ) {
-        $halfamount = bcdiv($amount, '2', 4);
-        $business_new_balance = bcsub($business_balance, $amount, 4);
-        $customer_new_balance = bcadd($customer_balance, $halfamount, 4);
-        $company_balance = bcadd($business_balance, $halfamount, 4);
+        $halfamount = bcdiv($amount, '2', 2);
+        $business_new_balance = bcsub($business_balance, $amount, 2);
+        $customer_new_balance = bcadd($customer_balance, $halfamount, 2);
+        $company_balance = bcadd($business_balance, $halfamount, 2);
         update_user_meta($business_id, 'wallet_balance', $business_new_balance);
         update_user_meta($customer_id, 'wallet_balance', $customer_new_balance);
 
@@ -372,7 +368,7 @@ function cashback_func() {
         $cashbacks[] = $new_cashback;
         update_option('cashbacks', $cashbacks, false);
         update_option('company_balance', $company_balance, false);
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $mysavingwallet->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance));
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
@@ -403,7 +399,7 @@ add_action('wp_ajax_save_basic', 'save_basic_func');
 
 
 function user_settings_func(){
-    $mysavingwallet = new Mysavingwallet;
+    global $msw;
     $data = array_filter($_POST['dd']);
 
     $error = array();
@@ -415,10 +411,10 @@ function user_settings_func(){
             if(!intval($v) || $v < 5 || $v > 35 ) {
                 $error[] = 'Input percentage needs to be a number between 5 to 35';
             } else {
-                $mysavingwallet->updateUserMeta($k, $v);
+                $msw->updateUserMeta($k, $v);
             }
         } else {
-            $mysavingwallet->updateUserMeta($k, $v);
+            $msw->updateUserMeta($k, $v);
         }
     }
 
@@ -435,9 +431,7 @@ add_action('wp_ajax_user_settings', 'user_settings_func');
 
 /* save bank info */
 function save_bank_func(){
-
-    $mysavingwallet = new Mysavingwallet;
-
+    global $msw;
     $dd = $_POST['dd'];
     $new_bank = array();
     $new_bank['verification'] = 'unverified';
@@ -448,13 +442,13 @@ function save_bank_func(){
         } else if ($v['name'] == 'account_type') {
             $new_bank['account_type'] = $v['value'];
         } else if ($v['name'] == 'bank_routing') {
-            if($mysavingwallet->checkRoutingNumber($v['value'])) {
+            if($msw->checkRoutingNumber($v['value'])) {
                 $new_bank['bank_routing'] = $v['value'];
             } else {
                 $error[] = 'Incorrect routing number';
             }
         } else if ($v['name'] == 'account_number') {
-            if($mysavingwallet->checkAccountNumber($v['value'])) {
+            if($msw->checkAccountNumber($v['value'])) {
                 $new_bank['account_number'] = $v['value'];
             } else {
                 $error[] = 'Incorrect account number';
@@ -510,11 +504,11 @@ add_action('wp_ajax_remove_bank', 'remove_bank_func');
 
 /* add balance */
 function topup_func() {
+    global $gw;
     $amount = $_POST['topup_amount'];
     $card_number = $_POST['card_number']; // 4111111111111111
     $cvv = $_POST['cvv']; // 1010
 
-    $gw = new gwapi;
     $gw->setLogin("demo", "password");
     $gw->setBilling("John","Smith","Acme, Inc.","123 Main St","Suite 200", "Beverly Hills",
             "CA","90210","US","555-555-5555","555-555-5556","support@example.com",
@@ -528,7 +522,7 @@ function topup_func() {
     if( $gw->responses['response'] == 1 ) {
         $user_id = get_current_user_id();
         $prev_balance = get_user_meta($user_id, 'wallet_balance', true);
-        $new_balance = (int) $prev_balance + (int) $amount;
+        $new_balance = bcadd($prev_balance, $amount, 2);
         update_user_meta($user_id, 'wallet_balance', $new_balance);
 
         $new_topup = array();
@@ -575,20 +569,20 @@ add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer
 
 /* withdraw request */
 function withdraw_request_func() {
+    global $msw;
     $amount = $_POST['amount'];
-    $mysavingwallet = new Mysavingwallet;
-    if(!$mysavingwallet->checkInteger($amount)) {
+    if(!$msw->checkInteger($amount)) {
         echo json_encode(array('status' => 'error', 'responsetext' => 'Amount must be digit character'));
         die();
-    } else if($mysavingwallet->minwithdraw > $amount) {
-        echo json_encode(array('status' => 'error', 'responsetext' => 'Minimum withdraw amount is ' . $mysavingwallet->minwithdraw ));
+    } else if($msw->minwithdraw > $amount) {
+        echo json_encode(array('status' => 'error', 'responsetext' => 'Minimum withdraw amount is ' . $msw->minwithdraw ));
         die();
     }
-    $verifiedbanks = $mysavingwallet->verifiedbanks();
+    $verifiedbanks = $msw->verifiedbanks();
     $selected_bank = array_filter($verifiedbanks, function($v) { return $v['bank_name'] == $_POST['bank']; });
     if(is_array($selected_bank) && count($selected_bank) === 1) {
-        $prev_balance = $mysavingwallet->getMetaValue('wallet_balance');
-        $new_balance = (int) $prev_balance - (int) $amount;
+        $prev_balance = $msw->getMetaValue('wallet_balance');
+        $new_balance = bcsub($prev_balance, $amount, 2);
 
         $new_withdraw = array();
         $new_withdraw['prev_balance'] = $prev_balance;
@@ -599,10 +593,10 @@ function withdraw_request_func() {
         $new_withdraw['status'] = 'pending';
         $new_withdraw['bank'] = $_POST['bank'];
 
-        $withdrawls = $mysavingwallet->getMetaValue('withdrawls');
+        $withdrawls = $msw->getMetaValue('withdrawls');
         $withdrawls[] = $new_withdraw;
-        $mysavingwallet->updateUserMeta('withdrawls', $withdrawls);
-        $mysavingwallet->updateUserMeta('wallet_balance', $new_balance);
+        $msw->updateUserMeta('withdrawls', $withdrawls);
+        $msw->updateUserMeta('wallet_balance', $new_balance);
         echo json_encode(array('status' => 'success', 'responsetext' => 'Your withdraw is pending for approval.'));
         die();
     } else {
