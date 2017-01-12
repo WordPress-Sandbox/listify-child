@@ -28,7 +28,7 @@ if(!is_user_logged_in()){
     exit();
 }
 
-$mysavingwallet = new Mysavingwallet;
+global $msw;
 
 $user_id = get_current_user_id();
 $user = new WP_User($user_id);
@@ -93,7 +93,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
     <div class="verification_badge">
         <ul>
-            <?php $mysavingwallet->verificationBadge(); ?>
+            <?php $msw->verificationBadge(); ?>
         </ul>
     </div>
 
@@ -102,9 +102,9 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
             <div class="col-md-3">
                 <div>
                 <div class="qr_profile">
-                    <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
+                    <?php if($msw->get_user_role() == 'customer'): ?>
                         <div class="qr_code">
-                            <img src="https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl=<?php echo $mysavingwallet->qrurl(); ?>&choe=UTF-8" alt="" >
+                            <img src="https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl=<?php echo $msw->qrurl(); ?>&choe=UTF-8" alt="" >
                         </div>
                         <style>
                             .qr_code {
@@ -128,7 +128,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <?php echo get_avatar($user_id, 262); ?>
                     </div>
                     <br/>
-                    <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
+                    <?php if($msw->get_user_role() == 'customer'): ?>
                         <h2> Customer ID: <?php echo $user_id; ?></h2>
                     <?php endif; ?>
                 </div>
@@ -163,7 +163,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <li><a href="#passwordTab">Change Password</a></li>
                         <li><a href="#payment">Payment</a></li>
                         <li><a href="#settings">Settings</a></li>
-                        <?php if($mysavingwallet->get_user_role() == 'business') : ?>
+                        <?php if($msw->get_user_role() == 'business') : ?>
                         <li><a href="#stats">Stats</a></li>
                         <?php endif; ?>
                     </ul>
@@ -176,7 +176,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 							<form id="basic_info" action="" class="form-edit-account" method="post">
 
 	                            <dl class="dl-horizontal">
-                                    <?php if($mysavingwallet->get_user_role() == 'business') : ?>
+                                    <?php if($msw->get_user_role() == 'business') : ?>
                                     <dt><strong><?php esc_html_e( 'Business name', 'listify_child' ); ?></strong></dt>
                                     <dd>
                                         <input type="text" name="billing_company" value="<?php echo esc_attr( $billing_company ); ?>"> 
@@ -389,10 +389,10 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
                             <p class="show_message"></p>
-                            <p> Your current balance is: <?php echo $mysavingwallet->wallet_balance(); ?>
+                            <p> Your current balance is: <?php echo $msw->wallet_balance(); ?>
                                 <br/>
 
-                            <?php if($mysavingwallet->get_user_role() != 'customer') : ?>
+                            <?php if($msw->get_user_role() != 'customer') : ?>
                                 <a class="button topup"> Topup </a>
                                 <h4> Topup history </h4>
                                 <?php echo do_shortcode('[topup]'); ?>
@@ -401,14 +401,14 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <?php require_once locate_template( 'inc/templates/topup.php' ); ?>
                             <?php endif; ?>
 
-                            <?php if($mysavingwallet->get_user_role() == 'customer'): ?>
-                                <?php if( $mysavingwallet->wallet_balance() >= $mysavingwallet->minwithdraw ) : ?>
+                            <?php if($msw->get_user_role() == 'customer'): ?>
+                                <?php if( $msw->wallet_balance_value() >= $msw->minwithdraw ) : ?>
                                     <p class="message"></p>
                                     <form id="withdraw">
-                                    <?php if($mysavingwallet->hasverifiedbank()) : ?>
+                                    <?php if($msw->hasverifiedbank()) : ?>
                                         <input type="number" name="amount" placeholder="Enter withdraw amount">
-                                        <?php if( is_array($mysavingwallet->verifiedbanks())) : 
-                                                foreach ($mysavingwallet->verifiedbanks() as $key => $bank) : ?>
+                                        <?php if( is_array($msw->verifiedbanks())) : 
+                                                foreach ($msw->verifiedbanks() as $key => $bank) : ?>
                                         <input type="radio" name="bank_name" value="<?php echo $bank['bank_name']; ?>"><?php echo $bank['bank_name']; ?><br>
                                         <?php endforeach; endif; ?>
                                     <?php else : ?>
@@ -436,7 +436,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                             $class = 'check';
                                                         } elseif ( $bank['verification'] == 'declined' ) {
                                                             $class = 'cross';
-                                                        } else {
+                                                        } elseif ( $bank['verification'] == 'pending') {
                                                             $class = 'review';
                                                             $reviewText = '<strong>(Account is In Review)</strong>';
                                                         }
@@ -465,7 +465,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="bank_routing" class="input">
                                                         <i class="icon_append fa fa-wifi"></i>
-                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $mysavingwallet->ccMasking($bank['bank_routing']); ?>" disabled>
+                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $msw->ccMasking($bank['bank_routing']); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Routing Number</b>
                                                     </label>
                                                 </section>
@@ -476,7 +476,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="account_number" class="input">
                                                         <i class="icon_append fa fa-credit-card-alt"></i>
-                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $mysavingwallet->ccMasking($bank['account_number']); ?>" disabled>
+                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $msw->ccMasking($bank['account_number']); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Account Number</b>
                                                     </label>
                                                 </section>
@@ -576,11 +576,17 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                                 <p class="image-notice"></p>
                                                                 <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
                                                                 <input type="hidden" name="image_id" class="image_id">
-                                                                <b class="tooltip tooltip-bottom-right">Please provide proof of Account Info – Voided Check or Bank Letter</b>
+                                                                <p>Please upload a proof of bank account ownership, acceptable forms of verification are voided check, bank letter, or bank statement.</p>
                                                             </label>
                                                         </section>
                                                     </dd>
-                                                    <hr>
+                                                    <dd>
+                                                        <section>
+                                                            <ul>
+                                                                <li><img src=""></li>
+                                                            </ul>
+                                                        </section>
+                                                    </dd>
                                                     <dt><?php esc_html_e( '', 'listify_child' ); ?></dt>
                                                     <dd>
                                                         <section>
@@ -608,12 +614,12 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                             <form id="user_settings" action="#" method="post" class="user_settings password_change">
 
                                 <dl class="dl-horizontal">
-                                    <?php if($mysavingwallet->get_user_role() == 'business'): ?>
+                                    <?php if($msw->get_user_role() == 'business'): ?>
                                     <dt><?php esc_html_e( 'Cashback percentage %', 'listify_child' ); ?></dt>
                                     <dd>
                                         <section>
                                             <label class="input">
-                                                <input type="number" name="cashback_percentage" placeholder="Cashback percentange" value="<?php echo esc_attr( $mysavingwallet->getMetaValue('cashback_percentage') ); ?>">
+                                                <input type="number" name="cashback_percentage" placeholder="Cashback percentange" value="<?php echo esc_attr( $msw->getMetaValue('cashback_percentage') ); ?>">
                                                 <b class="tooltip tooltip-bottom-right">Min 5, Max 35</b>
                                             </label>
                                         </section>
@@ -627,7 +633,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                 <button type="submit" class="button">Save Changes</button>
                             </form>
                         </div><!-- /settings -->
-                        <?php if($mysavingwallet->get_user_role() == 'business'): ?>
+                        <?php if($msw->get_user_role() == 'business'): ?>
                         <div id="stats">
                             <?php echo do_shortcode('[stats_dashboard]'); ?>
                         </div> <!-- stats -->

@@ -78,7 +78,7 @@ class Mysavingwallet {
 
 	public function checkAccountNumber($accountNumber = 0) {
 	    $accountNumber = preg_replace('[\D]', '', $accountNumber); //only digits
-	    if(strlen($accountNumber) < 16 ) {
+	    if(strlen($accountNumber) < 6 ) {
 	        return false;  
 	    } else {
 	    	return true;
@@ -135,9 +135,13 @@ class Mysavingwallet {
 	    return substr($number, 0, 4) . str_repeat($maskingCharacter, strlen($number) - 8) . substr($number, -4);
 	}
 
-	public function wallet_balance() {
+	public function wallet_balance_value() {
 		$balance = $this->getMetaValue('wallet_balance');
-		return $balance ? $this->currency_symbol . $balance : $this->currency_symbol . '0.00';
+		return $balance ? $balance : '0.00';
+	}
+
+	public function wallet_balance() {
+		return $this->currency_symbol . $this->wallet_balance_value();
 	}
 
 	public function topup() {

@@ -485,73 +485,20 @@ jQuery(function($){
 
 
 	/* async upload bank doc */
-	var $imgFile = $('.bank_docs');
-	var $imgNotice = $('.image-notice');
-	var $imgId      = $('.image_id');
 
-    $imgFile.on('change', function(e) {
-	    e.preventDefault();
-
-	    var formData = new FormData();
-
-	    formData.append('action', 'upload-attachment');
-	    formData.append('async-upload', $imgFile[0].files[0]);
-	    formData.append('name', $imgFile[0].files[0].name);
-	    formData.append('_wpnonce', local.nonce);
-
-	    $.ajax({
-	        url: local.upload_url,
-	        data: formData,
-	        processData: false,
-	        contentType: false,
-	        dataType: 'json',
-	        xhr: function() {
-	            var myXhr = $.ajaxSettings.xhr();
-
-	            if ( myXhr.upload ) {
-	                myXhr.upload.addEventListener( 'progress', function(e) {
-	                    if ( e.lengthComputable ) {
-	                        var perc = ( e.loaded / e.total ) * 100;
-	                        perc = perc.toFixed(2);
-	                        $imgNotice.html('Uploading&hellip;(' + perc + '%)');
-	                    }
-	                }, false );
-	            }
-
-	            return myXhr;
-	        },
-	        type: 'POST',
-	        beforeSend: function() {
-	            $imgFile.hide();
-	            $imgNotice.html('Uploading&hellip;').show();
-	        },
-	        success: function(resp) {
-	            if ( resp.success ) {
-	                $imgNotice.html('Successfully uploaded. <a href="#" class="btn-change-image">Change?</a>');
-
-	                var img = $('<img>', {
-	                    src: resp.data.url
-	                });
-
-	                $imgId.val( resp.data.id );
-	                // $imgPreview.html( img ).show();
-
-	            } else {
-	                $imgNotice.html('Fail to upload image. Please try again.');
-	                $imgFile.show();
-	                $imgId.val('');
-	            }
-	        }
-	    });
-	});
 
 	/* save bank info */
 	$('#add_bank').submit(function(e){
 		e.preventDefault();
 
+		var values = {};
+		$.each($(this).serializeArray(), function(i, field) {
+		    values[field.name] = field.value;
+		});
+
 		var data = {
 			action: 'save_bank',
-			dd: $(this).serializeArray()
+			dd: values
 		}
 
 		$.ajax({
@@ -560,10 +507,11 @@ jQuery(function($){
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				if( typeof resp.error === 'object') {
-						$('.add_bank_message').css('color', 'red').html(resp.error);
+				console.log(resp);
+				if( resp.status == 'error') {
+						$('.add_bank_message').css('color', 'red').html(resp.responsetext);
 				} else {
-					$('.add_bank_message').css('color', 'green').html(resp);
+					$('.add_bank_message').css('color', 'green').html(resp.responsetext);
 					window.setTimeout(location.reload(), 3000);
 				}
 			},

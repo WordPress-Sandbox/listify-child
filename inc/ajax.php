@@ -451,51 +451,52 @@ add_action('wp_ajax_user_settings', 'user_settings_func');
 function save_bank_func(){
     global $msw;
     $dd = $_POST['dd'];
-    $new_bank = array();
-    $new_bank['verification'] = 'unverified';
     $error = array();
-    foreach($dd as $k => $v) {
-        if($v['name'] == 'bank_name') {
-            $new_bank['bank_name'] = $v['value'];
-        } else if ($v['name'] == 'account_type') {
-            $new_bank['account_type'] = $v['value'];
-        } else if ($v['name'] == 'bank_routing') {
-            if($msw->checkRoutingNumber($v['value'])) {
-                $new_bank['bank_routing'] = $v['value'];
-            } else {
-                $error[] = 'Incorrect routing number';
-            }
-        } else if ($v['name'] == 'account_number') {
-            if($msw->checkAccountNumber($v['value'])) {
-                $new_bank['account_number'] = $v['value'];
-            } else {
-                $error[] = 'Incorrect account number';
-            }
-        }
 
-        // else if ($v['name'] == 'image_id') {
-        //     if($v['value']) {
-        //         $data_array['image_id'] = $v['value'];
-        //     } else {
-        //         $error[] = 'No Bank Doc Uploaded.';
-        //     }
-        // }
+    $bank_name      = sanitize_text_field($dd['bank_name']);
+    $account_type   = sanitize_text_field($dd['account_type']);
+    $bank_routing   = $dd['bank_routing'];
+    $account_number = $dd['account_number'];
+
+    if(empty($bank_name)) {
+        $error[] = 'Bank name required.';
     }
+
+    if(!$msw->checkRoutingNumber($bank_routing)) {
+        $error[] = 'Incorrect routing number.';
+    }
+
+    if(!$msw->checkAccountNumber($account_number)) {
+        $error[] = 'Incorrect account number.';
+    }
+
+    // else if ($v['name'] == 'image_id') {
+    //     if($v['value']) {
+    //         $data_array['image_id'] = $v['value'];
+    //     } else {
+    //         $error[] = 'No Bank Doc Uploaded.';
+    //     }
+    // }
+
+    $new_bank = array();
+    $new_bank['verification']   = 'pending';
+    $new_bank['bank_name']      = $bank_name;
+    $new_bank['account_type']   = $account_type;
+    $new_bank['bank_routing']   = $bank_routing;
+    $new_bank['account_number'] = $account_number;
+
     if(count($error) == 0 ) {
-        $user_id = get_current_user_id();
-        $banks = get_user_meta($user_id, 'banks', true);
+        $banks = $msw->getMetaValue('banks');
         $banks[] = $new_bank;
-        update_user_meta($user_id, 'banks', $banks);
-        echo json_encode('Bank info updated successfully');
+        $msw->updateUserMeta('banks', $banks);
+        echo json_encode(array('status' => 'success', 'responsetext' => 'New bank added successfully!'));
     } else {
-        echo json_encode(array('error' => $error));
+        echo json_encode(array('status' => 'error', 'responsetext' => $error[0]));
     }
     
     die();
 
 }
-
-// save_bank_func();
 
 add_action('wp_ajax_save_bank', 'save_bank_func');
 
