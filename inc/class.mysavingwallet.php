@@ -176,7 +176,7 @@ class Mysavingwallet {
 		{
 			$column = 'customer_id';
 		}
-		if($column) {
+		if($column && is_array($cashbacks)) {
 			$cashbacks = array_filter($cashbacks, function($v) use ($column) { return $v[$column] == $this->user_id; });
 		}
 
