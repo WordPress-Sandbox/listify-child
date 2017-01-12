@@ -82,6 +82,48 @@ jQuery(function($){
 	}
 
 
+	SavingWallet.prototype.prepareUpload = function (e) {
+		e.preventDefault();
+		var file = e.target.files;
+		var data = new FormData();
+		data.append('action', 'upload_bank_doc');
+		$.each(file, function(k, v) {
+			data.append('upload_bank_doc', v);
+		});
+
+    	$.ajax({
+    		  url: local.ajax_url,
+	          type: 'POST',
+	          data: data,
+	          cache: false,
+	          dataType: 'json',
+	          processData: false,
+	          contentType: false,
+	          success: function(data, textStatus, jqXHR) {	
+	          	console.log(data);
+              	if( data.response == "SUCCESS" ){
+	                var preview = "";
+	                if( data.type === "image/jpg" 
+	                  || data.type === "image/png" 
+	                  || data.type === "image/gif"
+	                  || data.type === "image/jpeg"
+	                ) {
+	                  preview = "<li><img src='" + data.url + "' /></li>";
+	                } else {
+	                  preview = "<li>" + data.filename + "</li>";
+	                }
+	  
+	                var previewID = $('#preview_doc');
+	                previewID.append(preview);
+                
+                 } else {
+	             alert( data.error );
+                 }
+			}
+		})
+    };
+
+
 
 	var savingwallet = new SavingWallet();
 
@@ -485,7 +527,68 @@ jQuery(function($){
 
 
 	/* async upload bank doc */
+	// var $imgFile = $('.bank_docs');
+	// var $imgNotice = $('.image-notice');
+	// var $imgId      = $('.image_id');
 
+ //    $imgFile.on('change', function(e) {
+	//     e.preventDefault();
+
+	//     var formData = new FormData();
+
+	//     formData.append('action', 'upload-attachment');
+	//     formData.append('async-upload', $imgFile[0].files[0]);
+	//     formData.append('name', $imgFile[0].files[0].name);
+	//     formData.append('_wpnonce', local.nonce);
+
+	//     $.ajax({
+	//         url: local.upload_url,
+	//         data: formData,
+	//         processData: false,
+	//         contentType: false,
+	//         dataType: 'json',
+	//         xhr: function() {
+	//             var myXhr = $.ajaxSettings.xhr();
+
+	//             if ( myXhr.upload ) {
+	//                 myXhr.upload.addEventListener( 'progress', function(e) {
+	//                     if ( e.lengthComputable ) {
+	//                         var perc = ( e.loaded / e.total ) * 100;
+	//                         perc = perc.toFixed(2);
+	//                         $imgNotice.html('Uploading&hellip;(' + perc + '%)');
+	//                     }
+	//                 }, false );
+	//             }
+
+	//             return myXhr;
+	//         },
+	//         type: 'POST',
+	//         beforeSend: function() {
+	//             $imgFile.hide();
+	//             $imgNotice.html('Uploading&hellip;').show();
+	//         },
+	//         success: function(resp) {
+	//             if ( resp.success ) {
+	//                 $imgNotice.html('Successfully uploaded. <a href="#" class="btn-change-image">Change?</a>');
+
+	//                 var img = $('<img>', {
+	//                     src: resp.data.url
+	//                 });
+
+	//                 $imgId.val( resp.data.id );
+	//                 // $imgPreview.html( img ).show();
+
+	//             } else {
+	//                 $imgNotice.html('Fail to upload image. Please try again.');
+	//                 $imgFile.show();
+	//                 $imgId.val('');
+	//             }
+	//         }
+	//     });
+	// });
+
+
+	$('#bank_docs').on('change', savingwallet.prepareUpload);
 
 	/* save bank info */
 	$('#add_bank').submit(function(e){
@@ -644,7 +747,6 @@ jQuery(function($){
 	    }
 
 	});
-
 
 
 

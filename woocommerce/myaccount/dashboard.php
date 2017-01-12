@@ -18,6 +18,8 @@
  * @version     2.6.0
  */
 
+
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -52,6 +54,23 @@ if(array_key_exists('key', $_GET)) {
 }
 
 ?>
+
+
+<form action="" method="POST" class="ibenic_upload_form" enctype="multipart/form-data">
+  <div class="ibenic_upload_message"></div>
+  <div id="ibenic_file_upload" class="file-upload">
+    <input type="file" id="ibenic_file_input"/>
+    <p class="ibenic_file_upload_text"><?php _e( 'Upload your file', 'ibenic_upload' ); ?></p>
+  </div>
+  <div id="ibenic_file_upload_preview" class="file-upload file-preview" style="display:none;">
+    <div class="ibenic_file_preview"></div>
+    <button data-fileurl="" class="ibenic_file_delete">
+      <?php _e( 'Delete', 'ibenic_upload' ); ?>
+    </button>
+  </div>
+</form>
+
+
 
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
@@ -432,6 +451,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                     <i class="icon_append fa fa-times" data-bankid="<?php echo $key; ?>"></i>
                                                     <?php 
                                                         $reviewText = '';
+                                                        $class = '';
                                                         if ( $bank['verification'] == 'verified' ) {
                                                             $class = 'check';
                                                         } elseif ( $bank['verification'] == 'declined' ) {
@@ -574,16 +594,15 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                             <label for="async-upload" class="input">
                                                                 <i class="icon_append fa fa-life-ring"></i>
                                                                 <p class="image-notice"></p>
-                                                                <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
+                                                                <input type="file" id="bank_docs">
                                                                 <input type="hidden" name="image_id" class="image_id">
-                                                                <p>Please upload a proof of bank account ownership, acceptable forms of verification are voided check, bank letter, or bank statement.</p>
+                                                                <p>Please upload a proof of bank account ownership, <br> acceptable forms of verification are voided check, <br> bank letter, or bank statement.</p>
                                                             </label>
                                                         </section>
                                                     </dd>
                                                     <dd>
                                                         <section>
-                                                            <ul>
-                                                                <li><img src=""></li>
+                                                            <ul id="preview_doc">
                                                             </ul>
                                                         </section>
                                                     </dd>

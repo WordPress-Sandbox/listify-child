@@ -803,6 +803,21 @@ p#wpua-preview-existing {
     margin: 0;
 }
 
+#add_bank #preview_doc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 15px;
+}
+#add_bank #preview_doc li {
+  display: inline-block;
+  width: 100px;
+}
+#add_bank #preview_doc li img {
+  width: 100%;
+}
+
+
 /* Payment Tab */
 .user_profile .payment_method section {
     margin-bottom: 20px;

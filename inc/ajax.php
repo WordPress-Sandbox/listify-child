@@ -447,6 +447,64 @@ function user_settings_func(){
 
 add_action('wp_ajax_user_settings', 'user_settings_func');
 
+/* save uploaded bank doc */
+function upload_bank_doc_func() {
+    $usingUploader = 2;
+    $fileErrors = array(
+        0 => "There is no error, the file uploaded with success",
+        1 => "The uploaded file exceeds the upload_max_files in server settings",
+        2 => "The uploaded file exceeds the MAX_FILE_SIZE from html form",
+        3 => "The uploaded file uploaded only partially",
+        4 => "No file was uploaded",
+        6 => "Missing a temporary folder",
+        7 => "Failed to write file to disk",
+        8 => "A PHP extension stoped file to upload" );
+    $posted_data =  isset( $_POST ) ? $_POST : array();
+    $file_data = isset( $_FILES ) ? $_FILES : array();
+    $data = array_merge( $posted_data, $file_data );
+    $response = array();
+    if( $usingUploader == 1 ) {
+        $uploaded_file = wp_handle_upload( $data['upload_bank_doc'], array( 'test_form' => false ) );
+        if( $uploaded_file && ! isset( $uploaded_file['error'] ) ) {
+            $response['response'] = "SUCCESS";
+            $response['filename'] = basename( $uploaded_file['url'] );
+            $response['url'] = $uploaded_file['url'];
+            $response['type'] = $uploaded_file['type'];
+        } else {
+            $response['response'] = "ERROR";
+            $response['error'] = $uploaded_file['error'];
+        }
+    } elseif ( $usingUploader == 2) {
+        $attachment_id = media_handle_upload( 'upload_bank_doc', 0 );
+        
+        if ( is_wp_error( $attachment_id ) ) { 
+            $response['response'] = "ERROR";
+            $response['error'] = $fileErrors[ $data['upload_bank_doc']['error'] ];
+        } else {
+            $fullsize_path = get_attached_file( $attachment_id );
+            $pathinfo = pathinfo( $fullsize_path );
+            $url = wp_get_attachment_url( $attachment_id );
+            $response['response'] = "SUCCESS";
+            $response['filename'] = $pathinfo['filename'];
+            $response['url'] = $url;
+            $type = $pathinfo['extension'];
+            if( $type == "jpeg"
+            || $type == "jpg"
+            || $type == "png"
+            || $type == "gif" ) {
+                $type = "image/" . $type;
+            }
+            $response['type'] = $type;
+        }
+    }
+    echo json_encode( $response );
+    die();
+}
+
+// ibenic_file_upload();
+add_action("wp_ajax_upload_bank_doc", "upload_bank_doc_func");
+
+
 /* save bank info */
 function save_bank_func(){
     global $msw;
