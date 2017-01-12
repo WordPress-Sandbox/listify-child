@@ -803,20 +803,34 @@ p#wpua-preview-existing {
     margin: 0;
 }
 
-#add_bank #preview_doc {
+#add_bank #preview_doc,
+#preview_doc {
   list-style: none;
   margin: 0;
   padding: 0;
   margin-bottom: 15px;
 }
-#add_bank #preview_doc li {
+#add_bank #preview_doc li, 
+#preview_doc li {
   display: inline-block;
   width: 100px;
+  position: relative;
 }
-#add_bank #preview_doc li img {
+#add_bank #preview_doc li img, 
+#preview_doc li img  {
   width: 100%;
 }
-
+span.delete_doc {
+  color: #000;
+  position: absolute;
+  left: 50%;
+  font-size: 25px;
+  z-index: 999;
+  top: -25px;
+  height: 50px;
+  width: 50px;
+  cursor: pointer
+}
 
 /* Payment Tab */
 .user_profile .payment_method section {

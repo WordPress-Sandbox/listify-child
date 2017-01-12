@@ -55,23 +55,6 @@ if(array_key_exists('key', $_GET)) {
 
 ?>
 
-
-<form action="" method="POST" class="ibenic_upload_form" enctype="multipart/form-data">
-  <div class="ibenic_upload_message"></div>
-  <div id="ibenic_file_upload" class="file-upload">
-    <input type="file" id="ibenic_file_input"/>
-    <p class="ibenic_file_upload_text"><?php _e( 'Upload your file', 'ibenic_upload' ); ?></p>
-  </div>
-  <div id="ibenic_file_upload_preview" class="file-upload file-preview" style="display:none;">
-    <div class="ibenic_file_preview"></div>
-    <button data-fileurl="" class="ibenic_file_delete">
-      <?php _e( 'Delete', 'ibenic_upload' ); ?>
-    </button>
-  </div>
-</form>
-
-
-
     <div class="woocommerce-message" style="display: none"></div>
     <?php //echo get_user_meta($user_id, 'email_code', true); ?>
     <?php //echo get_user_meta($user_id, 'email_status', true); ?>
@@ -485,7 +468,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="bank_routing" class="input">
                                                         <i class="icon_append fa fa-wifi"></i>
-                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $msw->ccMasking($bank['bank_routing']); ?>" disabled>
+                                                        <input type="text" name="bank_routing" id="bank_routing" value="<?php echo $msw->ccMasking($bank['bank_routing'], '*'); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Routing Number</b>
                                                     </label>
                                                 </section>
@@ -496,7 +479,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                 <section>
                                                     <label for="account_number" class="input">
                                                         <i class="icon_append fa fa-credit-card-alt"></i>
-                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $msw->ccMasking($bank['account_number']); ?>" disabled>
+                                                        <input type="text" name="account_number" id="account_number" value="<?php echo $msw->ccMasking($bank['account_number'], '*'); ?>" disabled>
                                                         <b class="tooltip tooltip-bottom-right">Bank Account Number</b>
                                                     </label>
                                                 </section>
@@ -517,12 +500,11 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
                                             <dd>
                                                 <section>
-                                                    <label for="async-upload" class="input">
-                                                        <i class="icon_append fa fa-life-ring"></i>
-                                                        <p class="image-notice"></p>
-                                                        <input type="file" name="async-upload" id="async-upload" class="bank_docs" accept="image/*">
-                                                        <input type="hidden" name="image_id" class="image_id">
-                                                    </label>
+                                                    <ul id="preview_doc">
+                                                        <?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : ?>
+                                                            <li><img src="<?php echo wp_get_attachment_url($id); ?>" /></li>
+                                                        <?php endforeach; endif; ?>
+                                                    </ul>
                                                 </section>
                                             </dd>
                                         </dl>       
@@ -542,6 +524,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <div id="modal1Desc">
                                         <div class="password_change">
                                             <form id="add_bank" class="password_change" action="#" method="post" enctype="multipart/form-data">
+                                            <?php //wp_nonce_field( 'add_bank_docs_nonce' ); ?>
                                                 <dl class="dl-horizontal">
                                                     <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
                                                     <dd>
@@ -593,7 +576,6 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                         <section>
                                                             <label for="async-upload" class="input">
                                                                 <i class="icon_append fa fa-life-ring"></i>
-                                                                <p class="image-notice"></p>
                                                                 <input type="file" id="bank_docs">
                                                                 <input type="hidden" name="image_id" class="image_id">
                                                                 <p>Please upload a proof of bank account ownership, <br> acceptable forms of verification are voided check, <br> bank letter, or bank statement.</p>

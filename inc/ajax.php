@@ -462,6 +462,7 @@ function upload_bank_doc_func() {
     $posted_data =  isset( $_POST ) ? $_POST : array();
     $file_data = isset( $_FILES ) ? $_FILES : array();
     $data = array_merge( $posted_data, $file_data );
+   // check_ajax_referer( 'add_bank_docs_nonce', 'nonce' );
     $response = array();
     if( $usingUploader == 1 ) {
         $uploaded_file = wp_handle_upload( $data['upload_bank_doc'], array( 'test_form' => false ) );
@@ -469,6 +470,7 @@ function upload_bank_doc_func() {
             $response['response'] = "SUCCESS";
             $response['filename'] = basename( $uploaded_file['url'] );
             $response['url'] = $uploaded_file['url'];
+            $response['id'] = $uploaded_file['id'];
             $response['type'] = $uploaded_file['type'];
         } else {
             $response['response'] = "ERROR";
@@ -486,6 +488,7 @@ function upload_bank_doc_func() {
             $url = wp_get_attachment_url( $attachment_id );
             $response['response'] = "SUCCESS";
             $response['filename'] = $pathinfo['filename'];
+            $response['id'] = $attachment_id;
             $response['url'] = $url;
             $type = $pathinfo['extension'];
             if( $type == "jpeg"
@@ -501,7 +504,6 @@ function upload_bank_doc_func() {
     die();
 }
 
-// ibenic_file_upload();
 add_action("wp_ajax_upload_bank_doc", "upload_bank_doc_func");
 
 
@@ -515,6 +517,7 @@ function save_bank_func(){
     $account_type   = sanitize_text_field($dd['account_type']);
     $bank_routing   = $dd['bank_routing'];
     $account_number = $dd['account_number'];
+    $attachment_ids = array_filter($dd['attachment_ids']);
 
     if(empty($bank_name)) {
         $error[] = 'Bank name required.';
@@ -528,13 +531,9 @@ function save_bank_func(){
         $error[] = 'Incorrect account number.';
     }
 
-    // else if ($v['name'] == 'image_id') {
-    //     if($v['value']) {
-    //         $data_array['image_id'] = $v['value'];
-    //     } else {
-    //         $error[] = 'No Bank Doc Uploaded.';
-    //     }
-    // }
+    if(!is_array($attachment_ids) || count($attachment_ids) == 0 ) {
+        $error[] = 'Please upload a proof of bank account ownership, acceptable forms of verification are voided check, bank letter, or bank statement.';
+    }
 
     $new_bank = array();
     $new_bank['verification']   = 'pending';
@@ -542,6 +541,7 @@ function save_bank_func(){
     $new_bank['account_type']   = $account_type;
     $new_bank['bank_routing']   = $bank_routing;
     $new_bank['account_number'] = $account_number;
+    $new_bank['attachment_ids'] = $attachment_ids;
 
     if(count($error) == 0 ) {
         $banks = $msw->getMetaValue('banks');
@@ -549,7 +549,7 @@ function save_bank_func(){
         $msw->updateUserMeta('banks', $banks);
         echo json_encode(array('status' => 'success', 'responsetext' => 'New bank added successfully!'));
     } else {
-        echo json_encode(array('status' => 'error', 'responsetext' => $error[0]));
+        echo json_encode(array('status' => 'error', 'responsetext' => $error[0], 'attachment_ids' => $attachment_ids));
     }
     
     die();

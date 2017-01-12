@@ -1,6 +1,6 @@
 jQuery(function($){
 
-	//
+	// http://www.ibenic.com/wordpress-file-upload-with-ajax/ 
 
 	function SavingWallet() {
 		this.errors = {};
@@ -86,7 +86,9 @@ jQuery(function($){
 		e.preventDefault();
 		var file = e.target.files;
 		var data = new FormData();
+		var nonce = $("#_wpnonce").val();
 		data.append('action', 'upload_bank_doc');
+		//data.append('nonce', local.nonce);
 		$.each(file, function(k, v) {
 			data.append('upload_bank_doc', v);
 		});
@@ -108,16 +110,16 @@ jQuery(function($){
 	                  || data.type === "image/gif"
 	                  || data.type === "image/jpeg"
 	                ) {
-	                  preview = "<li><img src='" + data.url + "' /></li>";
+	                  preview = "<li data-attachment-id='" + data.id + "'><img src='" + data.url + "' /><span class=\"delete_doc\" data-fileurl='" + data.url + "'>x</span></li>";
 	                } else {
-	                  preview = "<li>" + data.filename + "</li>";
+	                  preview = "<li data-attachment-id='" + data.id + "'><a href='" + data.url + "'>" + data.filename + "</a></li>";
 	                }
 	  
 	                var previewID = $('#preview_doc');
 	                previewID.append(preview);
                 
                  } else {
-	             alert( data.error );
+                 	$('.add_bank_message').css('color', 'red').text(data.error);
                  }
 			}
 		})
@@ -525,84 +527,32 @@ jQuery(function($){
 
 	});
 
-
-	/* async upload bank doc */
-	// var $imgFile = $('.bank_docs');
-	// var $imgNotice = $('.image-notice');
-	// var $imgId      = $('.image_id');
-
- //    $imgFile.on('change', function(e) {
-	//     e.preventDefault();
-
-	//     var formData = new FormData();
-
-	//     formData.append('action', 'upload-attachment');
-	//     formData.append('async-upload', $imgFile[0].files[0]);
-	//     formData.append('name', $imgFile[0].files[0].name);
-	//     formData.append('_wpnonce', local.nonce);
-
-	//     $.ajax({
-	//         url: local.upload_url,
-	//         data: formData,
-	//         processData: false,
-	//         contentType: false,
-	//         dataType: 'json',
-	//         xhr: function() {
-	//             var myXhr = $.ajaxSettings.xhr();
-
-	//             if ( myXhr.upload ) {
-	//                 myXhr.upload.addEventListener( 'progress', function(e) {
-	//                     if ( e.lengthComputable ) {
-	//                         var perc = ( e.loaded / e.total ) * 100;
-	//                         perc = perc.toFixed(2);
-	//                         $imgNotice.html('Uploading&hellip;(' + perc + '%)');
-	//                     }
-	//                 }, false );
-	//             }
-
-	//             return myXhr;
-	//         },
-	//         type: 'POST',
-	//         beforeSend: function() {
-	//             $imgFile.hide();
-	//             $imgNotice.html('Uploading&hellip;').show();
-	//         },
-	//         success: function(resp) {
-	//             if ( resp.success ) {
-	//                 $imgNotice.html('Successfully uploaded. <a href="#" class="btn-change-image">Change?</a>');
-
-	//                 var img = $('<img>', {
-	//                     src: resp.data.url
-	//                 });
-
-	//                 $imgId.val( resp.data.id );
-	//                 // $imgPreview.html( img ).show();
-
-	//             } else {
-	//                 $imgNotice.html('Fail to upload image. Please try again.');
-	//                 $imgFile.show();
-	//                 $imgId.val('');
-	//             }
-	//         }
-	//     });
-	// });
-
-
+	// upload bank doc 
 	$('#bank_docs').on('change', savingwallet.prepareUpload);
 
 	/* save bank info */
 	$('#add_bank').submit(function(e){
 		e.preventDefault();
-
+		var attachment_ids = [];
 		var values = {};
 		$.each($(this).serializeArray(), function(i, field) {
 		    values[field.name] = field.value;
 		});
 
+		// graps all attachment ids 
+		$('li[data-attachment-id]').each(function(){
+			attachment_ids.push($(this).data('attachment-id'));
+		});
+
+		// include attachments ids to data values
+		values['attachment_ids'] = attachment_ids;
+
 		var data = {
 			action: 'save_bank',
 			dd: values
 		}
+
+		console.log(data);
 
 		$.ajax({
 			type: 'POST',
@@ -747,8 +697,6 @@ jQuery(function($){
 	    }
 
 	});
-
-
 
 
 });

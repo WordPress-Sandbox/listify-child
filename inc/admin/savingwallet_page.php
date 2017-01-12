@@ -60,7 +60,7 @@ function bank_verification() {
 		$banks = get_user_meta($id, 'banks', true);
 		if(is_array($banks)) :
 			foreach ($banks as $key => $bank) :
-				if($bank['verification'] === 'unverified') : 
+				if($bank['verification'] === 'pending') : 
 				?>
 
 				<div class="accordion" data-accordion>
@@ -68,6 +68,7 @@ function bank_verification() {
 			        <div data-content>
 			            <div>
 			            	<h3 class="message"></h3>
+			            	<div class="basic_info">
 			            	<ul>
 			            		<?php $user = get_userdata($id); ?>
 			            		<li>Customer ID: <?php echo $id; ?></li>
@@ -78,11 +79,19 @@ function bank_verification() {
 			            		<li>Account type: <?php echo $bank['account_type']; ?></li>
 			            		<li>Routing number: <?php echo $bank['bank_routing']; ?></li>
 			            		<li>Account number: <?php echo $bank['account_number']; ?></li>
-			            		<li>Support Doc: <a href="<?php echo $bank['account_number']; ?>">DOC</a></li>
 			            	</ul>
 			            	<div class="btn_area">
 			            		<a class="verify_btn" data-status="verified" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as verified</a>
 			            		<a class="verify_btn" data-status="declined" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as Declined</a>
+			            	</div>
+			            	</div>
+			            	<div class="support_docs">
+			            		<h4> Support Docs</h4>
+			            		<ul>
+			            			<?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : ?>
+			            				<li><img src="<?php echo wp_get_attachment_url($id); ?>" /></li>
+			            			<?php endforeach; endif; ?>
+			            		</ul>
 			            	</div>
 			            </div>
 			        </div>

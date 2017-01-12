@@ -28,3 +28,22 @@ div.btn_area .withdrawl_btn {
 	padding: 5px 10px;
 	cursor: pointer;
 }
+.basic_info {
+	display: inline-block;
+}
+.support_docs {
+	max-width: 500px;
+	display: inline-block;
+}
+.support_docs ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.support_docs ul li {
+	display: inline-block;
+	max-width: 100px;
+}
+.support_docs ul img {
+	width: 100%;
+}
