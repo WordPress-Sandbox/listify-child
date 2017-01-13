@@ -110,9 +110,9 @@ jQuery(function($){
 	                  || data.type === "image/gif"
 	                  || data.type === "image/jpeg"
 	                ) {
-	                  preview = "<li data-attachment-id='" + data.id + "'><img src='" + data.url + "' /><span class=\"delete_doc\" data-fileurl='" + data.url + "'>x</span></li>";
+	                  preview = '<li data-attachment-id="' + data.id + '"><img src="' + data.url + '"><span class="delete_doc" data-fileurl="' + data.url + '">x</span></li>';
 	                } else {
-	                  preview = "<li data-attachment-id='" + data.id + "'><a href='" + data.url + "'>" + data.filename + "</a></li>";
+	                  preview = '<li data-attachment-id="' + data.id + '"><a href="' + data.url + '">' + data.filename + '"</a></li>';
 	                }
 	  
 	                var previewID = $('#preview_doc');
@@ -545,6 +545,38 @@ jQuery(function($){
 	// upload bank doc 
 	$('#bank_docs').on('change', savingwallet.prepareUpload);
 
+	// delete doc attachment
+	$('body').on('click', 'span.delete_doc', function(){
+		var _that = $(this);
+		var id = _that.parent().data('attachment-id');
+		var data = {
+			action: 'delete_attachment',
+			id: id
+		}
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			cache: false,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp);
+				if( resp.status == 'ERROR') {
+						$('.add_bank_message').css('color', 'red').html(resp.responsetext);
+				} else if (resp.status == 'SUCCESS') {
+					console.log('upload should be deleted');
+					_that.parent().remove();
+				}
+			},
+			error: function( req, status, err ) {
+				$('.add_bank_message').css('color', 'red').html('something went wrong', status, err);
+			}
+		});
+
+
+	});
+
+
 	/* save bank info */
 	$('#add_bank').submit(function(e){
 		e.preventDefault();
@@ -567,15 +599,12 @@ jQuery(function($){
 			dd: values
 		}
 
-		console.log(data);
-
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
 				if( resp.status == 'error') {
 						$('.add_bank_message').css('color', 'red').html(resp.responsetext);
 				} else {
@@ -584,7 +613,6 @@ jQuery(function($){
 				}
 			},
 			error: function( req, status, err ) {
-				console.log('error in ajax request');
 				$('.add_bank_message').css('color', 'red').html('something went wrong', status, err);
 			}
 		});

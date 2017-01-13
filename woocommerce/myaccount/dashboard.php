@@ -500,7 +500,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
                                             <dd>
                                                 <section>
-                                                    <ul id="preview_doc">
+                                                    <ul id="list_preview_doc">
                                                     <?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) :
                                                         $image_atts = wp_get_attachment_image_src( $id );
                                                     ?>

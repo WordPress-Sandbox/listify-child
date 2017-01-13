@@ -507,6 +507,24 @@ function upload_bank_doc_func() {
 add_action("wp_ajax_upload_bank_doc", "upload_bank_doc_func");
 
 
+/* Delete attachement */
+function delete_attachment_func() {
+    $id = absint($_POST['id']);
+    $response = array();
+    if( false === wp_delete_attachment($id) ) {
+        $response['status'] = 'ERROR';
+        $response['responsetext'] = 'File could not be deleted';
+    } else {
+        $response['status'] = 'SUCCESS';
+    }
+
+    echo json_encode($response);
+    die();
+
+}
+add_action("wp_ajax_delete_attachment", "delete_attachment_func");
+
+
 /* save bank info */
 function save_bank_func(){
     global $msw;
