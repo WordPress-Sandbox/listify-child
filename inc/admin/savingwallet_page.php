@@ -21,9 +21,11 @@ function enqueue_admin_scripts($hook) {
 
   /* css */
   wp_enqueue_style('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/css/jquery.accordion.css');
+  wp_enqueue_style('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.css');
   wp_enqueue_style('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/css/style.css');
   /* js */
   wp_enqueue_script('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/js/jquery.accordion.js', array('jquery'));
+  wp_enqueue_script('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.js', array('jquery'));
   wp_enqueue_script('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/js/script.js', array('jquery'));
 }
 
@@ -88,8 +90,10 @@ function bank_verification() {
 			            	<div class="support_docs">
 			            		<h4> Support Docs</h4>
 			            		<ul>
-			            			<?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : ?>
-			            				<li><img src="<?php echo wp_get_attachment_url($id); ?>" /></li>
+			            			<?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : 
+			            				$image_atts = wp_get_attachment_image_src( $id );
+			            			?>
+			            				<li><a class="magnific-popup" href="<?php echo wp_get_attachment_url($id); ?>"><img src="<?php echo $image_atts[0]; ?>" /></a></li>
 			            			<?php endforeach; endif; ?>
 			            		</ul>
 			            	</div>

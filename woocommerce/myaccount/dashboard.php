@@ -501,8 +501,10 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <dd>
                                                 <section>
                                                     <ul id="preview_doc">
-                                                        <?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : ?>
-                                                            <li><img src="<?php echo wp_get_attachment_url($id); ?>" /></li>
+                                                    <?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) :
+                                                        $image_atts = wp_get_attachment_image_src( $id );
+                                                    ?>
+                                                        <li><a class="magnific-popup" href="<?php echo wp_get_attachment_url($id); ?>"><img src="<?php echo $image_atts[0]; ?>" /></a></li>
                                                         <?php endforeach; endif; ?>
                                                     </ul>
                                                 </section>

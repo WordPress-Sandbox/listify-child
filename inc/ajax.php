@@ -485,11 +485,11 @@ function upload_bank_doc_func() {
         } else {
             $fullsize_path = get_attached_file( $attachment_id );
             $pathinfo = pathinfo( $fullsize_path );
-            $url = wp_get_attachment_url( $attachment_id );
+            $image_atts = wp_get_attachment_image_src( $attachment_id );
             $response['response'] = "SUCCESS";
             $response['filename'] = $pathinfo['filename'];
             $response['id'] = $attachment_id;
-            $response['url'] = $url;
+            $response['url'] = $image_atts[0];
             $type = $pathinfo['extension'];
             if( $type == "jpeg"
             || $type == "jpg"

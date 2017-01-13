@@ -139,6 +139,21 @@ jQuery(function($){
         function(){$(".qr_code").css({"z-index": "-1"});}
     );
 
+    /* Magnific Popup */
+    $('.magnific-popup').magnificPopup({
+    	type: 'image',
+    	closeOnContentClick: false,
+    	mainClass: 'mfp-with-zoom',
+		image: {
+			verticalFit: true
+		},
+		zoom: {
+			enabled: true,
+			duration: 300, // don't foget to change the duration also in CSS
+			easing: 'ease-in-out',
+		}
+    });
+
 	// inttelinput 
 	var telInput = $("#phone");
 
