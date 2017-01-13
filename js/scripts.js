@@ -432,15 +432,25 @@ jQuery(function($){
 		var data = {
 			action: 'email_verify',
 			email_verify_nonce: $('.email_verify input[name="email_verify_nonce"]').val(), 
-			user_id: $('.email_verify input[name="user_id"]').val(), 
 			email: $('.email_verify input[name="email"]').val()
 		}
 
-		$.post( local.ajax_url, data, function(res) {
-			var res = $.parseJSON(res);
-			console.log(res);
-			if(res == 'success') {
-				$('.email_verify').html('<span class="success_message">✓ Please check your inbox.</span>');
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp);
+				if( resp.status == 'ERROR') {
+					$('.message').css('color', 'red').text(resp.responsetext);
+				} else if (resp.status == 'SUCCESS') {
+					$('.message').css('color', 'green').text(resp.responsetext);
+				}
+			},
+			error: function( req, status, err ) {
+				console.log('error in ajax request');
+				$('.message').css('color', 'red').text('something went wrong', status, err);
 			}
 		});
 
@@ -716,8 +726,6 @@ jQuery(function($){
 				amount: $('form#withdraw input[name="amount"]').val()
 			}
 
-			console.log(data);
-
 			$.ajax({
 				type: 'POST',
 				url: local.ajax_url,
@@ -725,9 +733,10 @@ jQuery(function($){
 				dataType: 'json',
 				success: function(resp) {
 					console.log(resp);
-					if( resp.status == 'error') {
+					if( resp.status == 'ERROR') {
 						$('.message').css('color', 'red').text(resp.responsetext);
-					} else if (resp.status == 'success') {
+					} else if (resp.status == 'SUCCESS') {
+						$('.balance').text(local.currency_symbol + resp.balance);
 						$('.message').css('color', 'green').text(resp.responsetext);
 					}
 				},

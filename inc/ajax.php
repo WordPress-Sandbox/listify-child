@@ -282,18 +282,19 @@ add_action('wp_ajax_nopriv_user_login', 'msw_user_login');
 /* email verify */
 function email_verify_func() {
 
-    $err = array();
+    global $msw;
+    $response = array();
 
     // Verify nonce
     if( !isset( $_POST['email_verify_nonce'] ) && !wp_verify_nonce( $_POST['email_verify_nonce'], 'email_verify' ) ) {
-        $err[] = 'Ooops, something went wrong, please try again later.';
+        $response['status'] = 'ERROR';
+        $response['responsetext'] = 'Ooops, something went wrong, please try again later.';
     }
 
     // Get data 
-    $user_id = mysql_escape_string($_POST['user_id']);
-    $email = mysql_escape_string($_POST['email']);
-    $user = new WP_User($user_id);
-    $email_status = get_user_meta($user_id, 'email_status', true);
+    $user = new WP_User($msw->user_id);
+    $email = sanitize_email($_POST['email']);
+    $email_status = $msw->getMetaValue('email_status');
 
     $sub = "MySavingsWallet email verification";
 
@@ -304,32 +305,34 @@ function email_verify_func() {
     $message = "<html><body>";
     $message .= "Hi <strong>" . $user->display_name . "<strong>"; 
     $message .= "<h2> Thanks for registering with mysavingswallet. </h2>";
-    $message .= 'Click on the verify email button to confirm your email. <a style="display: inline-block; padding: 5px 10px; background-color: #2854A1; color: #FFF;" href="'.$link.'"> Verify email</a>';
+    $message .= "Click on the verify email button to confirm your email. <a style=\"display: inline-block; padding: 5px 10px; background-color: #2854A1; color: #FFF;\" href=\"{$link}\"> Verify email</a>";
     $message .= "</body></html>";
 
-    $headers = 'From:info@mysavingswallet.com' . "\r\n";
+    $headers = "From:info@mysavingswallet.com" . "\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-    //
-    if( $user->user_email == $email && $email_status != 'verified' ) {
+    if( $email_status == 'unverified' || $email_status == 'pending' ) {
         $mail = wp_mail( $email, $sub, $message, $headers);
         if($mail) {
-            update_user_meta($user_id, 'email_code', $code);
-            update_user_meta($user_id, 'email_status', 'pending');
-            $err[] = 'success';
+            wp_update_user( array( 'ID' => $msw->user_id, 'user_email' => $email ) );
+            $msw->updateUserMeta('email_code', $code);
+            $msw->updateUserMeta('email_status', 'pending');
+            $response['status'] = 'SUCCESS';
+            $response['responsetext'] = 'Verification link sent to your email. Please check inbox.';
         } else {
-            $err[] = 'Couldn\'t sent the mail.';
+            $response['responsetext'] = 'Couldn\'t send verification email.';
         }
     } else {
-        $err[] = 'Something went wrong!';
+            $response['status'] = 'ERROR';
+            $response['responsetext'] = 'Someting went wrong!';
     }
 
-    echo json_encode($err[0]);
+    echo json_encode($response);
     die();
 
 }
-
+// email_verify_func();
 add_action('wp_ajax_email_verify', 'email_verify_func');
 
 /* cashback */
@@ -666,16 +669,28 @@ add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer
 function withdraw_request_func() {
     global $msw;
     $amount = $_POST['amount'];
+
+    $response = array('status' => 'proceed');
+
     if(!$msw->checkInteger($amount)) {
-        echo json_encode(array('status' => 'error', 'responsetext' => 'Amount must be digit character'));
-        die();
+        $response['status'] = 'ERROR';
+        $response['responsetext'] = 'Amount must be digit character';
     } else if($msw->minwithdraw > $amount) {
-        echo json_encode(array('status' => 'error', 'responsetext' => 'Minimum withdraw amount is ' . $msw->minwithdraw ));
-        die();
+        $response['status'] = 'ERROR';
+        $response['responsetext'] = 'Minimum withdraw amount is ' . $msw->minwithdraw;
     }
+
     $verifiedbanks = $msw->verifiedbanks();
-    $selected_bank = array_filter($verifiedbanks, function($v) { return $v['bank_name'] == $_POST['bank']; });
-    if(is_array($selected_bank) && count($selected_bank) === 1) {
+    if(is_array($verifiedbanks)) {
+        $selected_bank = array_filter($verifiedbanks, function($v) { return $v['bank_name'] == $_POST['bank']; });
+    }
+
+    if(empty($selected_bank)) {
+        $response['status'] = 'ERROR';
+        $response['responsetext'] = 'Error in selecting bank.';
+    }
+
+    if($response['status'] === 'proceed' ) {
         $prev_balance = $msw->getMetaValue('wallet_balance');
         $new_balance = bcsub($prev_balance, $amount, 2);
 
@@ -692,12 +707,14 @@ function withdraw_request_func() {
         $withdrawls[] = $new_withdraw;
         $msw->updateUserMeta('withdrawls', $withdrawls);
         $msw->updateUserMeta('wallet_balance', $new_balance);
-        echo json_encode(array('status' => 'success', 'responsetext' => 'Your withdraw is pending for approval.'));
-        die();
-    } else {
-        echo json_encode(array('status' => 'error', 'responsetext' => 'Error in selecting bank.'));
-        die();
-    }
+
+        $response['status'] = 'SUCCESS';
+        $response['responsetext'] = 'Your withdraw is pending for approval.';
+        $response['balance'] = $new_balance;
+    } 
+
+    echo json_encode($response);
+    die();
 }
 add_action('wp_ajax_withdraw_request', 'withdraw_request_func');
 

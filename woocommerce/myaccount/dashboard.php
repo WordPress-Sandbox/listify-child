@@ -36,7 +36,6 @@ $user_id = get_current_user_id();
 $user = new WP_User($user_id);
 $email_status = get_user_meta($user_id, 'email_status', true);
 $email_code = get_user_meta($user_id, 'email_code', true);
-$email_code = get_user_meta($user_id, 'email_code', true);
 $gender = get_user_meta($user_id, 'gender', true);
 $billing_phone = get_user_meta($user_id, 'billing_phone', true);
 $billing_company = get_user_meta($user_id, 'billing_company', true);
@@ -48,24 +47,20 @@ $facebook = get_user_meta($user_id, 'facebook', true);
 $description = get_user_meta($user_id, 'description', true);
 $banks = get_user_meta($user_id, 'banks', true);
 
-$key = '';
-if(array_key_exists('key', $_GET)) {
-    $key = $_GET['key'];
-}
+$key = isset($_GET['key']) ? $_GET['key'] : '';
 
 ?>
 
     <div class="woocommerce-message" style="display: none"></div>
-    <?php //echo get_user_meta($user_id, 'email_code', true); ?>
-    <?php //echo get_user_meta($user_id, 'email_status', true); ?>
-
+    <?php //echo $msw->getMetaValue('email_code'); ?>
+    <?php //echo $msw->getMetaValue('email_status'); ?>
 <?php 
 
 if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 
     <div class="container">
         <div class="email_confirmed">
-            <?php update_user_meta($user_id, 'email_status', 'verified'); ?>
+            <?php $msw->updateUserMeta('email_status', 'verified'); ?>
             <h2> Your Email Verified Successfully </h2>
             <script>window.setTimeout(function(){location.reload()}, 2000);</script>
         </div>
@@ -83,11 +78,11 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
         </div>
         <div class="row">
             <div class="email_verify">
-                <input type="text" name="email" value="<?php echo $user->user_email; ?>" disabled>
-                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                <input type="text" name="email" value="<?php echo $user->user_email; ?>">
                 <?php wp_nonce_field('email_verify','email_verify_nonce', true, true ); ?>
                 <input type="submit" name="email_submit" value="Send verification code">
             </div>
+            <p class="message"></p>
         </div>
     </div>
 
@@ -391,8 +386,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <div id="payment" class="user_profile_edit fade">
                             <h2>Manage your Payment</h2>
                             <p class="show_message"></p>
-                            <p> Your current balance is: <?php echo $msw->wallet_balance(); ?>
-                                <br/>
+                            <p> Your current balance is: <span class="balance"><?php echo $msw->wallet_balance(); ?></span></p>
 
                             <?php if($msw->get_user_role() != 'customer') : ?>
                                 <a class="button topup"> Topup </a>

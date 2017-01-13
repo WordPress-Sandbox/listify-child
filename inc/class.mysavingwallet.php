@@ -12,7 +12,7 @@ class Mysavingwallet {
 	private $sid;
 	private $token;
 	private $from_phone;
-	private $user_id;
+	public $user_id;
 	public $minwithdraw;
 	public $currency_symbol;
 
