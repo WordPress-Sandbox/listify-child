@@ -183,12 +183,21 @@ class Mysavingwallet {
 		if(is_array($cashbacks) && count($cashbacks) > 0 ) {
 			$cashbacks = array_reverse($cashbacks);
 			$html = '<table>';
-			$html .= '<tr><th>Cashback ID</th><th>Customer ID</th><th>Business ID</th><th> Amount </th><th>Time</th></tr>';
+			$html .= '<tr><th>Cashback ID</th><th>Customer ID</th><th>Business ID</th>'; 
+			if($this->get_user_role() == 'administrator') {
+				$html .= '<th> Customer Balance </th><th> Business Balance </th><th> Company Balance </th>';
+			}
+			$html .= '<th> Amount </th><th>Time</th></tr>';
 			foreach ($cashbacks as $key => $cash) {
 				$html .= '<tr>';
 					$html .= '<td>' . $cash['id'] . '</td>';
 					$html .= '<td>' . $cash['customer_id'] . '</td>';
 					$html .= '<td>' . $cash['business_id'] . '</td>';
+					if($this->get_user_role() == 'administrator') {
+						$html .= '<td>' . $this->currency_symbol . $cash['customer_balance'] . '</td>';
+						$html .= '<td>' . $this->currency_symbol . $cash['business_balance'] . '</td>';
+						$html .= '<td>' . $this->currency_symbol . $cash['company_balance'] . '</td>';
+					}
 					$html .= '<td>' . $this->currency_symbol . $cash['amount'] . '</td>';
 					$html .= '<td>' . $cash['time'] . '</td>';
 				$html .= '</tr>';
