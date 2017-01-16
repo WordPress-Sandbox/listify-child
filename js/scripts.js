@@ -29,6 +29,10 @@ jQuery(function($){
 	    return true;
 	}
 
+	SavingWallet.prototype.isNumber = function(n) {
+	  return !isNaN(parseFloat(n)) && isFinite(n);
+	}
+
 	// confirm password match 
 	SavingWallet.prototype.checkPasswordMatch = function(p1, p2) {
 	    if(p1) {

@@ -38,7 +38,14 @@ global $msw;
 	<div class="wrap">
 		<h1> Saving Wallet Settings </h1>
 		<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
-		<h4> Lastest Cashbacks </h4>
+		<div class="add_user_balance">
+			<h3> Add Balance to User</h3>
+			<p class="amount_to_user_message"></p>
+			<input type="number" name="amount_to_user_id" placeholder="User ID">
+			<input type="number" name="amount_to_user" placeholder="Amount">
+			<input type="submit" value="Add balance" id="add_user_balance">
+		</div>
+		<h3> Lastest Cashbacks </h3>
 		<?php echo do_shortcode('[cashbacks]'); ?>
 	</div>
 

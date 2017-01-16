@@ -47,3 +47,11 @@ div.btn_area .withdrawl_btn {
 .support_docs ul img {
 	width: 100%;
 }
+
+.add_user_balance {
+    background: #ddd;
+    padding: 10px 20px;
+}
+.add_user_balance h3 {
+    margin: 0;
+}

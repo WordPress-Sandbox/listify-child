@@ -125,9 +125,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <?php echo get_avatar($user_id, 262); ?>
                     </div>
                     <br/>
-                    <?php if($msw->get_user_role() == 'customer'): ?>
-                        <h2> Customer ID: <?php echo $user_id; ?></h2>
-                    <?php endif; ?>
+                    <h2> User ID: <?php echo $user_id; ?></h2>
                 </div>
                 </div>
                 <div class="user_profile_desc">

@@ -1,4 +1,9 @@
 jQuery(function($){
+
+	function isNotNumber(n) {
+	  return isNaN(parseFloat(n)) && isFinite(n);
+	}
+
 	$('.accordion').accordion({
 	    "transitionSpeed": 400
 	});
@@ -43,6 +48,30 @@ jQuery(function($){
 				$('.message').text('something went wrong', status, err);
 			}
 		});
+	});
 
+	$('#add_user_balance').click(function(e){
+		e.preventDefault();
+		var data = {
+			action: 'add_user_balance',
+			userid: $('input[name="amount_to_user_id"]').val(),
+			amount: $('input[name="amount_to_user"]').val(),
+		}
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				if(resp.status == 'SUCCESS') {
+					$('.amount_to_user_message').css('color', 'green').text(resp.responsetext);
+				} else if (resp.status == 'ERROR') {
+					$('.amount_to_user_message').css('color', 'red').text(resp.responsetext);
+				}
+			},
+			error: function( req, status, err ) {
+				$('.amount_to_user_message').css('color', 'red').text('something went wrong', status, err);
+			}
+		});
 	});
 })
