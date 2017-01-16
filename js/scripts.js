@@ -458,9 +458,13 @@ jQuery(function($){
 
 	/* cashback percentage */
 	$('input[name="cashback_input"]').on('change', function(){
-		var input = $(this).val();
-		var cashback = local.cashback_percentage*input/100;
-		$('#cashback_amount').val(local.currency_symbol + cashback);
+		if(local.cashback_percentage ) {
+			var input = $(this).val();
+			var cashback = local.cashback_percentage*input/100;
+			$('#cashback_amount').val(local.currency_symbol + cashback);
+		} else {
+			$('.cashback_message').css('color', 'red').text('Please set cashback percentage between 5% and 35% from myaccount setting.');
+		}
 	});
 
 	$('#cashback_btn').click(function(e){

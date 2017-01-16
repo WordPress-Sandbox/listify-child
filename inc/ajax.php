@@ -430,7 +430,7 @@ function user_settings_func(){
     foreach ($data as $k => $v ) {
         if($k === 'cashback_percentage') {
             if(!intval($v) || $v < 5 || $v > 35 ) {
-                $error[] = 'Input percentage needs to be a number between 5 to 35';
+                $error[] = 'Input percentage needs to be a number between 5 and 35';
             } else {
                 $msw->updateUserMeta($k, $v);
             }
