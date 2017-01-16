@@ -354,7 +354,7 @@ function cashback_func() {
         $halfamount = bcdiv($amount, '2', 2);
         $business_new_balance = bcsub($business_balance, $amount, 2);
         $customer_new_balance = bcadd($customer_balance, $halfamount, 2);
-        $company_balance = bcadd($business_balance, $halfamount, 2);
+        $company_new_balance = bcadd($company_balance, $halfamount, 2);
         update_user_meta($business_id, 'wallet_balance', $business_new_balance);
         update_user_meta($customer_id, 'wallet_balance', $customer_new_balance);
 
@@ -364,13 +364,13 @@ function cashback_func() {
         $new_cashback['business_id'] = $business_id;
         $new_cashback['customer_balance'] = $customer_new_balance;
         $new_cashback['business_balance'] = $business_new_balance;
-        $new_cashback['company_balance'] = $company_balance;
+        $new_cashback['company_balance'] = $company_new_balance;
         $new_cashback['amount'] = $halfamount;
         $new_cashback['time'] = current_time('mysql');
 
         $cashbacks[] = $new_cashback;
         update_option('cashbacks', $cashbacks, false);
-        update_option('company_balance', $company_balance, false);
+        update_option('company_balance', $company_new_balance, false);
 
 
         // emailing
