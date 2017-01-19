@@ -253,6 +253,23 @@ class Mysavingwallet {
 		if(count($this->verifiedbanks()) > 0 ) return true;
 	}
 
+	public function getUserByCashbackAmount($amount, $compare='=') {
+	    $args = array(
+	        'meta_key'      => 'cashback_percentage', 
+	        'meta_value'    => $amount,
+	        'meta_compare'	=> $compare
+	    );
+
+	    $cashback_user_search = new WP_User_Query($args);
+	    $cashback_users = $cashback_user_search->get_results();
+	    $cashback_users_ids = array();
+	    foreach($cashback_users as $cb_user) {
+	        $cashback_users_ids[] = $cb_user->ID;
+	    }
+	    
+	    return $cashback_users_ids;
+	}
+
 }
 
 $GLOBALS['msw'] = new Mysavingwallet;

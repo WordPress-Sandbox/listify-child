@@ -151,24 +151,7 @@ function savingwallet_submit_job_form_func() {
 add_shortcode('savingwallet_submit_job_form', 'savingwallet_submit_job_form_func');
 
 
-/* balance to users columns */
-function balance_columns_head( $column ) {
-    $column['wallet_balance'] = 'Balance';
-    return $column;
-}
 
-function balance_columns_content( $val, $column_name, $user_id ) {
-    global $msw;
-    switch ($column_name) {
-        case 'wallet_balance' :
-            $balance = get_the_author_meta( 'wallet_balance', $user_id );
-            return $balance ? $msw->currency_symbol . $balance : $msw->currency_symbol . '0.00';
-            break;
-        default:
-    }
-    return $val;
-}
+var_dump($msw->getUserByCashbackAmount('6', '>='));
 
-add_filter( 'manage_users_columns', 'balance_columns_head' );
-add_filter( 'manage_users_custom_column', 'balance_columns_content', 10, 3 );
 
