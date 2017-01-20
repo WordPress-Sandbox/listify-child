@@ -492,6 +492,7 @@ jQuery(function($){
 				} else if (resp.status == 'success') {
 					$('.cashback_message').css('color', 'green').text( resp.message );
 					$('span.balance').text(local.currency_symbol + resp.balance);
+					$('#cashback_wrapper').html(resp.replace_content);
 				}
 			},
 			error: function( req, status, err ) {

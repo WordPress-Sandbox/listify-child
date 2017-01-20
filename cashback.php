@@ -40,6 +40,7 @@ $msw = new Mysavingwallet;
 	   		<?php else : ?>
 	   			<?php if($msw->get_user_role() == 'business') : ?>
 	   				<div class="row">
+	   					<div id="cashback_wrapper">
 	   					<div class="col-md-5">
 	   						<div class="cashback_wrapper">
 	   							<p> Your current balance is: <strong><span class="balance"><?php echo $msw->wallet_balance(); ?></span></strong></p>
@@ -83,6 +84,7 @@ $msw = new Mysavingwallet;
 	   							</div>
 	   						</div>
 	   					</div>
+	   				 </div>
 	   				</div>
 	   			<?php else : ?>
 	   			<p> You must be a business to give cashback</p>

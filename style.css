@@ -1170,3 +1170,10 @@ span.cashback_percentage {
 .user_info_cashback img {
     padding: 0 0 8px;
 }
+
+
+
+/* search form */
+.template-home .listify_widget_search_listings .search_by_cashback {
+  display: none;
+}

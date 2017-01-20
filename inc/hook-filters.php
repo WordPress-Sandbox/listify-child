@@ -45,6 +45,27 @@ function manage_users_custom_column_content( $val, $column_name, $user_id ) {
 add_filter( 'manage_users_columns', 'manage_users_columns_head' );
 add_filter( 'manage_users_custom_column', 'manage_users_custom_column_content', 10, 3 );
 
+
+// custom cashback percentage field in user profile 
+add_action( 'show_user_profile', 'user_extra_profile_fields' );
+add_action( 'edit_user_profile', 'user_extra_profile_fields' );
+
+function user_extra_profile_fields() {
+	locate_template( array('inc/templates/cashback_percentage_user_profile.php'), true, true);
+}
+
+// save user cashback percentage field 
+add_action( 'personal_options_update', 'user_extra_profile_fields_save' );
+add_action( 'edit_user_profile_update', 'user_extra_profile_fields_save' );
+
+function user_extra_profile_fields_save( $user_id ) {
+	if ( !current_user_can( 'edit_user', $user_id ) ) {
+		return false;
+	}
+	update_usermeta( $user_id, 'cashback_percentage', $_POST['cashback_percentage'] );
+}
+
+
 /* show cashback percentage */
 function listify_content_job_listing_before_func() {
 	global $msw;
@@ -74,7 +95,7 @@ function filter_by_cashback_query_args( $query_args, $args ) {
 		// min cashback 
 		if ( ! empty( $form_data['min_cashback'] ) ) {
 			$min_cashback = sanitize_text_field( $form_data['min_cashback'] );
-			$min_cashback_users = $msw->getUserByCashbackAmount($min_cashback, '<=');
+			$min_cashback_users = $msw->getUserByCashbackAmount($min_cashback*2, '>=');
 			// This will show the 'reset' link
 			add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
 		}		
@@ -82,19 +103,28 @@ function filter_by_cashback_query_args( $query_args, $args ) {
 		// max cashback 
 		if ( ! empty( $form_data['max_cashback'] ) ) {
 			$max_cashback = sanitize_text_field( $form_data['max_cashback'] );
-			$max_cashback_users = $msw->getUserByCashbackAmount($max_cashback, '>=');
+			$max_cashback_users = $msw->getUserByCashbackAmount($max_cashback*2, '<=');
 			// This will show the 'reset' link
 			add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
 		}
 
-		// combine all authors 
-		$authors = array_merge($min_cashback_users, $max_cashback_users);
-		if(!empty($authors)) {
-			$query_args['author'] = $authors;
-		}
+		// combine all authors
+		$authors = array_merge( (array) $min_cashback_users, (array) $max_cashback_users);
+		$query_args['author__in'] = $authors;
 	}
+	
 	return $query_args;
+
 }
 
+function single_page_cashback_badge() {
+	global $msw;
+	$listing = get_post();
+	$cashback_percentage = get_user_meta($listing->post_author, 'cashback_percentage', true);
+	$show_half_customer = $cashback_percentage / 2; 
+	if($show_half_customer > 0 ) {
+		echo "<span class=\"single_listing_page cashback_percentage\"> {$show_half_customer}%</span>";
+	}
+}
 
-
+add_action('single_job_listing_meta_start', 'single_page_cashback_badge');

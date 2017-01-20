@@ -389,7 +389,11 @@ function cashback_func() {
         $b_mail = wp_mail( $b_email, $b_sub, $b_message, $headers);
         $c_mail = wp_mail( $c_email, $c_sub, $c_message, $headers);
 
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance, 'b_message' => $b_message, 'c_message' => $c_message));
+        $replace_content = "<div class=\"col-md-6 col-md-offset-3\">
+        <h2> Your Cashback to <strong>{$customer->first_name} {$customer->last_name}</strong> successful. <br/> Current Balance: {$msw->currency_symbol}{$business_new_balance}</h2>
+        </div>";
+
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance, 'replace_content' => $replace_content, 'b_message' => $b_message, 'c_message' => $c_message));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));
