@@ -238,10 +238,15 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
 	                                <dd>
 	                                    <input type="text" name="bs_apartmentsuite" value="<?php echo esc_attr($apartmentsuite); ?>">
 	                                </dd>
-	                                <hr>
+                                    <hr>
                                     <dt><strong><?php esc_html_e( 'City', 'listify_child' ); ?></strong></dt>
                                     <dd>
                                         <input type="text" name="billing_city" value="<?php echo esc_attr( $user->billing_city ); ?>" >
+                                    </dd>	                                
+                                    <hr>
+                                    <dt><strong><?php esc_html_e( 'Zip Code', 'listify_child' ); ?></strong></dt>
+                                    <dd>
+                                        <input type="text" name="billing_postcode" value="<?php echo esc_attr( $user->billing_postcode ); ?>" >
                                     </dd>
                                     <hr>	                                
                                     <dt><strong><?php esc_html_e( 'State', 'listify_child' ); ?></strong></dt>
@@ -330,8 +335,8 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                         <div id="passwordTab" class="user_profile_edit fade">
                             <h2>Manage your Security Settings</h2>
 							<hr>
+                            <p class="message"></p>
                             <form id="change_password" action="" class="password_change" method="post">
-                            	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
                                 <dl class="dl-horizontal">
                                     <dt><?php esc_html_e( 'Username', 'listify_child' ); ?></dt>
                                     <dd>
@@ -346,38 +351,51 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <dt><?php esc_html_e( 'Email Address', 'listify_child' ); ?></dt>
                                     <dd>
                                         <section>
-                                            <label for="account_email" class="input">
+                                            <label for="user_email" class="input">
                                                 <i class="icon_append fa fa-envelope"></i>
-                                                <input type="email" name="account_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
+                                                <input type="email" name="user_email" placeholder="Email address" value="<?php echo esc_attr( $user->user_email ); ?>" disabled>
                                             </label>
                                         </section>
                                     </dd>
                                     <hr>
-                                    <dt><?php esc_html_e( 'Enter current password', 'listify_child' ); ?></dt>
+                                    <dt><?php esc_html_e( 'Enter Current Password', 'listify_child' ); ?></dt>
                                     <dd>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" name="password_1" placeholder="Enter your current password">
-                                                <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+                                                <b class="tooltip tooltip-bottom-right">Your current password</b>
+                                                <input type="password" name="user_password_current" placeholder="Enter your current password">
+                                                <span></span>
                                             </label>
                                         </section>
                                     </dd>
                                     <hr>
-                                    <dt><?php esc_html_e( 'Confirm Password', 'listify_child' ); ?></dt>
+                                    <dt><?php esc_html_e( 'Enter New Password', 'listify_child' ); ?></dt>
                                     <dd>
                                         <section>
                                             <label class="input">
                                                 <i class="icon_append fa fa-lock"></i>
-                                                <input type="password" name="password_2" placeholder="Confirm password">
-                                                <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+                                                <b class="tooltip tooltip-bottom-right">Enter new password</b>
+                                                <input type="password" id="pass" name="user_password" placeholder="Confirm password">
+                                                <span></span>
+                                            </label>
+                                        </section>
+                                    </dd>                                      
+                                    <hr>
+                                    <dt><?php esc_html_e( 'Re-enter New Password', 'listify_child' ); ?></dt>
+                                    <dd>
+                                        <section>
+                                            <label class="input">
+                                                <i class="icon_append fa fa-lock"></i>
+                                                <input type="password" id="confpass" name="conf_user_password" placeholder="Re-enter password">
+                                                <b class="tooltip tooltip-bottom-right">Confirm your new password</b>
                                             </label>
                                         </section>
                                     </dd>    
                                 </dl>
                                 <hr>
                                 <br>
-	                           		<button type="submit" name="change_password" class="button"><?php esc_html_e( 'Save Changes', 'woocommerce' ); ?></button>
+	                           	<button type="submit" name="change_password" class="button"><?php esc_html_e( 'Save Changes', 'listify_child' ); ?></button>
                             </form>    
                         </div><!-- /passwordTab -->
 

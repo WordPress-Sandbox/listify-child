@@ -509,17 +509,18 @@ jQuery(function($){
 	$('#basic_info').submit(function(e){
 		e.preventDefault();
 
-		var data = {
-			action: 'save_basic',
-			dd: $(this).serializeArray()
-		}
+		var data = {}
+
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
 
 		console.log(data);
 
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
-			data: data,
+			data: { action: 'save_basic', dd: data },
 			dataType: 'text',
 			success: function(resp) {
 				console.log(resp);
@@ -549,6 +550,33 @@ jQuery(function($){
 			dataType: 'json',
 			success: function(resp) {
 				if(resp.status == 'success') {
+					$('.message').css('color', 'green').text( resp.responsetext );
+				} else {
+					$('.message').css('color', 'red').text( resp.responsetext );
+				}
+			},
+			error: function( req, status, err ) {
+				$('.message').slideDown('slow').text( 'something went wrong', status, err );
+			}
+		});
+
+	});
+
+	$('#change_password').submit(function(e){
+		e.preventDefault();
+		var data = {};
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
+		console.log(data);
+		$.ajax({
+			type: 'POST',
+			url: local.ajax_url,
+			data: { action: 'change_password', dd: data },
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp);
+				if(resp.status == 'SUCCESS') {
 					$('.message').css('color', 'green').text( resp.responsetext );
 				} else {
 					$('.message').css('color', 'red').text( resp.responsetext );

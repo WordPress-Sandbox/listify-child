@@ -404,23 +404,60 @@ add_action('wp_ajax_cashback', 'cashback_func');
 
 /* edit profile */
 function save_basic_func(){
+    global $msw;
+    $data = array_filter($_POST['dd']);
 
-    $dd = $_POST['dd'];
-    $user_id = get_current_user_id();
-
-    foreach ($dd as $key => $value) {
-        if(!empty($value['value'])) {
-            $es_value = mysql_escape_string($value['value']);
-            update_user_meta($user_id, $value['name'], $value['value']);
-        }
+    foreach ($data as $key => $value) {
+        $es_value = sanitize_text_field($value);
+        $msw->updateUserMeta($key, $es_value);
     }
 
     echo json_encode('success');
     die();
-
 }
 
 add_action('wp_ajax_save_basic', 'save_basic_func');
+
+
+function change_password_func(){
+    global $msw;
+    $data = array_filter($_POST['dd']);
+    $current_pass = $data['user_password_current'];
+    $user_password = $data['user_password'];
+    $conf_user_password = $data['conf_user_password'];
+
+    $user = get_user_by( 'ID', $msw->user_id );
+
+    $status = 'PROCEED';
+
+    if( $user_password !== $conf_user_password ) 
+    {
+        $message = 'Password didn\'t match';
+        $status = 'FAILED';
+    } 
+    else if ($status == 'PROCEED' && 
+        !wp_check_password( $current_pass, $user->data->user_pass, $msw->user_id)) 
+    {
+        $message = 'Incorrect current password!';
+        $status = 'FAILED';
+    }
+
+    if($status == 'PROCEED') {
+        $user_id = wp_update_user( array( 'ID' => $msw->user_id, 'user_pass' => $user_password ));
+        if(is_wp_error($user_id)) {
+            $message = 'Current Password Wrong!';
+            $status = 'FAILED';
+        } else {
+            $message = 'Password changed successfully';
+            $status = 'SUCCESS';
+        }
+    }
+
+    echo json_encode( array('status' => $status, 'responsetext' => $message));
+    die();
+}
+
+add_action('wp_ajax_change_password', 'change_password_func');
 
 
 function user_settings_func(){
