@@ -809,6 +809,7 @@ p#wpua-preview-existing {
   margin: 0;
   padding: 0;
   margin-bottom: 15px;
+  min-height: 50px;
 }
 #add_bank #preview_doc li, 
 #list_preview_doc li {

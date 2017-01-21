@@ -510,6 +510,12 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <dt><?php esc_html_e( 'Support Doc', 'listify_child' ); ?></dt>
                                             <dd>
                                                 <section>
+                                                    <?php if ( $bank['verification'] == 'verified' ) : ?>
+
+                                                        <span style="color: green;">Verified Document</span>
+
+                                                    <?php else : ?>
+
                                                     <ul id="list_preview_doc">
                                                     <?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) :
                                                         $image_atts = wp_get_attachment_image_src( $id );
@@ -517,6 +523,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                         <li><a class="magnific-popup" href="<?php echo wp_get_attachment_url($id); ?>"><img src="<?php echo $image_atts[0]; ?>" /></a></li>
                                                         <?php endforeach; endif; ?>
                                                     </ul>
+                                                    <?php endif; ?>
                                                 </section>
                                             </dd>
                                         </dl>       
@@ -557,6 +564,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                                 <input type="text" name="bank_routing" id="bank_routing" placeholder="Bank Routing Number (9 Digits only)">
                                                                 <b class="tooltip tooltip-bottom-right">Bank Routing Number (9 Digits only)</b>
                                                             </label>
+                                                            <p class="routing_info"></p>
                                                         </section>
                                                     </dd>
                                                     <hr>

@@ -131,8 +131,8 @@ class Mysavingwallet {
 		}
 	}
 
-	public function ccMasking($number, $maskingCharacter = 'X') {
-	    return substr($number, 0, 4) . str_repeat($maskingCharacter, strlen($number) - 8) . substr($number, -4);
+	public function ccMasking($number, $maskingCharacter = 'x') {
+	    return substr($number, 0, 2) . str_repeat($maskingCharacter, strlen($number) - 4) . substr($number, -2);
 	}
 
 	public function wallet_balance_value() {

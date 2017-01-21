@@ -24,6 +24,20 @@ jQuery(function($){
     });
 
 
+    /* admin tabs 
+
+    https://codepen.io/cssjockey/pen/jGzuK
+    */
+	$('#savingwallet_admin a').click(function(){
+		var tab_id = $(this).attr('data-tab');
+
+		$('ul.tabs li').removeClass('current');
+		$('.tab-content').removeClass('current');
+
+		$(this).addClass('current');
+		$("#"+tab_id).addClass('current');
+	})
+
 /* verify & unverify customer account */
 
 	$('.verify_btn').click(function(e){

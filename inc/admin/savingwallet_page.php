@@ -8,7 +8,7 @@ add_action( 'admin_menu', 'savingwallet_admin_page' );
 
 function savingwallet_admin_page() {
 	add_menu_page( 'Saving Wallet', 'Saving Wallet', 'manage_options', 'savingwallet-admin.php', 'savingwallet_admin', 'dashicons-tickets', 8);
-	add_submenu_page( 'savingwallet-admin.php', 'Withdraw Request', 'Withdraw Request', 'manage_options', 'withdraw-request.php', 'withdraw_request' ); 
+	add_submenu_page( 'saaaavingwallet-admin.php', 'Withdraw Request', 'Withdraw Request', 'manage_options', 'withdraw-request.php', 'withdraw_request' ); 
 	add_submenu_page( 'savingwallet-admin.php', 'Bank Verification', 'Bank Verification', 'manage_options', 'bank-verification.php', 'bank_verification' ); 
 }
 
@@ -27,7 +27,7 @@ function enqueue_admin_scripts($hook) {
   wp_enqueue_script('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/js/jquery.accordion.js', array('jquery'));
   wp_enqueue_script('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.js', array('jquery'));
   wp_enqueue_script('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/js/script.js', array('jquery'));
-}
+}qxqq
 
 add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
 
@@ -36,7 +36,15 @@ function savingwallet_admin(){
 global $msw;
 	?>
 	<div class="wrap">
+
+
 		<h1> Saving Wallet Settings </h1>
+
+		<h2 class="nav-tab-wrapper" id="savingwallet_admin">
+		    <a class="nav-tab" data-tab="management"> Management </a>
+		    <a class="nav-tab" data-tab="bankinfo"> Bank Info </a>
+		</h2>
+         
 		<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
 		<div class="add_user_balance">
 			<h3> Add Balance to User</h3>

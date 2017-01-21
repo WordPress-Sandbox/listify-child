@@ -589,6 +589,25 @@ jQuery(function($){
 
 	});
 
+	// verify routing number https://routingnumbers.herokuapp.com/api/name.html
+
+	$('input[name="bank_routing"]').on('change', function(){
+		$('.routing_info').empty().text("Looking up " + $(this).val() + "...");
+			$.ajax({
+			url: "https://www.routingnumbers.info/api/name.json?rn=" + $(this).val(),
+			dataType: 'jsonp',
+			success: function(resp) {
+				console.log(resp);
+				if(resp.code == 200) {
+					$('input[name="bank_name"]').val(resp.name);
+					$('.routing_info').empty().css('color', 'green').text('Bank Name: ' + resp.name);
+				} else {
+					$('.routing_info').empty().css('color', 'red').text(resp.message);
+				}
+			}
+		});
+	});
+
 	// upload bank doc 
 	$('#bank_docs').on('change', savingwallet.prepareUpload);
 
