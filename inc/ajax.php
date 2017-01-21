@@ -706,41 +706,6 @@ function verify_unverify_customer_account_func() {
 }
 add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer_account_func');
 
-
-/* Add Balance to User */
-function add_user_balance_func() {    
-    global $msw;
-    $userid = $_POST['userid'];
-    $amount = $_POST['amount'];
-
-    $user = get_userdata( $userid );
-
-    $response = array('status' => 'PROCEED');
-
-    if(!$user) {
-        $response['status'] = 'ERROR';
-        $response['responsetext'] = 'Invalid User ID'; 
-    }
-    if(!$msw->checkInteger($amount)) {
-        $response['status'] = 'ERROR';
-        $response['responsetext'] = 'Input must be valid number';
-    }
-
-    if($response['status'] === 'PROCEED') {
-        $response['status'] = 'SUCCESS';
-        $prev_balance = get_user_meta($userid, 'wallet_balance', true);
-        $new_balance = bcadd($prev_balance, $amount, 2);
-        update_user_meta($userid, 'wallet_balance', $new_balance);
-        $response['responsetext'] = $msw->currency_symbol . $amount . ' has been added to ' . $user->display_name;
-    }
-
-    echo json_encode($response);
-    die();
-
-}
-
-add_action('wp_ajax_add_user_balance', 'add_user_balance_func'); 
-
 /* withdraw request */
 function withdraw_request_func() {
     global $msw;

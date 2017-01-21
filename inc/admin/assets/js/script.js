@@ -101,9 +101,8 @@ jQuery(function($){
 			data: { action: 'SearchUser', user_id: userid },
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
+				$('.user_search_message').empty();
 				if(resp.status == 'SUCCESS') {
-					$('.user_search_message').empty();
 					let res = resp.responsetext;
 					let output = `<div class="userfound">
 					<div class="user_img"><img src="` + res.avatar + `"></div>
@@ -111,9 +110,10 @@ jQuery(function($){
 					 + ` User name: <strong>` + res.name + `</strong><br/>`
 					 + ` User email: ` + res.email + `<br/>`
 					 + ` Role: ` + res.roles[0] + `<br/>`
+					 + ` Balance: ` + res.currency + `<span class="balance">` + res.balance + `</span><br/>`
 					+ `</div>
-					<a class="CreditBalance" data-action="credit">Credit Balance </a>
-					<a class="DebitBalance" data-action="debit"> Debit Balance </a>
+					<a class="CreditBalance" data-action="credit" data-userid="` + userid +`">Credit Balance </a>
+					<a class="DebitBalance" data-action="debit" data-userid="` + userid + `"> Debit Balance </a>
 					</div>`;
 					$('#LoadUser').empty().html(output);
 				} else {
@@ -128,10 +128,41 @@ jQuery(function($){
 
 	$('body').on('click', '.CreditBalance, .DebitBalance', function(){
 		$('#debitCredit').remove();
-		let inputField = `<form id="debitCredit"><input type="number" name="balance_debit_credit"/>`;
-			inputField += `<input type="hidden" name="action" value="`+ $(this).attr('data-action')+`"/>`;
-			inputField += `<input type="submit" value="Credit Balance" /></form>`;
+		let inputField = `<form id="debitCredit"><input type="text" name="debit_credit_amount"/>`;
+			inputField += `<input type="hidden" name="process" value="`+ $(this).attr('data-action') +`"/>`;
+			inputField += `<input type="hidden" name="user_id" value="`+ $(this).attr('data-userid') +`"/>`;
+			inputField += `<input type="submit" value="` + $(this).attr('data-action') + ` Balance" /></form>`;
 		$(this).after(inputField);
+	});
+
+
+	$('body').on( 'submit', '#debitCredit', function(e){
+		e.preventDefault();
+		var _that = $(this);
+		var data = { action: 'debitCreditUserBalance' };
+		$.each($(this).serializeArray(), function(i, field) {
+		    data[field.name] = field.value;
+		});
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp);
+				if(resp.status == 'SUCCESS') {
+					$('body').find('span.balance').text(resp.responsetext.balance);
+					_that.after('<p style="color:green"> '+ resp.responsetext + '</p>');
+				} else if (resp.status == 'ERROR') {
+					_that.after('<p style="color:red"> '+ resp.responsetext + '</p>');
+				}
+			},
+			error: function( req, status, err ) {
+				_that.after('<p style="color:green"> something went wrong ' + status, err + '</p>');
+			}
+		});
+
 	});
 
 

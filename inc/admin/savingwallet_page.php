@@ -48,14 +48,6 @@ function savingwallet_admin(){
 		<div id="management" class="tab-content current">
 			<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
 			<div class="add_user_balance">
-				<h3> Add Balance to User</h3>
-				<p class="amount_to_user_message"></p>
-				<input type="number" name="amount_to_user_id" placeholder="User ID">
-				<input type="number" name="amount_to_user" placeholder="Amount">
-				<input type="submit" value="Add balance" id="add_user_balance">
-			</div>			
-
-			<div class="add_user_balance">
 				<h3> Search a user by ID </h3>
 				<form id="SearchUser">
 					<p class="user_search_message"></p>
