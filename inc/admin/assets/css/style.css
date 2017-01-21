@@ -1,4 +1,22 @@
- #banks_verification { 
+/* Tab content */
+
+#savingwallet_admin a.current {
+	background: #ededed;
+	color: #222;
+}
+
+.tab-content {
+	display: none;
+	padding: 15px;
+}
+
+.tab-content.current{
+	display: inline-block;
+}
+
+
+
+#banks_verification { 
 }
 [data-accordion] {
  	border: 1px solid #e5e5e5;
@@ -55,3 +73,4 @@ div.btn_area .withdrawl_btn {
 .add_user_balance h3 {
     margin: 0;
 }
+

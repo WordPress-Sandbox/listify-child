@@ -128,6 +128,8 @@ require_once locate_template('/inc/class.MagicPayGateway.php');
 
 if(is_admin()) {
     require_once locate_template('inc/admin/savingwallet_page.php');
+    require_once locate_template('inc/admin/ajax_functions.php');
+    require_once locate_template('inc/admin/ajax_hook.php');
 }
 
 
