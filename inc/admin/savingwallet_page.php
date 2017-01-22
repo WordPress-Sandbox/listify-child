@@ -12,6 +12,8 @@ function savingwallet_admin_page() {
 
 function enqueue_admin_scripts($hook) {
 
+	global $msw;
+
   // if( 'bank-verification.php' != $hook ) {
   // 	return;
   // }  
@@ -19,11 +21,14 @@ function enqueue_admin_scripts($hook) {
   /* css */
   wp_enqueue_style('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/css/jquery.accordion.css');
   wp_enqueue_style('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.css');
+  wp_enqueue_style('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"');
   wp_enqueue_style('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/css/style.css');
   /* js */
   wp_enqueue_script('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/js/jquery.accordion.js', array('jquery'));
   wp_enqueue_script('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.js', array('jquery'));
-  wp_enqueue_script('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/js/script.js', array('jquery'));
+  wp_enqueue_script('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js', array('jquery'));
+  wp_enqueue_script('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/js/script.js', array('jquery', 'datatables'));
+  wp_localize_script('savingwallet', 'local', array('currency' => $msw->currency_symbol ));
 }
 
 add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
@@ -38,14 +43,14 @@ function savingwallet_admin(){
 
 		<!-- navigation tabs -->
 		<h2 class="nav-tab-wrapper" id="savingwallet_admin">
-		    <a class="nav-tab nav-tab-active" data-tab="management"> Management </a>
-		    <a class="nav-tab" data-tab="bankinfo"> Bank Info </a>
-		    <a class="nav-tab" data-tab="withdrawls"> Withdrawls </a>
+		    <a class="nav-tab nav-tab-active" data-tab="management-tab"> Management </a>
+		    <a class="nav-tab" data-tab="bankinfo-tab"> Bank Info </a>
+		    <a class="nav-tab" data-tab="withdrawls-tab"> Withdrawls </a>
 		</h2>
 		<!-- / navigation tabs -->
 
 		<!-- management tab -->
-		<div id="management" class="tab-content current">
+		<div id="management-tab" class="tab-content current">
 			<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
 			<div class="add_user_balance">
 				<h3> Search a user by ID </h3>
@@ -57,17 +62,14 @@ function savingwallet_admin(){
 				<div id="LoadUser"></div>
 			</div>
 
-
-			<?php //SearchUser_func(); ?>
-
-
 			<h3> Lastest Cashbacks </h3>
 			<?php echo do_shortcode('[cashbacks]'); ?>
+
 		</div>
 		<!-- management tab -->
 
 		<!-- Bank info tab -->
-		<div id="bankinfo" class="tab-content">
+		<div id="bankinfo-tab" class="tab-content">
 			<?php $user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
 			$counter = 1;
 			?>
@@ -137,62 +139,40 @@ function savingwallet_admin(){
 		<!-- / Bank info tab -->
 
 		<!-- withdrawls tab -->
-		<div id="withdrawls" class="tab-content">
-			<?php $user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
-			$counter = 1; 
-			?>
-			<h1> Pending Withdrawls </h1>
-			<section id="banks_verification" data-accordion-group="">
-				<div data-accordion-group>
-
-				<?php
-
-					foreach ($user_ids as $id) : 
-					$withdrawls = get_user_meta($id, 'withdrawls', true);
-					if(is_array($withdrawls)) :
-						foreach ($withdrawls as $key => $with) :
-							if($with['status'] === 'pending') :
-								// $mysavingwallet = new Mysavingwallet;
-								// $bank = $mysavingwallet->filterBank('bank_name', 'Rupali Bank Ltd.');
-								// var_dump($bank);
-							?>
-
-							<div class="accordion" data-accordion>
-						        <div data-control> Withdrawl #<?php echo $counter; $counter++; ?></div>
-						        <div data-content>
-						            <div>
-						            	<h3 class="message"></h3>
-						            	<ul>
-						            		<?php $user = get_userdata($id); ?>
-						            		<li>Customer ID: <?php echo $id; ?></li>
-						            		<li>Customer username: <?php echo $user->user_login; ?></li>
-						            		<li>Customer Email: <?php echo $user->user_email; ?></li>
-						            		<li>Customer name: <?php echo $user->display_name; ?></li>
-						            		<li>Withdraw ID: <?php echo $with['id']; ?></li>
-						            		<li>Withdraw Amount: <?php echo $with['amount']; ?></li>
-						            		<li>Withdraw Time: <?php echo $with['time']; ?></li>
-						            		<li>Bank Name: <?php echo $with['bank']; ?></li>
-						            	</ul>
-						            	<div class="btn_area">
-						            		<a class="withdrawl_btn" data-status="approved" data-userid="<?php echo $id; ?>" data-withdrawkey="<?php echo $key; ?>">Approve</a>
-						            		<a class="withdrawl_btn" data-status="declined" data-userid="<?php echo $id; ?>" data-withdrawkey="<?php echo $key; ?>">Decline</a>
-						            	</div>
-						            </div>
-						        </div>
-						    </div>
-
-							<?php 
-							endif;
-							
-						endforeach;
-					endif; 
-				endforeach;
-
-				?>
-
-				</div>
-			</section>
-
+		<div id="withdrawls-tab" class="tab-content">
+			<div class="pull-left">
+				View: 
+				<ul class="withdrawls_filters">
+					<li><a href="#" data-load="all" class="btn active">All Withdrawls</a></li>
+					<li><a href="#" data-load="pending" class="btn">Pending Withdrawls</a></li>
+					<li><a href="#" data-load="approved" class="btn">Approved Withdrawls</a></li>
+					<li><a href="#" data-load="declined" class="btn">Declined Withdrawls</a></li>
+				</ul>
+			</div>
+			<table id="withdrawls" class="display" cellspacing="0" width="100%">
+		        <thead>
+		            <tr>
+		                <th>Customer Name</th>
+		                <th>Customer ID</th>
+		                <th>Customer Email</th>
+		                <th>Customer Username</th>
+		                <th>Withdraw Date</th>
+		                <th>Bank Name</th>
+		                <th>Amount</th>
+		            </tr>
+		        </thead>
+		        <tfoot>
+		        	<tr>
+		                <th>Customer Name</th>
+		                <th>Customer ID</th>
+		                <th>Customer Email</th>
+		                <th>Customer Username</th>
+		                <th>Withdraw Date</th>
+		                <th>Bank Name</th>
+		                <th>Amount</th>
+		            </tr>
+		        </tfoot>
+		    </table>
 
 		</div>
 		<!-- / withdrawls tab -->
@@ -200,4 +180,3 @@ function savingwallet_admin(){
 	</div>
 
 <?php } ?>
-

@@ -152,3 +152,5 @@ function savingwallet_submit_job_form_func() {
     }
 }
 add_shortcode('savingwallet_submit_job_form', 'savingwallet_submit_job_form_func');
+
+

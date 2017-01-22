@@ -25,18 +25,55 @@ jQuery(function($){
 
 
     /* admin tabs 
-
     https://codepen.io/cssjockey/pen/jGzuK
     */
 	$('#savingwallet_admin a').click(function(){
 		var tab_id = $(this).attr('data-tab');
-
-		console.log(tab_id); 
 		$('#savingwallet_admin a').removeClass('nav-tab-active');
 		$('.tab-content').removeClass('current');
-
 		$(this).addClass('nav-tab-active');
 		$("#"+tab_id).addClass('current');
+	});
+
+
+	/* datatable query processor */
+	function withdrawlsQuery(qu) {
+			var _this = this;
+			var query = JSON.stringify(qu);
+			$('#withdrawls').DataTable({
+				processing: true,
+				serverSide: false,
+				responsive: true,
+				paging: true,
+				destroy: true,
+				sAjaxDataProp: 'data[]',
+				oLanguage: {
+				    "sEmptyTable": "No " + qu.load + " withdraw available"
+				},
+				ajax: ajaxurl +'?action=withdrawls_report&query='+query,
+				// aoColumnDefs: [
+			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
+			 //    ],
+		        columns: [
+		            { "data": "name" },
+		            { "data": "id" },
+		            { "data": "email" },
+		            { "data": "username" },
+		            { "data": "date" },
+		            { "data": "bank" },
+		            { "data": "amount" }
+		        ]
+			});
+		}
+
+
+	/* withdrawls */
+	withdrawlsQuery({load: 'all' });
+
+	$('.withdrawls_filters li a').on('click', function(e){
+		e.preventDefault();
+		var load = $(this).attr('data-load');
+		withdrawlsQuery({load: load });
 	});
 
 	/* verify & unverify customer account */
@@ -110,7 +147,7 @@ jQuery(function($){
 					 + ` User name: <strong>` + res.name + `</strong><br/>`
 					 + ` User email: ` + res.email + `<br/>`
 					 + ` Role: ` + res.roles[0] + `<br/>`
-					 + ` Balance: ` + res.currency + `<span class="balance">` + res.balance + `</span><br/>`
+					 + ` Balance: ` + local.currency + `<span class="balance">` + res.balance + `</span><br/>`
 					+ `</div>
 					<a class="CreditBalance" data-action="credit" data-userid="` + userid +`">Credit Balance </a>
 					<a class="DebitBalance" data-action="debit" data-userid="` + userid + `"> Debit Balance </a>
@@ -128,7 +165,7 @@ jQuery(function($){
 
 	$('body').on('click', '.CreditBalance, .DebitBalance', function(){
 		$('#debitCredit').remove();
-		let inputField = `<form id="debitCredit"><input type="text" name="debit_credit_amount"/>`;
+		let inputField = `<form id="debitCredit">`+local.currency+`<input type="text" name="debit_credit_amount"/>`;
 			inputField += `<input type="hidden" name="process" value="`+ $(this).attr('data-action') +`"/>`;
 			inputField += `<input type="hidden" name="user_id" value="`+ $(this).attr('data-userid') +`"/>`;
 			inputField += `<input type="submit" value="` + $(this).attr('data-action') + ` Balance" /></form>`;
