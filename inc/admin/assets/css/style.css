@@ -1,7 +1,6 @@
 /* Tab content */
-.wrap {
-	overflow: hidden;
-}
+.wrap {}
+
 #savingwallet_admin a.current {
 	background: #ededed;
 	color: #222;
