@@ -16,7 +16,9 @@
 	display: inline-block;
 	width: 100%;
 }
-
+.cashback_reports {
+    margin-top: 50px;
+}
 
 
 #banks_verification { 
@@ -81,16 +83,16 @@ form#debitCredit input[type=submit] {
     text-transform: Capitalize;
 }
 
-ul.withdrawls_filters {}
-ul.withdrawls_filters ul { list-style: none; }
-ul.withdrawls_filters li {
+ul.admin_filters {}
+ul.admin_filters ul { list-style: none; }
+ul.admin_filters li {
 	display: inline-block;
 	margin-right: 20px;
 }
-ul.withdrawls_filters li a {
+ul.admin_filters li a {
 	background-color: #2854a1;
     color: #FFF;
     padding: 5px 10px;
     text-decoration: none;
 }
-ul.withdrawls_filters li a.active {}
+ul.admin_filters li a.active {}

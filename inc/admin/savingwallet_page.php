@@ -39,7 +39,7 @@ function savingwallet_admin(){
 	?>
 	<div class="wrap">
 
-		<h1> MySavingWallet Administration Panel </h1>
+		<h1> <?php echo esc_html('MySavingWallet Administration Panel'); ?></h1>
 
 		<!-- navigation tabs -->
 		<h2 class="nav-tab-wrapper" id="savingwallet_admin">
@@ -62,87 +62,64 @@ function savingwallet_admin(){
 				<div id="LoadUser"></div>
 			</div>
 
-			<h3> Lastest Cashbacks </h3>
-			<?php echo do_shortcode('[cashbacks]'); ?>
+			<div class="cashback_reports">
+			<h3> Cashback reports </h3>
+			<table id="cashbacks" class="display" cellspacing="0" width="100%">
+				<thead>
+		            <tr>
+		                <th>Cashback ID</th>
+		                <th>Customer ID</th>
+		                <th>Business ID</th>
+		                <th>Customer Balance</th>
+		                <th>Business Balance</th>
+		                <th>Company Balance</th>
+		                <th>Amount</th>
+		                <th>Date</th>
+		                <th>Time</th>
+		            </tr>
+		        </thead>
+			</table>
+			</div>
 
 		</div>
 		<!-- management tab -->
 
 		<!-- Bank info tab -->
 		<div id="bankinfo-tab" class="tab-content">
-			<?php $user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
-			$counter = 1;
-			?>
+			<h3> Banks Information </h3>
+			<div class="pull-left"> 
+				<ul class="bankinfo_filters admin_filters">
+					<li><a href="#" data-load="all" class="btn active">All Banks</a></li>
+					<li><a href="#" data-load="pending" class="btn">Pending</a></li>
+					<li><a href="#" data-load="verified" class="btn">Verified</a></li>
+					<li><a href="#" data-load="declined" class="btn">Declined</a></li>
+				</ul>
+			</div>
 
-			<h1> Banks Required Verification </h1>
-			<section id="banks_verification" data-accordion-group="">
-				<div data-accordion-group>
-
-				<?php
-
-					foreach ($user_ids as $id) : 
-					$banks = get_user_meta($id, 'banks', true);
-					if(is_array($banks)) :
-						foreach ($banks as $key => $bank) :
-							if($bank['verification'] === 'pending') : 
-							?>
-
-							<div class="accordion" data-accordion>
-						        <div data-control> Bank #<?php echo $counter; $counter++; ?></div>
-						        <div data-content>
-						            <div>
-						            	<h3 class="message"></h3>
-						            	<div class="basic_info">
-						            	<ul>
-						            		<?php $user = get_userdata($id); ?>
-						            		<li>Customer ID: <?php echo $id; ?></li>
-						            		<li>Customer username: <?php echo $user->user_login; ?></li>
-						            		<li>Customer Email: <?php echo $user->user_email; ?></li>
-						            		<li>Customer name: <?php echo $user->display_name; ?></li>
-						            		<li>Bank name: <?php echo $bank['bank_name']; ?></li>
-						            		<li>Account type: <?php echo $bank['account_type']; ?></li>
-						            		<li>Routing number: <?php echo $bank['bank_routing']; ?></li>
-						            		<li>Account number: <?php echo $bank['account_number']; ?></li>
-						            	</ul>
-						            	<div class="btn_area">
-						            		<a class="verify_btn" data-status="verified" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as verified</a>
-						            		<a class="verify_btn" data-status="declined" data-userid="<?php echo $id; ?>" data-bankkey="<?php echo $key; ?>">Check as Declined</a>
-						            	</div>
-						            	</div>
-						            	<div class="support_docs">
-						            		<h4> Support Docs</h4>
-						            		<ul>
-						            			<?php if(is_array($bank['attachment_ids'])) : foreach($bank['attachment_ids'] as $id ) : 
-						            				$image_atts = wp_get_attachment_image_src( $id );
-						            			?>
-						            				<li><a class="magnific-popup" href="<?php echo wp_get_attachment_url($id); ?>"><img src="<?php echo $image_atts[0]; ?>" /></a></li>
-						            			<?php endforeach; endif; ?>
-						            		</ul>
-						            	</div>
-						            </div>
-						        </div>
-						    </div>
-
-							<?php 
-							endif;
-							
-						endforeach;
-					endif; 
-				endforeach;
-
-				?>
-
-				</div>
-			</section>
+			<table id="bankinfo" class="display" cellspacing="0" width="100%">
+		        <thead>
+		            <tr>
+		                <th>Customer ID</th>
+		                <th>Customer Username</th>
+		                <th>Customer Email</th>
+		                <th>Customer Name</th>
+		                <th>Bank Name</th>
+		                <th>Account Type</th>
+		                <th>Routing Number</th>
+		                <th>Account Number</th>
+		                <th>Support Doc</th>
+		                <th>Action</th>
+		            </tr>
+		        </thead>
+		    </table>
 
 		</div>
 		<!-- / Bank info tab -->
 
 		<!-- withdrawls tab -->
 		<div id="withdrawls-tab" class="tab-content">
-			<div class="pull-left">
-				View: 
-				<ul class="withdrawls_filters">
+			<div class="pull-left"> 
+				<ul class="withdrawls_filters admin_filters">
 					<li><a href="#" data-load="all" class="btn active">All Withdrawls</a></li>
 					<li><a href="#" data-load="pending" class="btn">Pending Withdrawls</a></li>
 					<li><a href="#" data-load="approved" class="btn">Approved Withdrawls</a></li>
@@ -157,6 +134,7 @@ function savingwallet_admin(){
 		                <th>Customer Email</th>
 		                <th>Customer Username</th>
 		                <th>Withdraw Date</th>
+		                <th>Withdraw Time</th>
 		                <th>Bank Name</th>
 		                <th>Amount</th>
 		            </tr>
@@ -168,6 +146,7 @@ function savingwallet_admin(){
 		                <th>Customer Email</th>
 		                <th>Customer Username</th>
 		                <th>Withdraw Date</th>
+		                <th>Withdraw Time</th>
 		                <th>Bank Name</th>
 		                <th>Amount</th>
 		            </tr>

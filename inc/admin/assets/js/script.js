@@ -36,7 +36,7 @@ jQuery(function($){
 	});
 
 
-	/* datatable query processor */
+	/* withdraw reports */
 	function withdrawlsQuery(qu) {
 			var _this = this;
 			var query = JSON.stringify(qu);
@@ -60,14 +60,13 @@ jQuery(function($){
 		            { "data": "email" },
 		            { "data": "username" },
 		            { "data": "date" },
+		            { "data": "time" },
 		            { "data": "bank" },
 		            { "data": "amount" }
 		        ]
 			});
 		}
 
-
-	/* withdrawls */
 	withdrawlsQuery({load: 'all' });
 
 	$('.withdrawls_filters li a').on('click', function(e){
@@ -75,6 +74,80 @@ jQuery(function($){
 		var load = $(this).attr('data-load');
 		withdrawlsQuery({load: load });
 	});
+
+
+	/* admin cashback lists */
+	function CashbackListQuery() {
+			$('#cashbacks').DataTable({
+				processing: true,
+				serverSide: false,
+				responsive: true,
+				paging: true,
+				destroy: true,
+				sAjaxDataProp: 'data[]',
+				oLanguage: {
+				    "sEmptyTable": "No cashback available."
+				},
+				ajax: ajaxurl +'?action=cashback_report',
+				// aoColumnDefs: [
+			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
+			 //    ],
+		        columns: [
+		            { "data": "cashback_id" },
+		            { "data": "customer_id" },
+		            { "data": "business_id" },
+		            { "data": "customer_balance" },
+		            { "data": "business_balance" },
+		            { "data": "company_balance" },
+		            { "data": "amount" },
+		            { "data": "date" },
+		            { "data": "time" }
+		        ]
+			});
+		};
+
+	CashbackListQuery();
+
+	/* banks information */
+	function banksReportQuery(qu) {
+		var _this = this;
+		var query = JSON.stringify(qu);
+		$('#bankinfo').DataTable({
+			processing: true,
+			serverSide: false,
+			responsive: true,
+			paging: true,
+			destroy: true,
+			sAjaxDataProp: 'data[]',
+			oLanguage: {
+			    "sEmptyTable": "No " + qu.load + " banks available"
+			},
+			ajax: ajaxurl +'?action=bank_report&query='+query,
+			// aoColumnDefs: [
+		 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
+		 //    ],
+	        columns: [
+	            { "data": "customer_id" },
+	            { "data": "customer_username" },
+	            { "data": "customer_email" },
+	            { "data": "customer_name" },
+	            { "data": "bank_name" },
+	            { "data": "account_type" },
+	            { "data": "routing_number" },
+	            { "data": "account_number" },
+	            { "data": "support_doc" },
+	            { "data": "action_btn" }
+	        ]
+		});
+	}
+
+	banksReportQuery({load: 'all'});
+	$('.bankinfo_filters li a').on('click', function(e){
+		e.preventDefault();
+		var load = $(this).attr('data-load');
+		banksReportQuery({load: load });
+	});
+
 
 	/* verify & unverify customer account */
 	$('.verify_btn').click(function(e){

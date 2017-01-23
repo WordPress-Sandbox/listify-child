@@ -545,17 +545,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                             <form id="add_bank" class="password_change" action="#" method="post" enctype="multipart/form-data">
                                             <?php //wp_nonce_field( 'add_bank_docs_nonce' ); ?>
                                                 <dl class="dl-horizontal">
-                                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
-                                                    <dd>
-                                                        <section>
-                                                            <label for="bank_name" class="input">
-                                                                <i class="icon_append fa fa-university"></i>
-                                                                <input type="text" name="bank_name" id="bank_name" placeholder="Your Bank name">
-                                                                <b class="tooltip tooltip-bottom-right">Enter Bank name</b>
-                                                            </label>
-                                                        </section>
-                                                    </dd>
-                                                    <hr>
+
                                                     <dt><?php esc_html_e( 'Bank Routing Number', 'listify_child' ); ?></dt>
                                                     <dd>
                                                         <section>
@@ -568,6 +558,19 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                         </section>
                                                     </dd>
                                                     <hr>
+
+                                                    <dt><?php esc_html_e( 'Bank name', 'listify_child' ); ?></dt>
+                                                    <dd>
+                                                        <section>
+                                                            <label for="bank_name" class="input">
+                                                                <i class="icon_append fa fa-university"></i>
+                                                                <input type="text" name="bank_name" id="bank_name" placeholder="Your Bank name">
+                                                                <b class="tooltip tooltip-bottom-right">Enter Bank name</b>
+                                                            </label>
+                                                        </section>
+                                                    </dd>
+                                                    <hr>
+
                                                     <dt><?php esc_html_e( 'Bank Account Number', 'listify_child' ); ?></dt>
                                                     <dd>
                                                         <section>

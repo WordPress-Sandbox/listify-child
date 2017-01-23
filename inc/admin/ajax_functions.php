@@ -72,13 +72,11 @@ function debitCreditUserBalance_func() {
 
 }
 
-/* withdrawls */
+/* withdrawls report */
 function withdrawls_report_admin_func() {
     global $msw;
     $query = stripslashes($_GET['query']);
     $query = json_decode($query, true);
-
-
     $user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
     $res = array();
     foreach ($user_ids as $id) {
@@ -91,10 +89,13 @@ function withdrawls_report_admin_func() {
                 $each_withdraw['id'] = $id;
                 $each_withdraw['email'] = $user->user_email;
                 $each_withdraw['username'] = $user->user_login;
-                $each_withdraw['date'] = $with['time'];
+                $each_withdraw['date'] =  date("M/d/Y", strtotime($with['time']));
+                $each_withdraw['time'] = date("h:i A", strtotime($with['time']));
                 $each_withdraw['bank'] = $with['bank'];
-                $each_withdraw['amount'] = $msw->currency_symbol . $with['amount'];
+                $each_withdraw['amount'] = $msw->currency_symbol . number_format($with['amount'], 2, '.', ',');
                 if( $query['load'] == $with['status']) {
+                    $res["data"][] = $each_withdraw;
+                } else if ( $query['load'] == 'all' ) {
                     $res["data"][] = $each_withdraw;
                 }
             }
@@ -104,4 +105,81 @@ function withdrawls_report_admin_func() {
     echo json_encode($res);
     die();
 }
+
+
+/* cashback report */
+function cashback_report_admin_func() {
+    global $msw;
+    $res = array();
+    $cashbacks = array_reverse(get_option('cashbacks'));
+    if(is_array($cashbacks) && count($cashbacks) > 0 ) {
+        foreach ($cashbacks as $key => $cash)  {
+            $each_cashback = array();
+            $each_cashback['cashback_id'] = $cash['id'];
+            $each_cashback['customer_id'] = $cash['customer_id'];
+            $each_cashback['business_id'] = $cash['business_id'];
+            $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
+            $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
+            $each_cashback['company_balance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
+            $each_cashback['amount'] = $msw->currency_symbol . number_format($cash['amount'], 2, '.', ',');
+            $each_cashback['date'] = date("M/d/Y", strtotime($cash['time']));
+            $each_cashback['time'] = date("h:i A", strtotime($cash['time']));
+            $res["data"][] = $each_cashback;
+        }
+    } 
+    echo json_encode($res);
+    die();
+}
+
+
+/* banks report */
+function bank_report_admin_func() {
+    global $msw;
+    $query = stripslashes($_GET['query']);
+    $query = json_decode($query, true);
+    $user_ids = get_users(array('role__in' => array('customer'), 'fields' => 'ID'));
+    $res = array();
+    foreach ($user_ids as $id) {
+        $user = get_userdata($id); 
+        $banks = get_user_meta($id, 'banks', true);
+        if(is_array($banks) && count($banks) > 0 ) {
+            foreach ($banks as $k => $b)  {
+
+                // get attachments 
+                $docs = '';
+                if(is_array($b['attachment_ids'])) {
+                    $docs = '<ul>';
+                    foreach ($b['attachment_ids'] as $k => $aid) {
+                        $image_atts = wp_get_attachment_image_src( $aid , array(50));
+                        $docs .= '<li><a class="magnific-popup" href="'. wp_get_attachment_url($aid) .'"><img src="'. $image_atts[0] .'" /></a></li>';
+                    }
+                    $docs .= '</ul>';
+                }
+
+                $btns = '<a class="verify_btn" data-status="verified" data-userid="'.$id.'" data-bankkey="'.$k.'">Check as verified</a><a class="verify_btn" data-status="declined" data-userid="'.$id.'" data-bankkey="'.$k.'">Check as Declined</a>';
+
+                $each_bank = array();
+                $each_bank['customer_id'] = $id;
+                $each_bank['customer_username'] = $user->user_login;
+                $each_bank['customer_email'] = $user->user_email;
+                $each_bank['customer_name'] = $user->display_name;
+                $each_bank['bank_name'] = $b['bank_name'];
+                $each_bank['account_type'] = $b['account_type'];
+                $each_bank['routing_number'] = $b['bank_routing'];
+                $each_bank['account_number'] = $b['account_number'];
+                $each_bank['support_doc'] = $docs;
+                $each_bank['action_btn'] = $btns;
+
+                if( $query['load'] == $b['verification']) {
+                    $res["data"][] = $each_bank;
+                } else if ( $query['load'] == 'all' ) {
+                    $res["data"][] = $each_bank;
+                }
+            }
+        }
+    }
+
+    echo json_encode($res);
+    die();
+};
 

@@ -739,7 +739,7 @@ function withdraw_request_func() {
         $new_withdraw['prev_balance'] = $prev_balance;
         $new_withdraw['new_balance'] = $new_balance;
         $new_withdraw['time'] = current_time('mysql');
-        $new_withdraw['amount'] = $amount;
+        $new_withdraw['amount'] = number_format($amount, 2, '.', ',');
         $new_withdraw['id'] = rand(100000, 999999);
         $new_withdraw['status'] = 'pending';
         $new_withdraw['bank'] = $_POST['bank'];
