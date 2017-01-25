@@ -46,6 +46,54 @@ jQuery(function($){
 	});
 
 
+	/* add notes 
+	http://stackoverflow.com/questions/33267797/turn-text-element-into-input-field-type-text-when-clicked-and-change-back-to-tex
+	*/
+	$('body').on('click', '.bankNote', function(){
+  
+		  var $el = $(this), $userid = $el.attr('data-userid'), $routing = $el.attr('data-routing');
+		              
+		  var $input = $('<textarea/>').val( $el.text() );
+		  $el.replaceWith( $input );
+		  
+		  var save = function(){
+
+		  	var updateVal = $input.val(); 
+		  	if(updateVal)  {
+		  		var updateVal = updateVal;
+		  	} else {
+		  		var updateVal = 'Empty';
+		  	}
+
+		    var $p = $('<p class="bankNote" data-userid="'+ $userid +'" data-routing="'+ $routing +'"/>').text( updateVal );
+
+		    $input.replaceWith( $p );
+    		$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: { action: 'update_admin_bank_notes', userid: $userid, routing: $routing, note: $input.val() },
+				dataType: 'json',
+				success: function(resp) {
+					console.log('Bank info updated!');
+				},
+				error: function( req, status, err ) {
+					alert('something went wrong', status, err);
+				}
+			});
+		  };
+		  
+		  /**
+		    We're defining the callback with `one`, because we know that
+		    the element will be gone just after that, and we don't want 
+		    any callbacks leftovers take memory. 
+		    Next time `p` turns into `input` this single callback 
+		    will be applied again.
+		  */
+		  $input.one('blur', save).focus();
+		  
+		});
+
+
 	/* verify & unverify customer account */
 	$('body').on('click', '.verify_btn', function(e){
 		e.preventDefault();
@@ -185,6 +233,7 @@ jQuery(function($){
 	            { "data": "account_number" },
 	            { "data": "support_doc" },
 	            { "data": "status" },
+	            { "data": "note" },
 	            { "data": "action_btn" }
 	        ]
 		});

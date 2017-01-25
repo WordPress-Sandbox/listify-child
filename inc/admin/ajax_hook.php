@@ -17,3 +17,6 @@ add_action('wp_ajax_bank_report', 'bank_report_admin_func');
 
 /* verify unverify bank account */
 add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer_account_func');
+
+/* update admin bank note */
+add_action('wp_ajax_update_admin_bank_notes', 'update_admin_bank_notes_func');

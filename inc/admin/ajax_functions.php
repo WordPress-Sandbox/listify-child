@@ -48,6 +48,29 @@ function verify_unverify_customer_account_func() {
     die();
 }
 
+
+/* Update Bank Note */
+function update_admin_bank_notes_func() {
+    $userid = $_POST['userid'];
+    $routing = sanitize_text_field($_POST['routing']);
+    $note = sanitize_text_field($_POST['note']);
+
+    $banks = get_user_meta($userid, 'banks', true);
+
+    if($note && $routing && is_array($banks)) {
+        foreach($banks as &$bank){
+            if($bank['bank_routing'] == $routing ){
+                $bank['note'] = $note;
+                update_user_meta($userid, 'banks', $banks);
+                break;
+            }
+        }    
+    }
+
+    echo json_encode(array('responsetext' => $banks));
+    die();
+}
+
 /* debit credit user balance */
 function debitCreditUserBalance_func() {
     global $msw;
@@ -180,6 +203,10 @@ function bank_report_admin_func() {
 
                 $btns = '<a class="verify_btn" data-status="verified" data-userid="'.$id.'" data-routing="'.$b['bank_routing'].'">Verify</a><a class="verify_btn" data-status="declined" data-userid="'.$id.'" data-routing="'. $b['bank_routing'].'">Decline</a>';
 
+                $notetext = $b['note'] ? $b['note'] : 'empty';
+
+                $notes = '<p class="bankNote" data-userid="'.$id.'" data-routing="'.$b['bank_routing'].'">'. $notetext .'</p>';
+
                 $each_bank = array();
                 $each_bank['customer_id'] = $id;
                 $each_bank['customer_username'] = $user->user_login;
@@ -191,6 +218,7 @@ function bank_report_admin_func() {
                 $each_bank['account_number'] = $b['account_number'];
                 $each_bank['support_doc'] = $docs;
                 $each_bank['status'] = ucfirst($b['verification']);
+                $each_bank['note'] = $notes;
                 $each_bank['action_btn'] = $btns;
 
                 if( $query['load'] == $b['verification']) {

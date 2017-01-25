@@ -84,6 +84,11 @@ div.btn_area .withdrawl_btn {
   margin-right: 3px;
   margin-bottom: 0;
 }
+#list_preview_doc li a,
+#list_preview_doc li a:hover,
+#list_preview_doc li a:focus {
+	outline: 0;
+}
 #list_preview_doc li img  {
   width: 100%;
 }

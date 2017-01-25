@@ -124,6 +124,7 @@ function savingwallet_admin(){
 		                <th>Account Number</th>
 		                <th>Support Doc</th>
 		                <th>Status</th>
+		                <th>Note</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>
