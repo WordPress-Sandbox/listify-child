@@ -77,7 +77,7 @@ jQuery(function($){
 					console.log('Bank info updated!');
 				},
 				error: function( req, status, err ) {
-					alert('something went wrong', status, err);
+					console.log('something went wrong', status, err);
 				}
 			});
 		  };
