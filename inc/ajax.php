@@ -691,21 +691,6 @@ function topup_func() {
 
 add_action('wp_ajax_topup', 'topup_func');
 
-/* verify bank account */
-function verify_unverify_customer_account_func() {
-    $userid = $_POST['userid'];
-    $bankkey = $_POST['bankkey'];
-    $status = $_POST['status'];
-
-    $banks = get_user_meta($userid, 'banks', true);
-    $banks[$bankkey]['verification'] = $status;
-    update_user_meta($userid, 'banks', $banks);
-    echo json_encode(array('status' => $status));
-    die();
-
-}
-add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer_account_func');
-
 /* withdraw request */
 function withdraw_request_func() {
     global $msw;

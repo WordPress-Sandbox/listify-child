@@ -53,10 +53,25 @@ function savingwallet_admin(){
 		<div id="management-tab" class="tab-content current">
 			<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
 			<div class="add_user_balance">
-				<h3> Search a user by ID </h3>
+				<h3> Search a user </h3>
 				<form id="SearchUser">
 					<p class="user_search_message"></p>
-					<input type="number" name="search_id" class="search_id" placeholder="User ID">
+					<?php 
+						if(function_exists('woocommerce_form_field')) {
+							woocommerce_form_field('search_by', array(
+								'type' => 'select',
+								'class' => array('search_by'),
+								'label' => __('Search By'),
+								'options' => array(
+									'name' => __('Name'),
+									'email' => __('Email'),
+									'username' => __('Username'),
+									'id' => __('ID'),
+								)
+							));
+						} 
+					?>
+					<!-- <input type="number" name="search_id" class="search_id" placeholder="User ID"> -->
 					<input type="submit" value="Search User" class="btn">
 				</form>
 				<div id="LoadUser"></div>
@@ -108,6 +123,7 @@ function savingwallet_admin(){
 		                <th>Routing Number</th>
 		                <th>Account Number</th>
 		                <th>Support Doc</th>
+		                <th>Status</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>

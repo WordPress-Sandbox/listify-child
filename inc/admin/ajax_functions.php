@@ -26,6 +26,28 @@ function SearchUser_func() {
 	die();
 }
 
+/* verify unverify bank account */
+function verify_unverify_customer_account_func() {
+    $userid = $_POST['userid'];
+    $routing = sanitize_text_field($_POST['routing']);
+    $bank_status = sanitize_text_field($_POST['status']);
+
+    $banks = get_user_meta($userid, 'banks', true);
+
+    if($routing && is_array($banks)) {
+        foreach($banks as &$bank){
+            if($bank['bank_routing'] == $routing ){
+                $bank['verification'] = $bank_status;
+                update_user_meta($userid, 'banks', $banks);
+                break;
+            }
+        }    
+    }
+
+    echo json_encode(array('status' => $bank_status));
+    die();
+}
+
 /* debit credit user balance */
 function debitCreditUserBalance_func() {
     global $msw;
@@ -148,7 +170,7 @@ function bank_report_admin_func() {
                 // get attachments 
                 $docs = '';
                 if(is_array($b['attachment_ids'])) {
-                    $docs = '<ul>';
+                    $docs = '<ul id="list_preview_doc">';
                     foreach ($b['attachment_ids'] as $k => $aid) {
                         $image_atts = wp_get_attachment_image_src( $aid , array(50));
                         $docs .= '<li><a class="magnific-popup" href="'. wp_get_attachment_url($aid) .'"><img src="'. $image_atts[0] .'" /></a></li>';
@@ -156,7 +178,7 @@ function bank_report_admin_func() {
                     $docs .= '</ul>';
                 }
 
-                $btns = '<a class="verify_btn" data-status="verified" data-userid="'.$id.'" data-bankkey="'.$k.'">Check as verified</a><a class="verify_btn" data-status="declined" data-userid="'.$id.'" data-bankkey="'.$k.'">Check as Declined</a>';
+                $btns = '<a class="verify_btn" data-status="verified" data-userid="'.$id.'" data-routing="'.$b['bank_routing'].'">Verify</a><a class="verify_btn" data-status="declined" data-userid="'.$id.'" data-routing="'. $b['bank_routing'].'">Decline</a>';
 
                 $each_bank = array();
                 $each_bank['customer_id'] = $id;
@@ -168,6 +190,7 @@ function bank_report_admin_func() {
                 $each_bank['routing_number'] = $b['bank_routing'];
                 $each_bank['account_number'] = $b['account_number'];
                 $each_bank['support_doc'] = $docs;
+                $each_bank['status'] = ucfirst($b['verification']);
                 $each_bank['action_btn'] = $btns;
 
                 if( $query['load'] == $b['verification']) {

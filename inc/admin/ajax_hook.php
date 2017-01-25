@@ -14,3 +14,6 @@ add_action('wp_ajax_cashback_report', 'cashback_report_admin_func');
 
 /* banks reports */
 add_action('wp_ajax_bank_report', 'bank_report_admin_func');
+
+/* verify unverify bank account */
+add_action('wp_ajax_verify_unverify_customer_account', 'verify_unverify_customer_account_func');

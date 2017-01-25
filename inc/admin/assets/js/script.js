@@ -23,6 +23,54 @@ jQuery(function($){
 		}
     });
 
+	$(document).ready(function() {
+	    $('#bankinfo tbody').on('click', 'tr', function (e) {
+	    	e.preventDefault();
+	    	var el = $(this).find('.magnific-popup');
+	    	$.each(el, function(e) {
+			    $(this).magnificPopup({
+			    	type: 'image',
+			    	closeOnContentClick: false,
+			    	mainClass: 'mfp-with-zoom',
+					image: {
+						verticalFit: true
+					},
+					zoom: {
+						enabled: true,
+						duration: 300, // don't foget to change the duration also in CSS
+						easing: 'ease-in-out',
+					}
+			    });
+	    	})
+	    });
+	});
+
+
+	/* verify & unverify customer account */
+	$('body').on('click', '.verify_btn', function(e){
+		e.preventDefault();
+		var _that = $(this);
+		var data = {
+			action: 'verify_unverify_customer_account',
+			userid: _that.data('userid'),
+			routing: _that.data('routing'),
+			status: _that.data('status'),
+		}
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp)
+				alert('Bank status set to ' + resp.status);
+				_that.parent().parent().remove();
+			},
+			error: function( req, status, err ) {
+				$('.message').text('something went wrong', status, err);
+			}
+		});
+	});
 
     /* admin tabs 
     https://codepen.io/cssjockey/pen/jGzuK
@@ -136,6 +184,7 @@ jQuery(function($){
 	            { "data": "routing_number" },
 	            { "data": "account_number" },
 	            { "data": "support_doc" },
+	            { "data": "status" },
 	            { "data": "action_btn" }
 	        ]
 		});
@@ -149,30 +198,6 @@ jQuery(function($){
 	});
 
 
-	/* verify & unverify customer account */
-	$('.verify_btn').click(function(e){
-		e.preventDefault();
-
-		var data = {
-			action: 'verify_unverify_customer_account',
-			userid: $(this).data('userid'),
-			bankkey: $(this).data('bankkey'),
-			status: $(this).data('status'),
-		}
-
-		$.ajax({
-			type: 'POST',
-			url: ajaxurl,
-			data: data,
-			dataType: 'json',
-			success: function(resp) {
-				$('.message').text('Bank status set to ' + resp.status);
-			},
-			error: function( req, status, err ) {
-				$('.message').text('something went wrong', status, err);
-			}
-		});
-	});
 
 	/* add balance to user */
 	$('#add_user_balance').click(function(e){
