@@ -4,12 +4,16 @@
 /* search user by id */
 function SearchUser_func() {
 	global $msw;
-	$user_id = $_POST['user_id'];
+    $select = sanitize_text_field($_POST['select']);
+	$search_input = sanitize_text_field($_POST['search_input']);
 	$status = 'FAILED';
-	$user = get_user_by('ID', $user_id);
+    if($select != 'name' && $search_input ) {
+        $user = get_user_by($select, $search_input);
+    }
 
 	if ( ! empty( $user ) ) {
 		$message = array();
+        $message['userid'] = $user->data->ID;
 		$message['name'] = $user->data->display_name;
 		$message['email'] = $user->data->user_email;
 		$message['roles'] = $user->roles;

@@ -65,13 +65,12 @@ function savingwallet_admin(){
 								'options' => array(
 									'name' => __('Name'),
 									'email' => __('Email'),
-									'username' => __('Username'),
-									'id' => __('ID'),
+									'login' => __('Username'),
+									'ID' => __('ID'),
 								)
 							));
 						} 
 					?>
-					<!-- <input type="number" name="search_id" class="search_id" placeholder="User ID"> -->
 					<input type="submit" value="Search User" class="btn">
 				</form>
 				<div id="LoadUser"></div>

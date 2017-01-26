@@ -275,14 +275,25 @@ jQuery(function($){
 	});
 
 	/* search user by id */
+
+	function userSearchInputField() {
+		var el = $('#search_by'), value = el.val();
+		el.next().remove();
+		el.after('<input type="text" name="search_input" class="search_input" placeholder="User '+ value +'">');
+	}
+	userSearchInputField();
+	$('#search_by').on('change', userSearchInputField);
+
+
 	$('#SearchUser').submit(function(e){
 		e.preventDefault();
 		var _that = $(this);
-		var userid = _that.find('.search_id').val();
+		var select = _that.find('#search_by').val();
+		var search_input = _that.find('.search_input').val();
 		$.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: { action: 'SearchUser', user_id: userid },
+			data: { action: 'SearchUser', select: select, search_input: search_input },
 			dataType: 'json',
 			success: function(resp) {
 				$('.user_search_message').empty();
@@ -296,11 +307,12 @@ jQuery(function($){
 					 + ` Role: ` + res.roles[0] + `<br/>`
 					 + ` Balance: ` + local.currency + `<span class="balance">` + res.balance + `</span><br/>`
 					+ `</div>
-					<a class="CreditBalance" data-action="credit" data-userid="` + userid +`">Credit Balance </a>
-					<a class="DebitBalance" data-action="debit" data-userid="` + userid + `"> Debit Balance </a>
+					<a class="CreditBalance" data-action="credit" data-userid="` + res.userid +`">Credit Balance </a>
+					<a class="DebitBalance" data-action="debit" data-userid="` + res.userid + `"> Debit Balance </a>
 					</div>`;
 					$('#LoadUser').empty().html(output);
 				} else {
+					$('#LoadUser').empty();
 					$('.user_search_message').empty().css('color', 'red').html(resp.responsetext);
 				} 
 			},
