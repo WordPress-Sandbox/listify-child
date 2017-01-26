@@ -296,6 +296,7 @@ jQuery(function($){
 			data: { action: 'SearchUser', select: select, search_input: search_input },
 			dataType: 'json',
 			success: function(resp) {
+				console.log(resp);
 				$('.user_search_message').empty();
 				if(resp.status == 'SUCCESS') {
 					let res = resp.responsetext;

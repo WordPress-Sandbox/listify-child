@@ -75,7 +75,6 @@ function savingwallet_admin(){
 				</form>
 				<div id="LoadUser"></div>
 			</div>
-
 			<div class="cashback_reports">
 			<h3> Cashback reports </h3>
 			<table id="cashbacks" class="display" cellspacing="0" width="100%">

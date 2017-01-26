@@ -1,15 +1,48 @@
 <?php 
 
 
-/* search user by id */
+/* search user
+http://wordpress.stackexchange.com/questions/105168/how-can-i-search-for-a-worpress-user-by-display-name-or-a-part-of-it
+*/
 function SearchUser_func() {
 	global $msw;
     $select = sanitize_text_field($_POST['select']);
 	$search_input = sanitize_text_field($_POST['search_input']);
 	$status = 'FAILED';
+
     if($select != 'name' && $search_input ) {
         $user = get_user_by($select, $search_input);
     }
+
+    // $search_term = 23;
+    // $args = array (
+    //     'order' => 'ASC',
+    //     'orderby' => 'display_name',
+    //     'search' => '*'.esc_attr( $search_term ).'*',
+    //     'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email'),
+    //     'meta_query' => array(
+    //         'relation' => 'OR',
+    //         array(
+    //             'key'     => 'first_name',
+    //             'value'   => $search_term,
+    //             'compare' => 'LIKE'
+    //         ),
+    //         array(
+    //             'key'     => 'last_name',
+    //             'value'   => $search_term,
+    //             'compare' => 'LIKE'
+    //         ),
+    //         array(
+    //             'key' => 'description',
+    //             'value' => $search_term ,
+    //             'compare' => 'LIKE'
+    //         )
+    //     ),
+    //     'fields' => array('ID');
+    // );
+
+    // $wp_user_query = new WP_User_Query($args);
+    // $users_found = $wp_user_query->get_results();
 
 	if ( ! empty( $user ) ) {
 		$message = array();
