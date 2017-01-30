@@ -128,3 +128,10 @@ ul.admin_filters li a {
     text-decoration: none;
 }
 ul.admin_filters li a.active {}
+
+/* user search result */
+.userfound:not(:last-child) {
+    margin: 14px 0;
+    border-bottom: 1px solid #FFF;
+    padding-bottom: 10px;
+}

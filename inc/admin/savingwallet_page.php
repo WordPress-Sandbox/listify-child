@@ -37,6 +37,7 @@ add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
 function savingwallet_admin(){
 	global $msw;
 	?>
+
 	<div class="wrap">
 
 		<h1> <?php echo esc_html('MySavingWallet Administration Panel'); ?></h1>

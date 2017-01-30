@@ -9,53 +9,59 @@ function SearchUser_func() {
     $select = sanitize_text_field($_POST['select']);
 	$search_input = sanitize_text_field($_POST['search_input']);
 	$status = 'FAILED';
+    $usersids = array();
+    $message = array();
 
     if($select != 'name' && $search_input ) {
         $user = get_user_by($select, $search_input);
+        $usersids[] = $user->data->ID;
+    } else if( $select == 'name') {
+         $args = array (
+            'order' => 'ASC',
+            'orderby' => 'display_name',
+            'search' => '*'.esc_attr( $search_input ).'*',
+            // 'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email'),
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key'     => 'first_name',
+                    'value'   => $search_input,
+                    'compare' => 'LIKE'
+                ),
+                array(
+                    'key'     => 'last_name',
+                    'value'   => $search_input,
+                    'compare' => 'LIKE'
+                ),
+                array(
+                    'key' => 'description',
+                    'value' => $search_input ,
+                    'compare' => 'LIKE'
+                )
+            )
+        );
+
+    $wp_user_query = new WP_User_Query($args);
+    $users_found = $wp_user_query->get_results();
+    $usersids = wp_list_pluck($users_found, 'ID');
     }
 
-    // $search_term = 23;
-    // $args = array (
-    //     'order' => 'ASC',
-    //     'orderby' => 'display_name',
-    //     'search' => '*'.esc_attr( $search_term ).'*',
-    //     'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email'),
-    //     'meta_query' => array(
-    //         'relation' => 'OR',
-    //         array(
-    //             'key'     => 'first_name',
-    //             'value'   => $search_term,
-    //             'compare' => 'LIKE'
-    //         ),
-    //         array(
-    //             'key'     => 'last_name',
-    //             'value'   => $search_term,
-    //             'compare' => 'LIKE'
-    //         ),
-    //         array(
-    //             'key' => 'description',
-    //             'value' => $search_term ,
-    //             'compare' => 'LIKE'
-    //         )
-    //     ),
-    //     'fields' => array('ID');
-    // );
-
-    // $wp_user_query = new WP_User_Query($args);
-    // $users_found = $wp_user_query->get_results();
-
-	if ( ! empty( $user ) ) {
-		$message = array();
-        $message['userid'] = $user->data->ID;
-		$message['name'] = $user->data->display_name;
-		$message['email'] = $user->data->user_email;
-		$message['roles'] = $user->roles;
-		$message['avatar'] = get_avatar_url($user->data->ID);
-		$message['balance'] = get_user_meta( $user->data->ID, 'wallet_balance', true);
-		$message['currency'] = $msw->currency_symbol;
-		$status = 'SUCCESS';
+	if ( is_array($usersids) && !empty(array_filter($usersids)) ) {
+        $status = 'SUCCESS';
+        foreach ($usersids as $id) {
+            $each_user = array();
+            $user = get_user_by('ID', $id);
+            $each_user['userid'] = $user->data->ID;
+            $each_user['name'] = $user->data->display_name;
+            $each_user['email'] = $user->data->user_email;
+            $each_user['roles'] = $user->roles;
+            $each_user['avatar'] = get_avatar_url($user->data->ID);
+            $each_user['balance'] = get_user_meta( $user->data->ID, 'wallet_balance', true);
+            $each_user['currency'] = $msw->currency_symbol;
+            $message[] = $each_user;
+        }
 	} else {
-		$message = 'User not found!';
+		$message = 'No user found!';
 		$status = 'FAILED';
 	}
 
@@ -143,6 +149,7 @@ function debitCreditUserBalance_func() {
             $response['status'] = 'SUCCESS';
         	update_user_meta($userid, 'wallet_balance', $new_balance);
         	$response['responsetext'] = $msw->currency_symbol . $amount . ' has been ' . $process . 'ed to ' . $user->display_name;
+            $response['balance'] = $new_balance;
         } else {
             $response['status'] = 'ERROR';
         	$response['responsetext'] = 'Failed to adjust the balance. No changes made in balance';

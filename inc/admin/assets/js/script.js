@@ -274,7 +274,7 @@ jQuery(function($){
 		});
 	});
 
-	/* search user by id */
+	/* search user, debit credit balance */
 
 	function userSearchInputField() {
 		var el = $('#search_by'), value = el.val();
@@ -296,22 +296,26 @@ jQuery(function($){
 			data: { action: 'SearchUser', select: select, search_input: search_input },
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
 				$('.user_search_message').empty();
+				$('#LoadUser').empty().html(output);
 				if(resp.status == 'SUCCESS') {
-					let res = resp.responsetext;
-					let output = `<div class="userfound">
-					<div class="user_img"><img src="` + res.avatar + `"></div>
-					<div class="userinfo">`
-					 + ` User name: <strong>` + res.name + `</strong><br/>`
-					 + ` User email: ` + res.email + `<br/>`
-					 + ` Role: ` + res.roles[0] + `<br/>`
-					 + ` Balance: ` + local.currency + `<span class="balance">` + res.balance + `</span><br/>`
-					+ `</div>
-					<a class="CreditBalance" data-action="credit" data-userid="` + res.userid +`">Credit Balance </a>
-					<a class="DebitBalance" data-action="debit" data-userid="` + res.userid + `"> Debit Balance </a>
-					</div>`;
-					$('#LoadUser').empty().html(output);
+					let resArray = resp.responsetext;
+					// if( resArray.isArray ) {
+						for( let res of resArray) {
+							var output = `<div class="userfound">
+							<div class="user_img"><img src="` + res.avatar + `"></div>
+							<div class="userinfo">`
+							 + ` User name: <strong>` + res.name + `</strong><br/>`
+							 + ` User email: ` + res.email + `<br/>`
+							 + ` Role: ` + res.roles[0] + `<br/>`
+							 + ` Balance: ` + local.currency + `<span class="balance">` + res.balance + `</span><br/>`
+							+ `</div>
+							<a class="CreditBalance" data-action="credit" data-userid="` + res.userid +`">Credit Balance </a>
+							<a class="DebitBalance" data-action="debit" data-userid="` + res.userid + `"> Debit Balance </a>
+							</div>`;
+							$('#LoadUser').append(output);
+						}
+					// }
 				} else {
 					$('#LoadUser').empty();
 					$('.user_search_message').empty().css('color', 'red').html(resp.responsetext);
@@ -347,9 +351,8 @@ jQuery(function($){
 			data: data,
 			dataType: 'json',
 			success: function(resp) {
-				console.log(resp);
 				if(resp.status == 'SUCCESS') {
-					$('body').find('span.balance').text(resp.responsetext.balance);
+					_that.siblings('.userinfo').find('.balance').text(resp.balance);
 					_that.after('<p style="color:green"> '+ resp.responsetext + '</p>');
 				} else if (resp.status == 'ERROR') {
 					_that.after('<p style="color:red"> '+ resp.responsetext + '</p>');
