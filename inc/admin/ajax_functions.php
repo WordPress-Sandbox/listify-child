@@ -46,7 +46,9 @@ function SearchUser_func() {
     $usersids = wp_list_pluck($users_found, 'ID');
     }
 
-	if ( is_array($usersids) && !empty(array_filter($usersids)) ) {
+    $usersids = array_filter($usersids);
+
+	if ( is_array($usersids) && !empty($usersids) ) {
         $status = 'SUCCESS';
         foreach ($usersids as $id) {
             $each_user = array();
