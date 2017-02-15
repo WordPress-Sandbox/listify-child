@@ -312,7 +312,7 @@ function email_verify_func() {
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-    if( $email_status == 'unverified' || $email_status == 'pending' ) {
+    if( $email_status != 'verified') {
         $mail = wp_mail( $email, $sub, $message, $headers);
         if($mail) {
             wp_update_user( array( 'ID' => $msw->user_id, 'user_email' => $email ) );
