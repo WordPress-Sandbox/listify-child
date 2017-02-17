@@ -123,7 +123,23 @@ function single_page_cashback_badge() {
 	$cashback_percentage = get_user_meta($listing->post_author, 'cashback_percentage', true);
 	$show_half_customer = $cashback_percentage / 2; 
 	if($show_half_customer > 0 ) {
-		echo "<span class=\"single_listing_page cashback_percentage\"> {$show_half_customer}%</span>";
+		echo "<style>
+		h1.job_listing-title {
+			position: relative;
+		}
+		h1.job_listing-title:after {
+		    position: absolute;
+		    content: '{$show_half_customer}%';
+		    height: 40px;
+		    width: 40px;
+		    background-color: #ffb400;
+		    font-size: 15px;
+		    border-radius: 500px;
+		    line-height: 41px;
+		    text-align: center;
+		}
+		</style>";
+		// echo "<span class=\"single_listing_page cashback_percentage\"> {$show_half_customer}%</span>";
 	}
 }
 
