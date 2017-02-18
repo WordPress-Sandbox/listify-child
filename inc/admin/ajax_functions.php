@@ -2,7 +2,8 @@
 
 
 /* search user
-http://wordpress.stackexchange.com/questions/105168/how-can-i-search-for-a-worpress-user-by-display-name-or-a-part-of-it
+1. http://wordpress.stackexchange.com/questions/105168/how-can-i-search-for-a-worpress-user-by-display-name-or-a-part-of-it
+2. http://www.codeatlarge.com/creating-simple-user-search-wordpress/#
 */
 function SearchUser_func() {
 	global $msw;
@@ -16,34 +17,47 @@ function SearchUser_func() {
         $user = get_user_by($select, $search_input);
         $usersids[] = $user->data->ID;
     } else if( $select == 'name') {
-         $args = array (
-            'order' => 'ASC',
-            'orderby' => 'display_name',
-            'search' => '*'.esc_attr( $search_input ).'*',
-            // 'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email'),
-            'meta_query' => array(
-                'relation' => 'OR',
-                array(
-                    'key'     => 'first_name',
-                    'value'   => $search_input,
-                    'compare' => 'LIKE'
-                ),                
-                array(
-                    'key'     => 'last_name',
-                    'value'   => $search_input,
-                    'compare' => 'LIKE'
-                ),
-                array(
-                    'key' => 'description',
-                    'value' => $search_input ,
-                    'compare' => 'LIKE'
-                )
-            )
-        );
+    //      $args = array (
+    //         'order' => 'ASC',
+    //         'orderby' => 'display_name',
+    //         'search' => '*'.esc_attr( $search_input ).'*',
+    //         // 'search_columns' => array( 'ID', 'user_login', 'user_nicename', 'user_email'),
+    //         'meta_query' => array(
+    //             'relation' => 'OR',
+    //             array(
+    //                 'key'     => 'first_name',
+    //                 'value'   => $search_input,
+    //                 'compare' => 'LIKE'
+    //             ),                
+    //             array(
+    //                 'key'     => 'last_name',
+    //                 'value'   => $search_input,
+    //                 'compare' => 'LIKE'
+    //             ),
+    //             array(
+    //                 'key' => 'description',
+    //                 'value' => $search_input ,
+    //                 'compare' => 'LIKE'
+    //             )
+    //         )
+    //     );
 
-    $wp_user_query = new WP_User_Query($args);
-    $users_found = $wp_user_query->get_results();
-    $usersids = wp_list_pluck($users_found, 'ID');
+    // $wp_user_query = new WP_User_Query($args);
+    // $users_found = $wp_user_query->get_results();
+    // $usersids = wp_list_pluck($users_found, 'ID');
+
+    global $wpdb;
+    //some cleanup to the search term, as well as caching it to $usersearch
+    $usersearch = substr(stripslashes( trim($search_input) ), 1);
+    //$wpdb->prepare() is a fast and safe method for performing a MySQL query
+    $stmt = $wpdb->prepare("SELECT user_id FROM $wpdb->usermeta AS um
+        WHERE ( um.meta_key='first_name' AND um.meta_value LIKE '%%%s%%') OR
+        (um.meta_key='last_name' AND um.meta_value LIKE '%%%s%%')
+        ORDER BY um.meta_value 
+        LIMIT 150", $usersearch, $usersearch );
+    //results are cached in the variable $results using get_col()
+    $usersids = $wpdb->get_col( $stmt );
+
     }
 
     $usersids = array_filter($usersids);
@@ -64,7 +78,6 @@ function SearchUser_func() {
         }
 	} else {
 		$message = 'No user found!';
-		$status = 'FAILED';
 	}
 
 	echo json_encode(array( 'status' => $status, 'responsetext' => $message ));
