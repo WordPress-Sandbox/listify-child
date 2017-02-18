@@ -103,7 +103,13 @@ class Mysavingwallet {
 	/* get user role by ID */
 	public function get_user_role() {
 	    $user = new WP_User($this->user_id);
-	    $role = array_shift($user -> roles);
+	    $role = array_shift($user->roles);
+	    return $role;
+	}
+
+	public function get_user_role_by_id($id) {
+		$user = new WP_User($id);
+	    $role = array_shift($user->roles);
 	    return $role;
 	}
 

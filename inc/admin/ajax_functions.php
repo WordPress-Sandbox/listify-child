@@ -27,7 +27,7 @@ function SearchUser_func() {
                     'key'     => 'first_name',
                     'value'   => $search_input,
                     'compare' => 'LIKE'
-                ),
+                ),                
                 array(
                     'key'     => 'last_name',
                     'value'   => $search_input,
@@ -120,6 +120,7 @@ function update_admin_bank_notes_func() {
 function debitCreditUserBalance_func() {
     global $msw;
     $userid = $_POST['user_id'];
+    $admin_id = get_current_user_id();
     $process = $_POST['process'];
     $amount = $_POST['debit_credit_amount'];
 
@@ -138,20 +139,41 @@ function debitCreditUserBalance_func() {
 
     if($response['status'] === 'PROCEED') {
 
-        $prev_balance = get_user_meta($userid, 'wallet_balance', true);
+        $user_prev_balance = get_user_meta($userid, 'wallet_balance', true);
+        $company_prev_balance = get_option('company_balance');
+
+        // get all cashbacks
+        $cashbacks = get_option('cashbacks');
+
         // debit or credit by action 
         if($process == 'credit') {
-        	$new_balance = bcadd($prev_balance, $amount, 2);
+        	$user_new_balance = bcadd($user_prev_balance, $amount, 2);
+            $company_new_balance = bcsub($company_prev_balance, $amount, 2);
         } else if ( $process == 'debit') {
-        	$new_balance = bcsub($prev_balance, $amount, 2);
+        	$user_new_balance = bcsub($user_prev_balance, $amount, 2);
+            $company_new_balance = bcadd($company_prev_balance, $amount, 2);
         }
 
         // update new balance 
-        if($new_balance !== $prev_balance ) {
+        if($user_new_balance !== $user_prev_balance ) {
             $response['status'] = 'SUCCESS';
-        	update_user_meta($userid, 'wallet_balance', $new_balance);
-        	$response['responsetext'] = $msw->currency_symbol . $amount . ' has been ' . $process . 'ed to ' . $user->display_name;
-            $response['balance'] = $new_balance;
+        	update_user_meta($userid, 'wallet_balance', $user_new_balance);
+            update_option('company_balance', $company_new_balance, false);
+            // store the cashback in database
+            $new_cashback = array();
+            $new_cashback['id'] = rand(100000, 999999);
+            $new_cashback['customer_id'] = $userid;
+            $new_cashback['business_id'] = $admin_id;
+            $new_cashback['customer_balance'] = $user_new_balance;
+            // $new_cashback['business_balance'] = 'no effect';
+            $new_cashback['company_balance'] = $company_new_balance;
+            $new_cashback['amount'] = $amount;
+            $new_cashback['time'] = current_time('mysql');
+            $cashbacks[] = $new_cashback;
+            update_option('cashbacks', $cashbacks, false);
+
+        	$response['responsetext'] = $msw->currency_symbol . $amount . ' has been ' . $process . 'ed to ' . $user->display_name . ' Cashbacks Updated id: ' . $new_cashback['id'];
+            $response['balance'] = $user_new_balance;
         } else {
             $response['status'] = 'ERROR';
         	$response['responsetext'] = 'Failed to adjust the balance. No changes made in balance';
@@ -205,10 +227,15 @@ function cashback_report_admin_func() {
     $cashbacks = array_reverse(get_option('cashbacks'));
     if(is_array($cashbacks) && count($cashbacks) > 0 ) {
         foreach ($cashbacks as $key => $cash)  {
+            if($msw->get_user_role_by_id($cash['business_id']) == 'administrator') {
+                $provider = 'Administrator';
+            } else {
+                $provider = 'Business ' . $cash['business_id'];
+            }
             $each_cashback = array();
             $each_cashback['cashback_id'] = $cash['id'];
             $each_cashback['customer_id'] = $cash['customer_id'];
-            $each_cashback['business_id'] = $cash['business_id'];
+            $each_cashback['business_id'] = $provider;
             $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
             $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
             $each_cashback['company_balance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');

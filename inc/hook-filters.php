@@ -66,7 +66,7 @@ function user_extra_profile_fields_save( $user_id ) {
 }
 
 
-/* show cashback percentage */
+/* show cashback percentage in loops */
 function listify_content_job_listing_before_func() {
 	global $msw;
 	$listing = get_post();
