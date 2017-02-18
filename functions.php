@@ -161,7 +161,7 @@ add_action('admin_init', 'su_allow_subscriber_to_uploads');
 /* modify wp job manager shortcodes */
 function savingwallet_submit_job_form_func() {
     global $msw;
-    if($msw->get_user_role() == 'customer') {
+    if($msw->get_user_role() !== 'business') {
         echo '<p>Only businesses can add listing</p>';
     } else {
         echo do_shortcode('[submit_job_form]');
