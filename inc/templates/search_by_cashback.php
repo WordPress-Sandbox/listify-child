@@ -1,5 +1,8 @@
 <div class="search_by_cashback">
-	<span class="filter-label"> Filter by Cashback:  </span>
-	<input type="text" name="min_cashback" id="min_cashback" placeholder="Minimum Cashback Amount">
-	<input type="text" name="max_cashback" id="max_cashback" placeholder="Maximum Cashback Amount">
+	<label for="sort_by_cashback"><?php _e( 'Sort by Cashback', 'wp-job-manager' ); ?></label>
+	<select name="sort_by_cashback" class="job-manager-filter">
+		<option value=""><?php _e( 'None', 'wp-job-manager' ); ?></option>
+		<option value="ASC"><?php _e( 'ASC', 'wp-job-manager' ); ?></option>
+		<option value="DESC"><?php _e( 'DESC', 'wp-job-manager' ); ?></option>
+	</select>
 </div>

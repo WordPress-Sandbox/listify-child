@@ -45,6 +45,22 @@ add_action( 'after_setup_theme', 'listify_child_theme_setup' );
 /* add business role */
 add_role('business', __('Business'));
 
+/* set businesses cashback percentage as meta box to each listing */
+add_action('init', 'update_all_cashback_to_listing_metabox');
+function update_all_cashback_to_listing_metabox()
+{
+    $args = array(
+        'posts_per_page'   => -1,
+        'post_type'        => 'job_listing'
+    );
+    $posts_array = get_posts( $args );
+    foreach($posts_array as $post)
+    {
+        $user_cb_percentage = get_user_meta($post->post_author, 'cashback_percentage', true);
+        update_post_meta($post->ID, 'cashback_percentage', $user_cb_percentage);
+    }
+}
+
 
 /* dynamic link to tempate */
 function get_template_page_link($t) {

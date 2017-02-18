@@ -52,8 +52,8 @@ $key = isset($_GET['key']) ? $_GET['key'] : '';
 ?>
 
     <div class="woocommerce-message" style="display: none"></div>
-    <?php //echo $msw->getMetaValue('email_code'); ?>
-    <?php //echo $msw->getMetaValue('email_status'); ?>
+    <?php // echo $msw->getMetaValue('email_code'); ?>
+    <?php // echo $msw->getMetaValue('email_status'); ?>
 <?php 
 
 if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>

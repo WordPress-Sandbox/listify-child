@@ -70,7 +70,7 @@ function user_extra_profile_fields_save( $user_id ) {
 function listify_content_job_listing_before_func() {
 	global $msw;
 	$listing = get_post();
-	$cashback_percentage = get_user_meta($listing->post_author, 'cashback_percentage', true);
+	$cashback_percentage = get_post_meta($listing->ID, 'cashback_percentage', true);
 	$show_half_customer = $cashback_percentage / 2; 
 	if($show_half_customer > 0 ) {
 		echo "<span class=\"cashback_percentage\"> {$show_half_customer}%</span>";
@@ -93,24 +93,35 @@ function filter_by_cashback_query_args( $query_args, $args ) {
 		parse_str( $_POST['form_data'], $form_data );
 
 		// min cashback 
-		if ( ! empty( $form_data['min_cashback'] ) ) {
-			$min_cashback = sanitize_text_field( $form_data['min_cashback'] );
-			$min_cashback_users = $msw->getUserByCashbackAmount($min_cashback*2, '>=');
-			// This will show the 'reset' link
-			add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
-		}		
+		// if ( ! empty( $form_data['min_cashback'] ) ) {
+		// 	$min_cashback = sanitize_text_field( $form_data['min_cashback'] );
+		// 	$min_cashback_users = $msw->getUserByCashbackAmount($min_cashback*2, '>=');
+		// 	// This will show the 'reset' link
+		// 	add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
+		// }		
 
-		// max cashback 
-		if ( ! empty( $form_data['max_cashback'] ) ) {
-			$max_cashback = sanitize_text_field( $form_data['max_cashback'] );
-			$max_cashback_users = $msw->getUserByCashbackAmount($max_cashback*2, '<=');
-			// This will show the 'reset' link
-			add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
+		// // max cashback 
+		// if ( ! empty( $form_data['max_cashback'] ) ) {
+		// 	$max_cashback = sanitize_text_field( $form_data['max_cashback'] );
+		// 	$max_cashback_users = $msw->getUserByCashbackAmount($max_cashback*2, '<=');
+		// 	// This will show the 'reset' link
+		// 	add_filter( 'job_manager_get_listings_custom_filter', '__return_true' );
+		// }
+
+		// // combine all authors
+		// $authors = array_merge( (array) $min_cashback_users, (array) $max_cashback_users);
+
+		if( ! empty( $form_data['sort_by_cashback'] )) {
+			$SORT = sanitize_text_field( $form_data['sort_by_cashback'] );
+			$authors = get_users(array(
+			    'meta_key'     => 'cashback_percentage',
+			));
+			$query_args['author__in'] = wp_list_pluck($authors, 'ID');
+
+			$query_args['order'] = $SORT;
+			$query_args['meta_key'] = 'cashback_percentage';
+			$query_args['orderby'] = 'meta_value_num';
 		}
-
-		// combine all authors
-		$authors = array_merge( (array) $min_cashback_users, (array) $max_cashback_users);
-		$query_args['author__in'] = $authors;
 	}
 	
 	return $query_args;
@@ -120,7 +131,7 @@ function filter_by_cashback_query_args( $query_args, $args ) {
 function single_page_cashback_badge() {
 	global $msw;
 	$listing = get_post();
-	$cashback_percentage = get_user_meta($listing->post_author, 'cashback_percentage', true);
+	$cashback_percentage = get_post_meta($listing->ID, 'cashback_percentage', true);
 	$show_half_customer = $cashback_percentage / 2; 
 	if($show_half_customer > 0 ) {
 		echo "<style>
@@ -137,6 +148,8 @@ function single_page_cashback_badge() {
 		    border-radius: 500px;
 		    line-height: 41px;
 		    text-align: center;
+		    color: #FFF;
+		    margin-left: 5px;
 		}
 		</style>";
 		// echo "<span class=\"single_listing_page cashback_percentage\"> {$show_half_customer}%</span>";
