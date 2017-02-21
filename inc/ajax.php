@@ -419,8 +419,8 @@ function save_basic_func(){
                 $status = 'PHONEVERREQUIRED';
                 $message = 'Please verify your phone.';
                 $pin = $msw->sendPin($value);
-                $msw->updateUserMeta('phone_status', 'unverified');
         } else {
+            $msw->updateUserMeta('phone_status', 'verified');
             if ( $key !== 'phone_status') {
                 $es_value = sanitize_text_field($value);
                 $msw->updateUserMeta($key, $es_value);
