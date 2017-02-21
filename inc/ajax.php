@@ -13,7 +13,9 @@ function new_user_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $msw->sendPin($_POST['phone']);
+        $pin = $msw->sendPin($_POST['phone']);
+        echo json_encode(array('pin' => $pin ));
+        die();
     }
  
     // Get data 
@@ -125,7 +127,9 @@ function new_business_register() {
     }
 
     if($_POST['phone_status'] != 'verified') {
-        $msw->sendPin($_POST['bs_phone']);
+        $pin = $msw->sendPin($_POST['bs_phone']);
+        echo json_encode(array('pin' => $pin ));
+        die();
     }
  
     // Get data 
@@ -406,13 +410,25 @@ add_action('wp_ajax_cashback', 'cashback_func');
 function save_basic_func(){
     global $msw;
     $data = array_filter($_POST['dd']);
-
+    $status = 'SUCCESS';
+    $message = 'Basic Info Successfully updated!';
     foreach ($data as $key => $value) {
-        $es_value = sanitize_text_field($value);
-        $msw->updateUserMeta($key, $es_value);
+        if( $key == 'billing_phone' && 
+            $value != $msw->getMetaValue('billing_phone') &&
+            $data['phone_status'] != 'verified' ) {
+                $status = 'PHONEVERREQUIRED';
+                $message = 'Please verify your phone.';
+                $pin = $msw->sendPin($value);
+                $msw->updateUserMeta('phone_status', 'unverified');
+        } else {
+            if ( $key !== 'phone_status') {
+                $es_value = sanitize_text_field($value);
+                $msw->updateUserMeta($key, $es_value);
+            }
+        }
     }
 
-    echo json_encode('success');
+    echo json_encode(array('status' => $status, 'responsetext' => $message, 'pin' => $pin ));
     die();
 }
 

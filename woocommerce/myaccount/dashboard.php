@@ -668,4 +668,23 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
             </div><!-- /col-md-9 -->
         </div>   
     </div>
+
+    <div class="remodal" data-remodal-id="phone_verification" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+        <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+        <h2 id="modal1Title">Verify Your Phone Number</h2>
+        <div class="verification_content">
+            <div class="verification_img">
+                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/Smart_Phone.png" alt="">
+            </div>
+            <div id="modal1Desc">
+                <form id="pin_submit" action="">
+                    <label for="verification_code">Enter Verification Code</label>
+                    <input type="number" name="verification_code" id="verification_code">
+                    <input type="submit" name="pin_submit" value="Verify" class="custom_btn">
+                    <div class="show_message"></div>
+                </form>
+            </div>
+        </div>
+    </div>  
+    
 <?php endif; ?>

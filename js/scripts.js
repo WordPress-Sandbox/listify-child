@@ -374,13 +374,13 @@ jQuery(function($){
 	$('#pin_submit').submit(function(e){
 		e.preventDefault();
 		var user_code = $("#verification_code").val();
-		console.log(user_code == savingwallet.pin);
 		if( user_code == savingwallet.pin ) {
 			$(this).find('.show_message').removeClass('error_message').addClass('success_message').text('✓ Success!');
 	        $('#phone').removeClass('error_message').addClass('success_message').text('Phone verified!');
 			savingwallet.phone_status = 'verified';
 			window.setTimeout(savingwallet.closeModal('phone_verification'), 3000);
 			$('form#register_customer').submit();
+			$('#basic_info').submit();
 		} else {
 			$(this).find('.show_message').removeClass('success_message').addClass('error_message').text('x Failed');
 		}
@@ -509,22 +509,28 @@ jQuery(function($){
 	$('#basic_info').submit(function(e){
 		e.preventDefault();
 
-		var data = {}
+		var data = { 'phone_status' : savingwallet.phone_status }
 
 		$.each($(this).serializeArray(), function(i, field) {
 		    data[field.name] = field.value;
 		});
-
 		console.log(data);
 
 		$.ajax({
 			type: 'POST',
 			url: local.ajax_url,
 			data: { action: 'save_basic', dd: data },
-			dataType: 'text',
+			dataType: 'json',
 			success: function(resp) {
 				console.log(resp);
-				$('.woocommerce-message').slideDown('slow').text( 'Basic Info Successfully updated!' );
+				if(resp.status == 'PHONEVERREQUIRED') {
+					savingwallet.openModal('phone_verification');
+		        	savingwallet.pin = resp.pin;
+		        	$('.woocommerce-message').slideDown('slow').text( resp.responsetext );
+		        	return;
+				} else {
+					$('.woocommerce-message').slideDown('slow').text( resp.responsetext );
+				}
 			},
 			error: function( req, status, err ) {
 				$('.message').html( 'something went wrong', status, err );

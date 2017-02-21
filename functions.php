@@ -148,7 +148,6 @@ if(is_admin()) {
     require_once locate_template('inc/admin/ajax_hook.php');
 }
 
-
 /* allow customers to upload files */
 function su_allow_subscriber_to_uploads() {
     $customers = get_role('customer');

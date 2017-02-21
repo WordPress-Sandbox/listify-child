@@ -41,9 +41,7 @@ class Mysavingwallet {
             )
         );
 
-        echo json_encode(array('pin'=>$pin));
-        die();
-
+        return $pin;
 	}
 
 	public function isValidEmail($email){ 
