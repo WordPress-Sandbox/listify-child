@@ -466,6 +466,7 @@ jQuery(function($){
 			var input = $(this).val();
 			var cashback = local.cashback_percentage*input/100;
 			$('#cashback_amount').val(local.currency_symbol + cashback);
+			$('#cashback_amount_half').val(local.currency_symbol + cashback/2);
 		} else {
 			$('.cashback_message').css('color', 'red').text('Please set cashback percentage between 5% and 35% from myaccount setting.');
 		}
@@ -473,6 +474,7 @@ jQuery(function($){
 
 	$('#cashback_btn').click(function(e){
 		e.preventDefault();
+		var _that = $(this);
 		var cashback_amount = Number($('#cashback_amount').val().replace(/[^0-9\.]+/g,""));
 		var data = {
 			action: 'cashback', 
@@ -485,6 +487,9 @@ jQuery(function($){
 			url: local.ajax_url,
 			data: data,
 			dataType: 'json',
+			beforeSend: function(){
+				_that.prop('disabled', true);
+			},
 			success: function(resp) {
 				console.log(resp);
 				if(resp.status == 'error') {
@@ -494,6 +499,7 @@ jQuery(function($){
 					$('span.balance').text(local.currency_symbol + resp.balance);
 					$('#cashback_wrapper').html(resp.replace_content);
 				}
+				_that.prop('disabled', false);
 			},
 			error: function( req, status, err ) {
 				$('.cashback_message').html( 'something went wrong', status, err );
