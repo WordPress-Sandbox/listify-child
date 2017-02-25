@@ -157,3 +157,17 @@ function single_page_cashback_badge() {
 }
 
 add_action('single_job_listing_meta_start', 'single_page_cashback_badge');
+
+
+
+/* validate business listing review */
+// add_filter( 'comments_open', 'my_comments_open', 10, 2 );
+function my_comments_open( $open, $post_id ) {
+	global $msw;
+	$open =
+	$post = get_post( $post_id );
+	if($msw->get_user_role() == 'customer' ) {
+		$open = true;
+	}
+	return $open;
+}

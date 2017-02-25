@@ -33,6 +33,11 @@ function listify_child_styles() {
     	'themepath' => get_stylesheet_directory_uri()
     );
     wp_localize_script('listify-child-script', 'local', $data);
+    
+    if( is_singular() && comments_open() && ( get_option( 'thread_comments' ) == 1) ) {
+        // Load comment-reply.js (into footer)
+        wp_enqueue_script( 'comment-reply', 'wp-includes/js/comment-reply', array(), false, true );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'listify_child_styles', 999 );
 
@@ -167,3 +172,5 @@ function savingwallet_submit_job_form_func() {
     }
 }
 add_shortcode('savingwallet_submit_job_form', 'savingwallet_submit_job_form_func');
+
+

@@ -119,6 +119,22 @@ class Mysavingwallet {
 		update_user_meta($this->user_id, $k, $v);
 	}
 
+	public function customerReceivedCashback() {
+		global $post;
+		$cashbacks = get_option('cashbacks');
+		$business_id = $post->post_author;
+		if(is_array($cashbacks)) {
+			$cashbacks = array_filter($cashbacks, function($v) { return $v['customer_id'] == $this->user_id; });
+		}
+
+		$value = array_filter($cashbacks, function($v) use ($business_id ) { return $v['business_id'] == $business_id; });
+		if(count($value) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function verificationBadge() {
 		$items = array(
 			'email_status' => 'Email',
@@ -204,6 +220,9 @@ class Mysavingwallet {
 					}
 					$html .= '<td>' . $this->currency_symbol . $cash['amount'] . '</td>';
 					$html .= '<td>' . $cash['time'] . '</td>';
+					if( $this->get_user_role() == 'customer') {
+						$html .= '<td><a href="'.get_author_posts_url($cash['business_id'] ).'">Write Review</a></td>';
+					}
 				$html .= '</tr>';
 			}
 			$html .= '</table>';
