@@ -429,9 +429,13 @@ jQuery(function($){
 
 	/* email verification */
 
-	$('input[name="email_submit"]').click(function(e){
+	$('input[name="email_submit"], .resend_email').click(function(e){
 
 		e.preventDefault();
+
+		setTimeout(function(){
+			$('.resend_p').slideDown('slow');
+		}, 60000);
 
 		var data = {
 			action: 'email_verify',
@@ -449,7 +453,9 @@ jQuery(function($){
 				if( resp.status == 'ERROR') {
 					$('.message').css('color', 'red').text(resp.responsetext);
 				} else if (resp.status == 'SUCCESS') {
+					$('.message').hide();
 					$('.message').css('color', 'green').text(resp.responsetext);
+					$('.message').slideDown('slow');
 				}
 			},
 			error: function( req, status, err ) {

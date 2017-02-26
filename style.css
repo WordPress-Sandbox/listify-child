@@ -1081,6 +1081,13 @@ form#withdraw p {
   background-size: 40px;
   padding-left: 60px
 }
+.resend_email {
+    color: green;
+    cursor: pointer;
+}
+.resend_p {
+  display: none;
+}
 
 /* profile edit */
 .user_profile_img img {

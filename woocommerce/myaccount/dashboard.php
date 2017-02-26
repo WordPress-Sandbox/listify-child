@@ -52,8 +52,8 @@ $key = isset($_GET['key']) ? $_GET['key'] : '';
 ?>
 
     <div class="woocommerce-message" style="display: none"></div>
-    <?php // echo $msw->getMetaValue('email_code'); ?>
-    <?php // echo $msw->getMetaValue('email_status'); ?>
+    <?php echo $msw->getMetaValue('email_code'); ?>
+    <?php echo $msw->getMetaValue('email_status'); ?>
 <?php 
 
 if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
@@ -83,6 +83,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                 <input type="submit" name="email_submit" value="Send verification code">
             </div>
             <p class="message"></p>
+            <p class="resend_p">Didn’t receive the verification email? <span class="resend_email">Send Again</span></p>
         </div>
     </div>
 
