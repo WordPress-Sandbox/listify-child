@@ -146,6 +146,7 @@ function savingwallet_admin(){
 			<table id="withdrawls" class="display" cellspacing="0" width="100%">
 		        <thead>
 		            <tr>
+		                <th>Withdraw ID</th>
 		                <th>Customer Name</th>
 		                <th>Customer ID</th>
 		                <th>Customer Email</th>
@@ -154,10 +155,12 @@ function savingwallet_admin(){
 		                <th>Withdraw Time</th>
 		                <th>Bank Name</th>
 		                <th>Amount</th>
+		                <th>Note</th>
 		            </tr>
 		        </thead>
 		        <tfoot>
 		        	<tr>
+		        		<th>Withdraw ID</th>	
 		                <th>Customer Name</th>
 		                <th>Customer ID</th>
 		                <th>Customer Email</th>
@@ -166,6 +169,7 @@ function savingwallet_admin(){
 		                <th>Withdraw Time</th>
 		                <th>Bank Name</th>
 		                <th>Amount</th>
+		                <th>Note</th>
 		            </tr>
 		        </tfoot>
 		    </table>

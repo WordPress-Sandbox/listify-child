@@ -49,9 +49,15 @@ jQuery(function($){
 	/* add notes 
 	http://stackoverflow.com/questions/33267797/turn-text-element-into-input-field-type-text-when-clicked-and-change-back-to-tex
 	*/
-	$('body').on('click', '.bankNote', function(){
+	$('body').on('click', '.bankNote, .withNote', function(){
   
-		  var $el = $(this), $userid = $el.attr('data-userid'), $routing = $el.attr('data-routing');
+		  var $el = $(this),
+		  $notetype = $el.attr('class'),
+		  $userid = $el.attr('data-userid'), 
+		  $routing = $el.attr('data-routing');
+		  $withid = $el.attr('data-withid');
+
+		  $datatype = ($notetype == 'bankNote') ? 'data-routing=' + $routing : 'data-withid=' + $withid ;
 		              
 		  var $input = $('<textarea/>').val( $el.text() );
 		  $el.replaceWith( $input );
@@ -65,16 +71,23 @@ jQuery(function($){
 		  		var updateVal = 'Empty';
 		  	}
 
-		    var $p = $('<p class="bankNote" data-userid="'+ $userid +'" data-routing="'+ $routing +'"/>').text( updateVal );
+		  	var $p = $('<p class="'+ $notetype +'" data-userid="'+ $userid +'"' + $datatype + '/>').text( updateVal );
 
 		    $input.replaceWith( $p );
     		$.ajax({
 				type: 'POST',
 				url: ajaxurl,
-				data: { action: 'update_admin_bank_notes', userid: $userid, routing: $routing, note: $input.val() },
+				data: { 
+					action: 'update_admin_notes', 
+					userid: $userid, 
+					notetype: $notetype, 
+					routing: $routing, 
+					withid: $withid, 
+					note: $input.val()
+				},
 				dataType: 'json',
 				success: function(resp) {
-					console.log('Bank info updated!');
+					console.log(resp);
 				},
 				error: function( req, status, err ) {
 					console.log('something went wrong', status, err);
@@ -151,14 +164,16 @@ jQuery(function($){
 			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
 			 //    ],
 		        columns: [
-		            { "data": "name" },
 		            { "data": "id" },
+		            { "data": "name" },
+		            { "data": "customer" },
 		            { "data": "email" },
 		            { "data": "username" },
 		            { "data": "date" },
 		            { "data": "time" },
 		            { "data": "bank" },
-		            { "data": "amount" }
+		            { "data": "amount" },
+		            { "data": "note" },
 		        ]
 			});
 		}

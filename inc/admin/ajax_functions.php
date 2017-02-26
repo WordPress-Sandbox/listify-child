@@ -108,24 +108,42 @@ function verify_unverify_customer_account_func() {
 
 
 /* Update Bank Note */
-function update_admin_bank_notes_func() {
+function update_admin_notes_func() {
     $userid = $_POST['userid'];
     $routing = sanitize_text_field($_POST['routing']);
     $note = sanitize_text_field($_POST['note']);
+    $notetype = sanitize_text_field($_POST['notetype']);
+    $withid = sanitize_text_field($_POST['withid']);
 
-    $banks = get_user_meta($userid, 'banks', true);
-
-    if($note && $routing && is_array($banks)) {
-        foreach($banks as &$bank){
-            if($bank['bank_routing'] == $routing ){
-                $bank['note'] = $note;
-                update_user_meta($userid, 'banks', $banks);
-                break;
+    if( $notetype == 'bankNote' ) {
+        $banks = get_user_meta($userid, 'banks', true);
+        if($note && $routing && is_array($banks)) {
+            foreach($banks as &$bank){
+                if($bank['bank_routing'] == $routing ){
+                    $bank['note'] = $note;
+                    update_user_meta($userid, 'banks', $banks);
+                    break;
+                }
+            }    
+        }
+        $response = 'Bank note updated.';
+    } else if ( $notetype == 'withNote' ) {
+        $withdrawls = get_user_meta($userid, 'withdrawls', true);
+        if($note && $withid && is_array($withdrawls)) {
+            foreach ($withdrawls as &$with) {
+                if($with['id'] == $withid) {
+                    $with['note'] = $note;
+                    update_user_meta($userid, 'withdrawls', $withdrawls);
+                    break;
+                }
             }
-        }    
+        }
+        $response = 'Withdraw note updated.';
+    } else {
+        $response = 'Couldn\'t update the note';
     }
 
-    echo json_encode(array('responsetext' => $banks));
+    echo json_encode(array('responsetext' => $response));
     die();
 }
 
@@ -210,15 +228,19 @@ function withdrawls_report_admin_func() {
         $withdrawls = get_user_meta($id, 'withdrawls', true);
         if(is_array($withdrawls) && count($withdrawls) > 0 ) {
             foreach ($withdrawls as $key => $with)  {
+                $notetext = $with['note'] ? $with['note'] : 'empty';
+                $notes = '<p class="withNote" data-userid="'.$id.'" data-withid="'.$with['id'].'">'. $notetext .'</p>';
                 $each_withdraw = array();
+                $each_withdraw['id'] = $with['id'];
                 $each_withdraw['name'] = $user->display_name;
-                $each_withdraw['id'] = $id;
+                $each_withdraw['customer'] = $id;
                 $each_withdraw['email'] = $user->user_email;
                 $each_withdraw['username'] = $user->user_login;
                 $each_withdraw['date'] =  date("M/d/Y", strtotime($with['time']));
                 $each_withdraw['time'] = date("h:i A", strtotime($with['time']));
                 $each_withdraw['bank'] = $with['bank'];
                 $each_withdraw['amount'] = $msw->currency_symbol . number_format($with['amount'], 2, '.', ',');
+                $each_withdraw['note'] = $notes;
                 if( $query['load'] == $with['status']) {
                     $res["data"][] = $each_withdraw;
                 } else if ( $query['load'] == 'all' ) {
