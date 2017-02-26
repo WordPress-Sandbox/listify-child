@@ -107,12 +107,12 @@ jQuery(function($){
 		});
 
 
-	/* verify & unverify customer account */
+	/* verify, unverify customer account */
 	$('body').on('click', '.verify_btn', function(e){
 		e.preventDefault();
 		var _that = $(this);
 		var data = {
-			action: 'verify_unverify_customer_account',
+			action: 'verify_unverify_banks',
 			userid: _that.data('userid'),
 			routing: _that.data('routing'),
 			status: _that.data('status'),
@@ -125,6 +125,32 @@ jQuery(function($){
 			success: function(resp) {
 				console.log(resp)
 				alert('Bank status set to ' + resp.status);
+				_that.parent().parent().remove();
+			},
+			error: function( req, status, err ) {
+				$('.message').text('something went wrong', status, err);
+			}
+		});
+	});
+
+	/* approve, decline customer withdraw */
+	$('body').on('click', '.verify_with', function(e){
+		e.preventDefault();
+		var _that = $(this);
+		var data = {
+			action: 'approve_decline_withdraw',
+			userid: _that.data('userid'),
+			withid: _that.data('withid'),
+			status: _that.data('status'),
+		}
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				console.log(resp)
+				alert('Withdraw status set to ' + resp.status);
 				_that.parent().parent().remove();
 			},
 			error: function( req, status, err ) {
@@ -173,7 +199,9 @@ jQuery(function($){
 		            { "data": "time" },
 		            { "data": "bank" },
 		            { "data": "amount" },
+		            { "data": "status" },
 		            { "data": "note" },
+		            { "data": "action" }
 		        ]
 			});
 		}

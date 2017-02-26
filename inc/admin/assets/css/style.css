@@ -92,7 +92,8 @@ div.btn_area .withdrawl_btn {
 #list_preview_doc li img  {
   width: 100%;
 }
-a.verify_btn {
+a.verify_btn,
+a.verify_with {
     color: #FFF;
     background: #0073aa;
     padding: 2px 5px;

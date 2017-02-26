@@ -85,7 +85,7 @@ function SearchUser_func() {
 }
 
 /* verify unverify bank account */
-function verify_unverify_customer_account_func() {
+function verify_unverify_banks_func() {
     $userid = $_POST['userid'];
     $routing = sanitize_text_field($_POST['routing']);
     $bank_status = sanitize_text_field($_POST['status']);
@@ -103,6 +103,27 @@ function verify_unverify_customer_account_func() {
     }
 
     echo json_encode(array('status' => $bank_status));
+    die();
+}
+
+/* approve, decline customer withdraw */
+function approve_decline_withdraw_func() {
+    $userid = $_POST['userid'];
+    $withid = sanitize_text_field($_POST['withid']);
+    $status = sanitize_text_field($_POST['status']);
+
+    $withdrawls = get_user_meta($userid, 'withdrawls', true);
+
+    if($withid && is_array($withdrawls)) {
+        foreach($withdrawls as &$with){
+            if($with['id'] == $withid ){
+                $with['status'] = $status;
+                update_user_meta($userid, 'withdrawls', $withdrawls);
+                break;
+            }
+        }    
+    }
+    echo json_encode(array('status' => $status));
     die();
 }
 
@@ -229,6 +250,9 @@ function withdrawls_report_admin_func() {
         $withdrawls = get_user_meta($id, 'withdrawls', true);
         if(is_array($withdrawls) && count($withdrawls) > 0 ) {
             foreach ($withdrawls as $key => $with)  {
+
+                $btns = '<a class="verify_with" data-status="approved" data-userid="'.$id.'" data-withid="'.$with['id'].'">Approve</a><a class="verify_with" data-status="declined" data-userid="'.$id.'" data-withid="'. $with['id'].'">Decline</a>';
+
                 $notetext = $with['note'] ? $with['note'] : 'empty';
                 $notes = '<p class="withNote" data-userid="'.$id.'" data-withid="'.$with['id'].'">'. $notetext .'</p>';
                 $each_withdraw = array();
@@ -241,7 +265,9 @@ function withdrawls_report_admin_func() {
                 $each_withdraw['time'] = date("h:i A", strtotime($with['time']));
                 $each_withdraw['bank'] = $with['bank'];
                 $each_withdraw['amount'] = $msw->currency_symbol . number_format($with['amount'], 2, '.', ',');
+                $each_withdraw['status'] = ucfirst($with['status']);
                 $each_withdraw['note'] = $notes;
+                $each_withdraw['action'] = $btns;
                 if( $query['load'] == $with['status']) {
                     $res["data"][] = $each_withdraw;
                 } else if ( $query['load'] == 'all' ) {

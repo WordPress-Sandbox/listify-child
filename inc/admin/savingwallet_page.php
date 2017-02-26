@@ -155,23 +155,11 @@ function savingwallet_admin(){
 		                <th>Withdraw Time</th>
 		                <th>Bank Name</th>
 		                <th>Amount</th>
+		                <th>Status</th>
 		                <th>Note</th>
+		                <th>Action</th>
 		            </tr>
 		        </thead>
-		        <tfoot>
-		        	<tr>
-		        		<th>Withdraw ID</th>	
-		                <th>Customer Name</th>
-		                <th>Customer ID</th>
-		                <th>Customer Email</th>
-		                <th>Customer Username</th>
-		                <th>Withdraw Date</th>
-		                <th>Withdraw Time</th>
-		                <th>Bank Name</th>
-		                <th>Amount</th>
-		                <th>Note</th>
-		            </tr>
-		        </tfoot>
 		    </table>
 
 		</div>
