@@ -232,6 +232,7 @@ jQuery(function($){
 	            { "data": "routing_number" },
 	            { "data": "account_number" },
 	            { "data": "support_doc" },
+	            { "data": "ip" },
 	            { "data": "status" },
 	            { "data": "note" },
 	            { "data": "action_btn" }

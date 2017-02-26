@@ -615,6 +615,7 @@ function save_bank_func(){
 
     $new_bank = array();
     $new_bank['verification']   = 'pending';
+    $new_bank['ip']             = $msw->get_the_user_ip();
     $new_bank['bank_name']      = $bank_name;
     $new_bank['account_type']   = $account_type;
     $new_bank['bank_routing']   = $bank_routing;

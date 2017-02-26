@@ -418,7 +418,8 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                     <p class="message"></p>
                                     <form id="withdraw">
                                     <?php if($msw->hasverifiedbank()) : ?>
-                                        <input type="number" name="amount" placeholder="Enter withdraw amount">
+                                        <label class="currency">$
+                                        <input type="text" name="amount" placeholder="Enter withdraw amount"></label>
                                         <?php if( is_array($msw->verifiedbanks())) : 
                                                 foreach ($msw->verifiedbanks() as $key => $bank) : ?>
                                         <input type="radio" name="bank_name" value="<?php echo $bank['bank_name']; ?>"><?php echo $bank['bank_name']; ?><br>

@@ -253,6 +253,7 @@ function cashback_report_admin_func() {
             $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
             $each_cashback['company_balance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
             $each_cashback['amount'] = $msw->currency_symbol . number_format($cash['amount'], 2, '.', ',');
+            // http://thisinterestsme.com/calculating-difference-dates-php/
             $each_cashback['date'] = date("M/d/Y", strtotime($cash['time']));
             $each_cashback['time'] = date("h:i A", strtotime($cash['time']));
             $res["data"][] = $each_cashback;
@@ -303,6 +304,7 @@ function bank_report_admin_func() {
                 $each_bank['routing_number'] = $b['bank_routing'];
                 $each_bank['account_number'] = $b['account_number'];
                 $each_bank['support_doc'] = $docs;
+                $each_bank['ip'] = $b['ip'];
                 $each_bank['status'] = ucfirst($b['verification']);
                 $each_bank['note'] = $notes;
                 $each_bank['action_btn'] = $btns;

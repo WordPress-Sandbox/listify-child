@@ -21,7 +21,7 @@ class Mysavingwallet {
 		$this->sid 			= 'ACf2609e774c67bbfc8af7844558d57608';
 		$this->token 		= '59b014bf2054a4e636a2daa66df6a08f';
 		$this->from_phone 	= '561 800-0461';
-		$this->minwithdraw 	= 5;
+		$this->minwithdraw 	= 0.5;
 		$this->user_id = get_current_user_id();
 		$this->currency_symbol = '$';
 
@@ -132,6 +132,23 @@ class Mysavingwallet {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public function get_the_user_ip() {
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+		//check ip from share internet
+		$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+		//to check ip is pass from proxy
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+		$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		if($ip) {
+			return $ip;
+		} else {
+			return 'unknown';
 		}
 	}
 

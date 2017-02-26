@@ -122,6 +122,7 @@ function savingwallet_admin(){
 		                <th>Routing Number</th>
 		                <th>Account Number</th>
 		                <th>Support Doc</th>
+		                <th>IP</th>
 		                <th>Status</th>
 		                <th>Note</th>
 		                <th>Action</th>
