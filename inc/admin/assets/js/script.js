@@ -368,7 +368,8 @@ jQuery(function($){
 			dataType: 'json',
 			success: function(resp) {
 				if(resp.status == 'SUCCESS') {
-					_that.siblings('.userinfo').find('.balance').text(resp.balance);
+					_that.siblings('.userinfo').find('.balance').text(resp.user_balance);
+					$('.com_b').text(resp.company_balance)
 					_that.after('<p style="color:green"> '+ resp.responsetext + '</p>');
 				} else if (resp.status == 'ERROR') {
 					_that.after('<p style="color:red"> '+ resp.responsetext + '</p>');

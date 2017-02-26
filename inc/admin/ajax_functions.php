@@ -203,8 +203,9 @@ function debitCreditUserBalance_func() {
             $cashbacks[] = $new_cashback;
             update_option('cashbacks', $cashbacks, false);
 
-        	$response['responsetext'] = $msw->currency_symbol . $amount . ' has been ' . $process . 'ed to ' . $user->display_name . ' Cashbacks Updated id: ' . $new_cashback['id'];
-            $response['balance'] = $user_new_balance;
+        	$response['responsetext'] = $msw->currency_symbol . $amount . ' has been ' . $process . 'ed to ' . $user->display_name;
+            $response['user_balance'] = $user_new_balance;
+            $response['company_balance'] = $company_new_balance;
         } else {
             $response['status'] = 'ERROR';
         	$response['responsetext'] = 'Failed to adjust the balance. No changes made in balance';

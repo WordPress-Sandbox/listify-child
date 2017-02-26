@@ -52,7 +52,7 @@ function savingwallet_admin(){
 
 		<!-- management tab -->
 		<div id="management-tab" class="tab-content current">
-			<h3> Company balance: <?php echo $msw->currency_symbol; ?><?php echo get_option('company_balance'); ?></h3>
+			<h3> Company balance: <?php echo $msw->currency_symbol; ?><span class="com_b"><?php echo get_option('company_balance'); ?></span></h3>
 			<div class="add_user_balance">
 				<h3> Search a user </h3>
 				<form id="SearchUser">
