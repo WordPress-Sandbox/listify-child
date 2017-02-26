@@ -78,7 +78,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
         </div>
         <div class="row">
             <div class="email_verify">
-                <input type="text" name="email" value="<?php echo $user->user_email; ?>">
+                <input type="text" name="email" value="<?php echo $user->user_email; ?>" disabled>
                 <?php wp_nonce_field('email_verify','email_verify_nonce', true, true ); ?>
                 <input type="submit" name="email_submit" value="Send verification code">
             </div>
@@ -422,7 +422,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                         <input type="text" name="amount" placeholder="Enter withdraw amount"></label>
                                         <?php if( is_array($msw->verifiedbanks())) : 
                                                 foreach ($msw->verifiedbanks() as $key => $bank) : ?>
-                                        <input type="radio" name="bank_name" value="<?php echo $bank['bank_name']; ?>"><?php echo $bank['bank_name']; ?><br>
+                                        <p><input type="radio" name="bank_name" value="<?php echo $bank['bank_name']; ?>"><?php echo $bank['bank_name']; ?></p><br>
                                         <?php endforeach; endif; ?>
                                     <?php else : ?>
                                         <p> No verified bank account found! Please verify a bank account proior requesting for withdraw.</p>

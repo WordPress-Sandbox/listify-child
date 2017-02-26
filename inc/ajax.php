@@ -296,8 +296,10 @@ function email_verify_func() {
     }
 
     // Get data 
-    $user = new WP_User($msw->user_id);
-    $email = sanitize_email($_POST['email']);
+    // $user = new WP_User($msw->user_id);
+    // $email = sanitize_email($_POST['email']);
+    $user = get_user_by('id', $msw->user_id);
+    $email = $user->user_email;
     $email_status = $msw->getMetaValue('email_status');
 
     $sub = "MySavingsWallet email verification";
@@ -319,7 +321,7 @@ function email_verify_func() {
     if( $email_status != 'verified') {
         $mail = wp_mail( $email, $sub, $message, $headers);
         if($mail) {
-            wp_update_user( array( 'ID' => $msw->user_id, 'user_email' => $email ) );
+            // wp_update_user( array( 'ID' => $msw->user_id, 'user_email' => $email ) );
             $msw->updateUserMeta('email_code', $code);
             $msw->updateUserMeta('email_status', 'pending');
             $response['status'] = 'SUCCESS';

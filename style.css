@@ -873,15 +873,23 @@ dd.banklist_title {
   padding: 3px 10px;
   background: #ddd;
 }
-
+label.currency {
+    display: inline-flex;
+    align-items: center;
+}
 a.button.withdraw {
   margin-bottom: 40px;
 }
 form#withdraw {
-  max-width: 200px;
+  width: 500px;
   display: none;
 }
-
+form#withdraw input[name=amount] {
+  width: 100px;
+}
+form#withdraw p {
+  width: 100%;
+}
 
 /* Credit Card */
 .remodal.creditcard_popup {
