@@ -411,4 +411,98 @@ jQuery(function($){
 	});
 
 
+	/* generate reports */
+	var reportrange = function() {
+
+	    var start = moment().subtract(29, 'days');
+	    var end = moment();
+
+	    function cb(start, end) {
+	        $('#reportrange span').html(start.format('MMMM D YYYY, HH:MM') + ' - ' + end.format('MMMM D YYYY, HH:MM'));
+
+			/* load report to datatables */
+			var query = { 
+				start_time : start.format('YYYY-MM-DD HH:MM'),
+				end_time : end.format('YYYY-MM-DD HH:MM')
+			};
+
+			reportDataTable(query);
+
+		};
+
+		function reportDataTable(qu) {
+			var _this = this;
+			var timeframe = JSON.stringify(qu);
+			var performAjax = $('#generate_reports').DataTable({
+				processing: true,
+				serverSide: false,
+				responsive: true,
+				paging: true,
+				destroy: true,
+				sAjaxDataProp: 'data[]',
+				oLanguage: {
+				    "sEmptyTable": "No report available within your timeframe"
+				},
+				ajax: ajaxurl +'?action=generate_report&timeframe='+timeframe,
+				// aoColumnDefs: [
+			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
+			 //    ],
+		        columns: [
+		            { "data": "cashback_id" },
+		            { "data": "customer_id" },
+		            { "data": "business_id" },
+		            { "data": "customer_balance" },
+		            { "data": "business_balance" },
+		            { "data": "company_balance" },
+		            { "data": "amount" },
+		            { "data": "date" },
+		            { "data": "time" }
+		        ]
+			});
+
+			performAjax.on('xhr', function(e, settings, json){
+				console.log(json);
+			});
+		}
+
+
+	        /* perform ajax */
+	  //       $.ajax({
+			// 	type: 'POST',
+			// 	url: ajaxurl,
+			// 	data: { action: 'generate_report' },
+			// 	dataType: 'json',
+			// 	success: function(resp) {
+
+			// 	},
+			// 	error: function( req, status, err ) {
+			// 		_that.after('<p style="color:red"> something went wrong ' + status, err + '</p>');
+			// 	}
+			// });
+	  //   }
+
+	    $('#reportrange').daterangepicker({
+			startDate: start,
+			endDate: end,
+			timePicker: true,
+			timePicker24Hour: true,
+			alwaysShowCalendars: true,
+			showCustomRangeLabel: false,
+			opens: 'left',
+	        ranges: {
+	           'Today': [moment(), moment()],
+	           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+	           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+	           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+	           'This Month': [moment().startOf('month'), moment().endOf('month')],
+	           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	        },
+
+	    }, cb);
+
+	    cb(start, end);
+	}
+
+	reportrange();
+
 })

@@ -21,12 +21,22 @@ function enqueue_admin_scripts($hook) {
   /* css */
   wp_enqueue_style('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/css/jquery.accordion.css');
   wp_enqueue_style('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.css');
-  wp_enqueue_style('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"');
+  wp_enqueue_style('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css');
+  /* report generate */
+  wp_enqueue_style('bootstrapcss', '//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css');
+  wp_enqueue_style('daterangepicker', '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css');
+
   wp_enqueue_style('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/css/style.css');
+
   /* js */
   wp_enqueue_script('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/js/jquery.accordion.js', array('jquery'));
   wp_enqueue_script('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.js', array('jquery'));
   wp_enqueue_script('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js', array('jquery'));
+
+  /* report generate */
+  wp_enqueue_script('moment', '//cdn.jsdelivr.net/momentjs/latest/moment.min.js', array('jquery'));
+  wp_enqueue_script('daterangepicker', '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js', array('jquery'));
+
   wp_enqueue_script('savingwallet', get_stylesheet_directory_uri() . '/inc/admin/assets/js/script.js', array('jquery', 'datatables'));
   wp_localize_script('savingwallet', 'local', array('currency' => $msw->currency_symbol ));
 }
@@ -47,6 +57,7 @@ function savingwallet_admin(){
 		    <a class="nav-tab nav-tab-active" data-tab="management-tab"> Management </a>
 		    <a class="nav-tab" data-tab="bankinfo-tab"> Bank Info </a>
 		    <a class="nav-tab" data-tab="withdrawls-tab"> Withdrawls </a>
+		    <a class="nav-tab" data-tab="reports"> Reports </a>
 		</h2>
 		<!-- / navigation tabs -->
 
@@ -137,10 +148,10 @@ function savingwallet_admin(){
 		<div id="withdrawls-tab" class="tab-content">
 			<div class="pull-left"> 
 				<ul class="withdrawls_filters admin_filters">
-					<li><a href="#" data-load="all" class="btn active">All Withdrawls</a></li>
-					<li><a href="#" data-load="pending" class="btn">Pending Withdrawls</a></li>
-					<li><a href="#" data-load="approved" class="btn">Approved Withdrawls</a></li>
-					<li><a href="#" data-load="declined" class="btn">Declined Withdrawls</a></li>
+					<li><a href="#" data-load="all" class="btn active">All</a></li>
+					<li><a href="#" data-load="pending" class="btn">Pending</a></li>
+					<li><a href="#" data-load="approved" class="btn">Approved</a></li>
+					<li><a href="#" data-load="declined" class="btn">Declined</a></li>
 				</ul>
 			</div>
 			<table id="withdrawls" class="display" cellspacing="0" width="100%">
@@ -161,7 +172,33 @@ function savingwallet_admin(){
 		            </tr>
 		        </thead>
 		    </table>
+		</div>
+		<!-- / withdrawls tab -->
 
+
+		<!-- withdrawls tab -->
+		<div id="reports" class="tab-content">
+			<h3> Generate Reports </h3>
+			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+			    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+			    <span></span> <b class="caret"></b>
+			</div>
+
+			<table id="generate_reports" class="display" cellspacing="0" width="100%">
+				<thead>
+		            <tr>
+		                <th>Cashback ID</th>
+		                <th>Customer ID</th>
+		                <th>Business ID</th>
+		                <th>Customer Balance</th>
+		                <th>Business Balance</th>
+		                <th>Company Balance</th>
+		                <th>Amount</th>
+		                <th>Date</th>
+		                <th>Time</th>
+		            </tr>
+		        </thead>
+			</table>
 		</div>
 		<!-- / withdrawls tab -->
 

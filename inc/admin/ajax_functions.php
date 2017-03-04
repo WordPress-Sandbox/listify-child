@@ -371,3 +371,42 @@ function bank_report_admin_func() {
     die();
 };
 
+/* generate reports */
+
+function generate_report_func() {
+    global $msw;
+    $queried_json = $_POST['timeframe'];
+    $query = json_decode($queried_json, true);
+    $start_time = strtotime($query['start_time']);
+    $end_time = strtotime($query['end_time']);
+    $cashbacks = get_option('cashbacks');
+    $res = array();
+    $res['timeframe'] = $queried_json;
+    if(is_array($cashbacks) && count($cashbacks) > 0 ) {
+        foreach ($cashbacks as $cash) {
+            if($msw->get_user_role_by_id($cash['business_id']) == 'administrator') {
+                $provider = 'Administrator';
+            } else {
+                $provider = 'Business ' . $cash['business_id'];
+            }
+            $cashback_time = strtotime($cash['time']);
+            if( $cashback_time > $start_time && $cashback_time < $end_time ) {
+                $each_cashback = array();
+                $each_cashback['cashback_id'] = $cash['id'];
+                $each_cashback['customer_id'] = $cash['customer_id'];
+                $each_cashback['business_id'] = $provider;
+                $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
+                $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
+                $each_cashback['company_balance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
+                $each_cashback['amount'] = $msw->currency_symbol . number_format($cash['amount'], 2, '.', ',');
+                // http://thisinterestsme.com/calculating-difference-dates-php/
+                $each_cashback['date'] = date("M/d/Y", strtotime($cash['time']));
+                $each_cashback['time'] = date("h:i A", strtotime($cash['time']));
+                $res["data"][] = $each_cashback;
+            }
+        }
+    }
+
+    echo json_encode($res);
+    die();
+}

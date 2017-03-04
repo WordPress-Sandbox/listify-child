@@ -579,7 +579,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                             <label for="account_number" class="input">
                                                                 <i class="icon_append fa fa-credit-card-alt"></i>
                                                                 <input type="text" name="account_number" id="account_number" placeholder="Bank Account Number (up to 16 digits)">
-                                                                <b class="tooltip tooltip-bottom-right">Bank Account Number (up to 16 digits)</b>
+                                                                <b class="tooltip tooltip-bottom-right">Bank Account Number ( minimum 6 digits)</b>
                                                             </label>
                                                         </section>
                                                     </dd>

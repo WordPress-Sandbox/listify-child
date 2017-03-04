@@ -23,3 +23,6 @@ add_action('wp_ajax_approve_decline_withdraw', 'approve_decline_withdraw_func');
 
 /* update admin bank note */
 add_action('wp_ajax_update_admin_notes', 'update_admin_notes_func');
+
+/* generate reports */
+add_action('wp_ajax_generate_report', 'generate_report_func');
