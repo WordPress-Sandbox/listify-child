@@ -35,7 +35,7 @@ function enqueue_admin_scripts($hook) {
   wp_enqueue_script('pdfmake', '//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js', array('jquery'));
   wp_enqueue_script('vfs_fonts', '//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js', array('jquery'));
   wp_enqueue_script('buttons.html5', '//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js', array('jquery'));
-  wp_enqueue_script('buttons.html5', '//cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js', array('jquery'));
+  wp_enqueue_script('buttons.print', '//cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js', array('jquery'));
   wp_enqueue_script('moment', '//cdn.jsdelivr.net/momentjs/latest/moment.min.js', array('jquery'));
   wp_enqueue_script('daterangepicker', '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js', array('jquery'));
 
