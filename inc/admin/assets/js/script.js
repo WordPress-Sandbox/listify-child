@@ -431,22 +431,28 @@ jQuery(function($){
 		};
 
 		function reportDataTable(qu) {
-			var _this = this;
 			var timeframe = JSON.stringify(qu);
-			var performAjax = $('#generate_reports').DataTable({
+			$('#generate_reports').DataTable({
 				processing: true,
 				serverSide: false,
 				responsive: true,
 				paging: true,
 				destroy: true,
 				sAjaxDataProp: 'data[]',
-				oLanguage: {
-				    "sEmptyTable": "No report available within your timeframe"
-				},
+				dom: 'Bfrtip',
+		        buttons: [
+		            'print',
+		            'csvFlash',
+		            'excelFlash',
+		            'pdfFlash'
+		        ],
 				ajax: ajaxurl +'?action=generate_report&timeframe='+timeframe,
 				// aoColumnDefs: [
 			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
 			 //    ],
+			 	oLanguage: {
+				    "sEmptyTable": "No report available within your timeframe"
+				},
 		        columns: [
 		            { "data": "cashback_id" },
 		            { "data": "customer_id" },
@@ -459,27 +465,7 @@ jQuery(function($){
 		            { "data": "time" }
 		        ]
 			});
-
-			performAjax.on('xhr', function(e, settings, json){
-				console.log(json);
-			});
 		}
-
-
-	        /* perform ajax */
-	  //       $.ajax({
-			// 	type: 'POST',
-			// 	url: ajaxurl,
-			// 	data: { action: 'generate_report' },
-			// 	dataType: 'json',
-			// 	success: function(resp) {
-
-			// 	},
-			// 	error: function( req, status, err ) {
-			// 		_that.after('<p style="color:red"> something went wrong ' + status, err + '</p>');
-			// 	}
-			// });
-	  //   }
 
 	    $('#reportrange').daterangepicker({
 			startDate: start,

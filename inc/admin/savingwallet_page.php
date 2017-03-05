@@ -9,20 +9,16 @@ function savingwallet_admin_page() {
 	add_menu_page( 'Saving Wallet', 'Saving Wallet', 'manage_options', 'savingwallet-admin.php', 'savingwallet_admin', 'dashicons-tickets', 8);
 }
 
-
 function enqueue_admin_scripts($hook) {
 
 	global $msw;
 
-  // if( 'bank-verification.php' != $hook ) {
-  // 	return;
-  // }  
-
   /* css */
   wp_enqueue_style('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/css/jquery.accordion.css');
   wp_enqueue_style('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.css');
-  wp_enqueue_style('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css');
+  wp_enqueue_style('datatables', '//cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css');
   /* report generate */
+  wp_enqueue_style('datatable-button', 'https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css');
   wp_enqueue_style('bootstrapcss', '//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css');
   wp_enqueue_style('daterangepicker', '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css');
 
@@ -31,9 +27,15 @@ function enqueue_admin_scripts($hook) {
   /* js */
   wp_enqueue_script('jQueryaccordion', get_stylesheet_directory_uri() . '/inc/admin/assets/js/jquery.accordion.js', array('jquery'));
   wp_enqueue_script('magnific-popup', get_stylesheet_directory_uri() . '/assets/magnific-popup/magnific-popup.js', array('jquery'));
-  wp_enqueue_script('datatables', 'https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js', array('jquery'));
-
+  wp_enqueue_script('datatables', '//cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js', array('jquery'));
   /* report generate */
+  wp_enqueue_script('datatable-button', 'https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js', array('jquery'));
+  wp_enqueue_script('button-flash', '//cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js', array('jquery'));
+  wp_enqueue_script('jszip', '//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js', array('jquery'));
+  wp_enqueue_script('pdfmake', '//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js', array('jquery'));
+  wp_enqueue_script('vfs_fonts', '//cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js', array('jquery'));
+  wp_enqueue_script('buttons.html5', '//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js', array('jquery'));
+  wp_enqueue_script('buttons.html5', '//cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js', array('jquery'));
   wp_enqueue_script('moment', '//cdn.jsdelivr.net/momentjs/latest/moment.min.js', array('jquery'));
   wp_enqueue_script('daterangepicker', '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js', array('jquery'));
 
@@ -41,7 +43,9 @@ function enqueue_admin_scripts($hook) {
   wp_localize_script('savingwallet', 'local', array('currency' => $msw->currency_symbol ));
 }
 
-add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
+if (is_admin() && $_GET['page'] == 'savingwallet-admin.php') {
+	add_action( 'admin_enqueue_scripts', 'enqueue_admin_scripts' );
+}
 
 
 function savingwallet_admin(){
@@ -73,7 +77,7 @@ function savingwallet_admin(){
 							woocommerce_form_field('search_by', array(
 								'type' => 'select',
 								'class' => array('search_by'),
-								'label' => __('Search By'),
+								'label' => __('By'),
 								'options' => array(
 									'name' => __('Name'),
 									'email' => __('Email'),

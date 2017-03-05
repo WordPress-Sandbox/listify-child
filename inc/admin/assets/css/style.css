@@ -110,6 +110,7 @@ a.verify_with {
 }
 .add_user_balance h3 {
     margin: 0;
+    font-size: 18px !important;
 }
 
 form#debitCredit input[type=submit] {

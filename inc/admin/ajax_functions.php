@@ -375,13 +375,15 @@ function bank_report_admin_func() {
 
 function generate_report_func() {
     global $msw;
-    $queried_json = $_POST['timeframe'];
+    $queried_json = stripslashes($_GET['timeframe']);
     $query = json_decode($queried_json, true);
     $start_time = strtotime($query['start_time']);
     $end_time = strtotime($query['end_time']);
     $cashbacks = get_option('cashbacks');
     $res = array();
-    $res['timeframe'] = $queried_json;
+    $res['timeframe'] = $query;
+    $res['start_time'] = $start_time;
+    $res['end_time'] = $end_time;
     if(is_array($cashbacks) && count($cashbacks) > 0 ) {
         foreach ($cashbacks as $cash) {
             if($msw->get_user_role_by_id($cash['business_id']) == 'administrator') {
