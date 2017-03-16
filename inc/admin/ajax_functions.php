@@ -114,11 +114,15 @@ function approve_decline_withdraw_func() {
 
     $withdrawls = get_user_meta($userid, 'withdrawls', true);
 
-    if($withid && is_array($withdrawls)) {
+    if($withid && is_array($withdrawls)){
         foreach($withdrawls as &$with){
             if($with['id'] == $withid ){
                 $with['status'] = $status;
                 update_user_meta($userid, 'withdrawls', $withdrawls);
+                // credit user balance
+                $prev_balance = get_user_meta($userid, 'wallet_balance', true);
+                $new_balance = bcadd($prev_balance, $with['amount'], 2);
+                update_user_meta($userid, 'wallet_balance', $new_balance);
                 break;
             }
         }    
@@ -251,7 +255,9 @@ function withdrawls_report_admin_func() {
         if(is_array($withdrawls) && count($withdrawls) > 0 ) {
             foreach ($withdrawls as $key => $with)  {
 
-                $btns = '<a class="verify_with" data-status="approved" data-userid="'.$id.'" data-withid="'.$with['id'].'">Approve</a><a class="verify_with" data-status="declined" data-userid="'.$id.'" data-withid="'. $with['id'].'">Decline</a>';
+                $btn_approve = '<a class="verify_with" data-status="approved" data-userid="'.$id.'" data-withid="'.$with['id'].'">Approve</a>';
+
+                $btn_decline = '<a class="verify_with" data-status="declined" data-userid="'.$id.'" data-withid="'. $with['id'].'">Decline</a>';
 
                 $notetext = $with['note'] ? $with['note'] : 'empty';
                 $notes = '<p class="withNote" data-userid="'.$id.'" data-withid="'.$with['id'].'">'. $notetext .'</p>';
@@ -267,7 +273,14 @@ function withdrawls_report_admin_func() {
                 $each_withdraw['amount'] = $msw->currency_symbol . number_format($with['amount'], 2, '.', ',');
                 $each_withdraw['status'] = ucfirst($with['status']);
                 $each_withdraw['note'] = $notes;
-                $each_withdraw['action'] = $btns;
+                if($with['status'] == 'approved') {
+                    $each_withdraw['action'] = '<strong>approved</strong>';
+                } elseif ( $with['status'] == 'declined' ) {
+                    $each_withdraw['action'] = $btn_approve;
+                } elseif ( $with['status'] == 'pending' ) {
+                    $each_withdraw['action'] = $btn_approve;
+                    $each_withdraw['action'] .= $btn_decline;
+                }
                 if( $query['load'] == $with['status']) {
                     $res["data"][] = $each_withdraw;
                 } else if ( $query['load'] == 'all' ) {

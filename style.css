@@ -735,6 +735,9 @@ p#wpua-preview-existing {
     -moz-appearance: none;
     -webkit-appearance: none;
 }
+.user_profile .password_change input[type="file"] {
+  padding: 0;
+}
 .user_profile .password_change input#async-upload,
 .user_profile .password_change select {
   border: 1px solid #e5e5e5;
