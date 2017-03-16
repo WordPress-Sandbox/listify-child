@@ -618,6 +618,7 @@ if( ( $key == $email_code ) && ( $email_status == 'pending' ) )  :  ?>
                                                         <section>
                                                             <label class="input">
                                                                 <input type="submit" class="button" value="Save bank info" >
+                                                                <img class="loader" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/ajax-loader.gif">
                                                             </label>
                                                         </section>
                                                     </dd>

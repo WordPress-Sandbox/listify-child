@@ -53,7 +53,7 @@ function savingwallet_admin(){
 	?>
 
 	<div class="wrap">
-
+	
 		<h1> <?php echo esc_html('MySavingWallet Administration Panel'); ?></h1>
 
 		<!-- navigation tabs -->
@@ -96,15 +96,17 @@ function savingwallet_admin(){
 			<table id="cashbacks" class="display" cellspacing="0" width="100%">
 				<thead>
 		            <tr>
-		                <th>Cashback ID</th>
-		                <th>Customer ID</th>
+		            	<th>Date</th>
+		                <th>Time</th>
+		                <th>Transaction ID</th>
 		                <th>Business ID</th>
+		                <th>Business Name</th>
+		                <th>Customer ID</th>
+		                <th>Customer Name</th>
 		                <th>Customer Balance</th>
 		                <th>Business Balance</th>
-		                <th>Company Balance</th>
-		                <th>Amount</th>
-		                <th>Date</th>
-		                <th>Time</th>
+		                <th>Company Transaction Profit</th>
+		                <th>Current Company Balance</th>
 		            </tr>
 		        </thead>
 			</table>

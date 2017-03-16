@@ -345,10 +345,13 @@ add_action('wp_ajax_email_verify', 'email_verify_func');
 function cashback_func() {
     global $msw;
     $business_id = get_current_user_id();
-    $customer_id = $_POST['customer_id'];
-    $amount = $_POST['cashback_amount'];
+    $customer_id = sanitize_text_field($_POST['customer_id']);
+    $sale_amount = sanitize_text_field($_POST['sale_amount']);
+    $cashback_per = $msw->getMetaValue('cashback_percentage');
+    $cashback_amount = bcdiv(bcmul($sale_amount, $cashback_per), '100', 2);
+    $halfamount = bcdiv($cashback_amount, '2', 2);
 
-    if(!$msw->checkInteger($amount)) {
+    if(!$msw->checkInteger($cashback_amount)) {
         echo json_encode(array('status' => 'error', 'message' => 'Amount must be digit character' ));
         die();
     }
@@ -356,9 +359,9 @@ function cashback_func() {
     $customer_balance = get_user_meta($customer_id, 'wallet_balance', true);
     $cashbacks = get_option('cashbacks');
     $company_balance = get_option('company_balance');
-    if( $business_balance >= $amount ) {
-        $halfamount = bcdiv($amount, '2', 2);
-        $business_new_balance = bcsub($business_balance, $amount, 2);
+    if( $business_balance >= $cashback_amount ) {
+
+        $business_new_balance = bcsub($business_balance, $cashback_amount, 2);
         $customer_new_balance = bcadd($customer_balance, $halfamount, 2);
         $company_new_balance = bcadd($company_balance, $halfamount, 2);
         update_user_meta($business_id, 'wallet_balance', $business_new_balance);
@@ -370,14 +373,16 @@ function cashback_func() {
         $new_cashback['business_id'] = $business_id;
         $new_cashback['customer_balance'] = $customer_new_balance;
         $new_cashback['business_balance'] = $business_new_balance;
-        $new_cashback['company_balance'] = $company_new_balance;
-        $new_cashback['amount'] = $halfamount;
+        $new_cashback['company_balance'] = $company_new_balance; 
+        $new_cashback['comtranpro'] = $halfamount; 
+        $new_cashback['sale_amount'] = $sale_amount; 
+        $new_cashback['cashback_per'] = $cashback_per; 
+        $new_cashback['amount'] = $cashback_amount;
         $new_cashback['time'] = current_time('mysql');
 
         $cashbacks[] = $new_cashback;
         update_option('cashbacks', $cashbacks, false);
         update_option('company_balance', $company_new_balance, false);
-
 
         // emailing
         $business = new WP_User($business_id);
@@ -386,7 +391,7 @@ function cashback_func() {
         $c_email = $customer->user_email;
         $b_sub = "Cashback Sent Successful";
         $c_sub = "New Cashback Received!";
-        $b_message = "<html><body>Hello {$business->first_name}, your cashback payment of {$msw->currency_symbol}{$amount} to {$customer->first_name} {$customer->last_name} has been completed. Your current wallet balance is {$msw->currency_symbol}{$business_new_balance}.</body></html>";
+        $b_message = "<html><body>Hello {$business->first_name}, your cashback payment of {$msw->currency_symbol}{$cashback_amount} to {$customer->first_name} {$customer->last_name} has been completed. Your current wallet balance is {$msw->currency_symbol}{$business_new_balance}.</body></html>";
         $c_message = "<html><body>Hello {$customer->first_name}, you just received {$msw->currency_symbol}{$halfamount} cashback from {$business->billing_company}. The amount has been credited to your account.</body></html>";
 
         $headers = 'From:info@mysavingswallet.com' . "\r\n";
@@ -399,7 +404,7 @@ function cashback_func() {
         <h2> Your Cashback to <strong>{$customer->first_name} {$customer->last_name}</strong> successful. <br/> Current Balance: {$msw->currency_symbol}{$business_new_balance}</h2>
         </div>";
 
-        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $amount .' successful!', 'balance' => $business_new_balance, 'replace_content' => $replace_content, 'b_message' => $b_message, 'c_message' => $c_message));
+        echo json_encode(array('status' => 'success', 'message' => 'Cashback amount ' . $msw->currency_symbol . $cashback_amount .' successful!', 'balance' => $business_new_balance, 'replace_content' => $replace_content, 'b_message' => $b_message, 'c_message' => $c_message));
         die();
     } else {
         echo json_encode(array('status' => 'error', 'message' => 'Balance insufficient. Please topup' ));

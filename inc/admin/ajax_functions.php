@@ -210,6 +210,9 @@ function debitCreditUserBalance_func() {
             $company_new_balance = bcadd($company_prev_balance, $amount, 2);
         }
 
+        // company profit 
+        $company_profit = bcsub($company_new_balance, $company_prev_balance, 2);
+
         // update new balance 
         if($user_new_balance !== $user_prev_balance ) {
             $response['status'] = 'SUCCESS';
@@ -223,6 +226,7 @@ function debitCreditUserBalance_func() {
             $new_cashback['customer_balance'] = $user_new_balance;
             // $new_cashback['business_balance'] = 'no effect';
             $new_cashback['company_balance'] = $company_new_balance;
+            $new_cashback['comtranpro'] = $company_profit;
             $new_cashback['amount'] = $amount;
             $new_cashback['time'] = current_time('mysql');
             $cashbacks[] = $new_cashback;
@@ -308,16 +312,18 @@ function cashback_report_admin_func() {
                 $provider = 'Business ' . $cash['business_id'];
             }
             $each_cashback = array();
-            $each_cashback['cashback_id'] = $cash['id'];
-            $each_cashback['customer_id'] = $cash['customer_id'];
-            $each_cashback['business_id'] = $provider;
-            $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
-            $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
-            $each_cashback['company_balance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
-            $each_cashback['amount'] = $msw->currency_symbol . number_format($cash['amount'], 2, '.', ',');
             // http://thisinterestsme.com/calculating-difference-dates-php/
             $each_cashback['date'] = date("M/d/Y", strtotime($cash['time']));
             $each_cashback['time'] = date("h:i A", strtotime($cash['time']));
+            $each_cashback['transaction_id'] = $cash['id'];
+            $each_cashback['business_id'] = $provider;
+            $each_cashback['business_name'] = $msw->get_user_name_by_id($cash['business_id']);
+            $each_cashback['customer_id'] = $cash['customer_id'];
+            $each_cashback['customer_name'] = $msw->get_user_name_by_id($cash['customer_id']);
+            $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
+            $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
+            $each_cashback['comtranpro'] = $msw->currency_symbol . number_format($cash['comtranpro'], 2, '.', ',') . ', ' . $cash['sale_amount'] . ', ' . $cash['cashback_per'] . ', ' . $cash['amount'];
+            $each_cashback['combalance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
             $res["data"][] = $each_cashback;
         }
     } 

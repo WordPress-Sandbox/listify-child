@@ -105,6 +105,10 @@ jQuery(function($){
 	          dataType: 'json',
 	          processData: false,
 	          contentType: false,
+	          beforeSend: function(){
+	          	$('input[type="submit"]').css('opacity', '0.4').prop("disabled", true);
+	          	$('img.loader').css('opacity','1');
+	          },
 	          success: function(data, textStatus, jqXHR) {	
 	          	console.log(data);
               	if( data.response == "SUCCESS" ){
@@ -121,6 +125,9 @@ jQuery(function($){
 	  
 	                var previewID = $('#preview_doc');
 	                previewID.append(preview);
+
+		            $('input[type="submit"]').css('opacity', '1').prop("disabled", false);
+		          	$('img.loader').css('opacity','0');
                 
                  } else {
                  	$('.add_bank_message').css('color', 'red').text(data.error);
@@ -467,26 +474,27 @@ jQuery(function($){
 	});	
 
 	/* cashback percentage */
-	$('input[name="cashback_input"]').on('change', function(){
+	$('input[name="sale_amount"]').on('change', function(){
 		if(local.cashback_percentage ) {
 			var input = $(this).val();
-			var cashback = local.cashback_percentage*input/100;
-			$('#cashback_amount').val(local.currency_symbol + cashback);
-			$('#cashback_amount_half').val(local.currency_symbol + cashback/2);
+			var cashback = input*local.cashback_percentage/100;
+			$('input[name="cashback_amount"').val(local.currency_symbol + cashback);
+			$('input[name="customer_amount"]').val(local.currency_symbol + cashback/2);
 		} else {
 			$('.cashback_message').css('color', 'red').text('Please set cashback percentage between 5% and 35% from myaccount setting.');
 		}
 	});
 
-	$('#cashback_btn').click(function(e){
+	$('form.cashback').submit(function(e){
 		e.preventDefault();
 		var _that = $(this);
-		var cashback_amount = Number($('#cashback_amount').val().replace(/[^0-9\.]+/g,""));
+		var sale_amount = Number($('input[name="sale_amount"]').val().replace(/[^0-9\.]+/g,""));
 		var data = {
 			action: 'cashback', 
-			cashback_amount: cashback_amount,
+			sale_amount: sale_amount,
 			customer_id: $('#customer_id').val(),
 		}
+
 		console.log(data);
 		$.ajax({
 			type: 'POST',
@@ -688,6 +696,10 @@ jQuery(function($){
 			url: local.ajax_url,
 			data: data,
 			dataType: 'json',
+			beforeSend: function(){
+				$('input[type="submit"]').css('opacity', '0.4').prop("disabled", true);
+	          	$('img.loader').css('opacity','1');
+			},
 			success: function(resp) {
 				if( resp.status == 'error') {
 						$('.add_bank_message').css('color', 'red').html(resp.responsetext);
@@ -695,6 +707,8 @@ jQuery(function($){
 					$('.add_bank_message').css('color', 'green').html(resp.responsetext);
 					window.setTimeout(location.reload(), 3000);
 				}
+				$('input[type="submit"]').css('opacity', '1').prop("disabled", false);
+	          	$('img.loader').css('opacity','0');
 			},
 			error: function( req, status, err ) {
 				$('.add_bank_message').css('color', 'red').html('something went wrong', status, err);

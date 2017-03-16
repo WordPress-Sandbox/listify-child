@@ -109,6 +109,11 @@ class Mysavingwallet {
 		$user = new WP_User($id);
 	    $role = array_shift($user->roles);
 	    return $role;
+	}	
+
+	public function get_user_name_by_id($id) {
+		$user = get_userdata($id);
+	    return $user->user_login;
 	}
 
 	public function getMetaValue($k) {

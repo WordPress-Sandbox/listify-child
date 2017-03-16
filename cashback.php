@@ -46,23 +46,23 @@ $msw = new Mysavingwallet;
 	   							<p> Your current balance is: <strong><span class="balance"><?php echo $msw->wallet_balance(); ?></span></strong></p>
 		   						<p> You are giving <strong><?php echo $full_amount = $msw->getMetaValue('cashback_percentage'); ?>%</strong> cashback. <br> Customer would receive a <strong><?php echo $full_amount/2; ?>%</strong> cashback.</p>
 		   						<p></p>
-					   			<div class="cashback">
+					   			<form class="cashback">
 					   				<p class="cashback_message"></p>
 					   				<div class="col-md-4 padding-left-0">
-					   					<input type="number" name="cashback_input" placeholder="Purchase amount">
+					   					<input type="number" name="sale_amount" placeholder="Purchase amount">
 					   					<p>Total sale amount</p>
 					   				</div>
 					   				<div class="col-md-4 padding-left-0">
-					   					<input type="text" name="cashback_amount" id="cashback_amount" disabled>
+					   					<input type="text" name="cashback_amount" disabled>
 					   					<p>Total cashback</p>
 					   				</div>					   				
 					   				<div class="col-md-4 padding-left-0 padding-right-0">
-					   					<input type="text" name="cashback_amount" id="cashback_amount_half" disabled>
+					   					<input type="text" name="customer_amount" disabled>
 					   					<p>Customer receives</p>
 					   				</div>
 					   				<input type="hidden" id="customer_id" value="<?php echo $_GET['customer_id']; ?>">
-					   				<button class="button button-block login_btn login" id="cashback_btn">Give cashback</button>
-					   			</div>
+					   				<input type="submit" class="button button-block login_btn login" value="Give cashback">
+					   			</form>
 	   						</div><!-- /cashback_wrapper -->
 	   					</div>
 

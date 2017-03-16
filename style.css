@@ -746,6 +746,12 @@ p#wpua-preview-existing {
     top: 100%;
     margin-top: 15px;
 }
+img.loader {
+  opacity: 0;
+  position: absolute;
+  top: 8px;
+  left: 20%;
+}
 .user_profile .password_change .tooltip {
     position: absolute;
     z-index: 1;

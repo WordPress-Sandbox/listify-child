@@ -232,15 +232,17 @@ jQuery(function($){
 			 //      { "bSortable": false, "aTargets": [ 0, 4, 5, 6 ] }
 			 //    ],
 		        columns: [
-		            { "data": "cashback_id" },
-		            { "data": "customer_id" },
+		        	{ "data": "date" },
+		            { "data": "time" },
+		            { "data": "transaction_id" },
 		            { "data": "business_id" },
+		            { "data": "business_name" },
+		            { "data": "customer_id" },
+		            { "data": "customer_name" },
 		            { "data": "customer_balance" },
 		            { "data": "business_balance" },
-		            { "data": "company_balance" },
-		            { "data": "amount" },
-		            { "data": "date" },
-		            { "data": "time" }
+		            { "data": "comtranpro" },
+		            { "data": "combalance" },
 		        ]
 			});
 		};
