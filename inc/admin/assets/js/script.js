@@ -252,6 +252,7 @@ jQuery(function($){
 		var _this = this;
 		var query = JSON.stringify(qu);
 		$('#bankinfo').DataTable({
+			bLengthChange :true,
 			processing: true,
 			serverSide: false,
 			responsive: true,
@@ -290,6 +291,12 @@ jQuery(function($){
 		banksReportQuery({load: load });
 	});
 
+	// enable links to be worked 
+
+	$( "#bankinfo tbody" ).on('click', 'a[target="_blank"]',  function(){
+		 var url = $(this).attr('href'); 
+		 window.open(url, '_blank');
+	});
 
 
 	/* add balance to user */

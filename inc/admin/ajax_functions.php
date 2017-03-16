@@ -357,8 +357,8 @@ function bank_report_admin_func() {
                 $notes = '<p class="bankNote" data-userid="'.$id.'" data-routing="'.$b['bank_routing'].'">'. $notetext .'</p>';
 
                 $each_bank = array();
-                $each_bank['customer_id'] = $id;
-                $each_bank['customer_username'] = $user->user_login;
+                $each_bank['customer_id'] = '<a href="'.get_edit_user_link($id).'" target="_blank">'.$id.'</a>';
+                $each_bank['customer_username'] = '<a href="'.get_edit_user_link($id).'" target="_blank">'.$user->user_login.'</a>';
                 $each_bank['customer_email'] = $user->user_email;
                 $each_bank['customer_name'] = $user->display_name;
                 $each_bank['bank_name'] = $b['bank_name'];
