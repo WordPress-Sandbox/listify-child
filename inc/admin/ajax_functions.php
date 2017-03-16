@@ -316,13 +316,14 @@ function cashback_report_admin_func() {
             $each_cashback['date'] = date("M/d/Y", strtotime($cash['time']));
             $each_cashback['time'] = date("h:i A", strtotime($cash['time']));
             $each_cashback['transaction_id'] = $cash['id'];
-            $each_cashback['business_id'] = $provider;
-            $each_cashback['business_name'] = $msw->get_user_name_by_id($cash['business_id']);
-            $each_cashback['customer_id'] = $cash['customer_id'];
-            $each_cashback['customer_name'] = $msw->get_user_name_by_id($cash['customer_id']);
+            $each_cashback['business_id'] = '<a href="'.get_edit_user_link($cash['business_id']).'" target="_blank">'.$provider.'</a>';
+            $each_cashback['business_name'] = '<a href="'.get_edit_user_link($cash['business_id']).'" target="_blank">'.$msw->get_user_name_by_id($cash['business_id']).'</a>';
+            $each_cashback['customer_id'] = '<a href="'.get_edit_user_link($cash['customer_id']).'" target="_blank">'.$cash['customer_id'].'</a>';
+            $each_cashback['customer_name'] = '<a href="'.get_edit_user_link($cash['customer_id']).'" target="_blank">'.$msw->get_user_name_by_id($cash['customer_id']).'</a>';
             $each_cashback['customer_balance'] = $msw->currency_symbol . number_format($cash['customer_balance'], 2, '.', ',');
             $each_cashback['business_balance'] = $msw->currency_symbol . number_format($cash['business_balance'], 2, '.', ',');
-            $each_cashback['comtranpro'] = $msw->currency_symbol . number_format($cash['comtranpro'], 2, '.', ',') . ', ' . $cash['sale_amount'] . ', ' . $cash['cashback_per'] . ', ' . $cash['amount'];
+            $each_cashback['comtranpro'] = $msw->currency_symbol . number_format($cash['comtranpro'], 2, '.', ',');
+            // $each_cashback['comtranpro'] = $msw->currency_symbol . number_format($cash['comtranpro'], 2, '.', ',') . ', ' . $cash['sale_amount'] . ', ' . $cash['cashback_per'] . ', ' . $cash['amount'];
             $each_cashback['combalance'] = $msw->currency_symbol . number_format($cash['company_balance'], 2, '.', ',');
             $res["data"][] = $each_cashback;
         }
