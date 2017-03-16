@@ -309,7 +309,7 @@ function cashback_report_admin_func() {
             if($msw->get_user_role_by_id($cash['business_id']) == 'administrator') {
                 $provider = 'Administrator';
             } else {
-                $provider = 'Business ' . $cash['business_id'];
+                $provider = $cash['business_id'];
             }
             $each_cashback = array();
             // http://thisinterestsme.com/calculating-difference-dates-php/
